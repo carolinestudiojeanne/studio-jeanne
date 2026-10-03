@@ -1,8 +1,8 @@
 ---
 /**
  * Haut des pages projet : grand visuel avec titre centré, une photo verticale à cheval
- * sur le bas du visuel, les caractéristiques du projet, une bande de photos sur toute
- * la largeur, puis le bouton « Parlons de votre projet ».
+ * sur le bas du visuel, les caractéristiques du projet, les textes du projet (passés en slot),
+ * une bande de photos sur toute la largeur, puis le bouton « Parlons de votre projet ».
  */
 import Image from '../Image.astro'
 import type {ImageData, Projet} from '../../lib/types'
@@ -47,6 +47,14 @@ const {projet, portrait, bande, caracteristiques} = Astro.props
           </div>
         ))}
       </dl>
+    )
+  }
+
+  {
+    Astro.slots.has('default') && (
+      <div class="ep__textes">
+        <slot />
+      </div>
     )
   }
 
@@ -159,6 +167,16 @@ const {projet, portrait, bande, caracteristiques} = Astro.props
   .ep__carac dd {
     margin: 0;
     font-size: var(--t-m);
+  }
+
+  /* 4. Textes du projet (la demande, ce qui a été fait), avant les photos */
+  .ep__textes {
+    text-align: left;
+    max-width: calc(var(--etroit) + 2 * var(--gouttiere));
+    margin: 0 auto;
+    padding: 0 var(--gouttiere) clamp(3rem, 6vw, 5rem);
+    display: grid;
+    gap: clamp(2.5rem, 5vw, 3.5rem);
   }
 
   /* 5. Bouton sous les photos */

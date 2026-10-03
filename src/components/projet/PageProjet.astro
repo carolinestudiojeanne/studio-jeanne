@@ -85,8 +85,33 @@ const caracteristiques = [projet.typeDeProjet && {libelle: 'Projet', valeur: pro
 >
   {apercu && <div class="apercu">Aperçu du brouillon : cette page n’est pas encore publiée.</div>}
 
-  <!-- 1. Grand visuel, photo à cheval, type de projet, bande de photos -->
-  <EnTeteProjet projet={projet} portrait={portrait} bande={bande.map((g) => g.image)} caracteristiques={caracteristiques} />
+  <!-- 1. Grand visuel, photo à cheval, caractéristiques, textes, bande de photos -->
+  <EnTeteProjet projet={projet} portrait={portrait} bande={bande.map((g) => g.image)} caracteristiques={caracteristiques}>
+    {
+      projet.contexte?.length ? (
+        <div>
+          <h2 class="surtitre">Le contexte</h2>
+          <div class="texte" set:html={texteEnHtml(projet.contexte)} />
+        </div>
+      ) : null
+    }
+    {
+      projet.demande?.length ? (
+        <div>
+          <h2 class="surtitre">La demande</h2>
+          <div class="texte" set:html={texteEnHtml(projet.demande)} />
+        </div>
+      ) : null
+    }
+    {
+      realisationHtml && (
+        <div>
+          <h2 class="surtitre">Ce qui a été fait</h2>
+          <div class="texte" set:html={realisationHtml} />
+        </div>
+      )
+    }
+  </EnTeteProjet>
 
   <nav class="conteneur fil" aria-label="Fil d’Ariane">
     <ol>
@@ -98,40 +123,10 @@ const caracteristiques = [projet.typeDeProjet && {libelle: 'Projet', valeur: pro
     </ol>
   </nav>
 
-  <!-- 2. Le contexte + 3. La demande -->
-  <section class="section section--serree">
-    <div class="conteneur intro">
-      <div class="intro__textes">
-        {
-          projet.contexte?.length ? (
-            <div>
-              <h2 class="surtitre">Le contexte</h2>
-              <div class="texte" set:html={texteEnHtml(projet.contexte)} />
-            </div>
-          ) : null
-        }
-        {
-          projet.demande?.length ? (
-            <div>
-              <h2 class="surtitre">La demande</h2>
-              <div class="texte" set:html={texteEnHtml(projet.demande)} />
-            </div>
-          ) : null
-        }
-      </div>
-    </div>
-  </section>
-
-  <!-- 4. Ce qui a été fait + galerie -->
+  <!-- 2. Photos restantes et vidéo -->
   {
-    (realisationHtml || resteGalerie.length > 0) && (
+    (resteGalerie.length > 0 || (projet.video && (projet.video.fichierUrl || projet.video.lien))) && (
       <section class="section section--serree">
-        {realisationHtml && (
-          <div class="colonne realisation">
-            <h2>Ce qui a été fait</h2>
-            <div class="texte" set:html={realisationHtml} />
-          </div>
-        )}
         {resteGalerie.length > 0 && (
           <div class="conteneur galerie-bloc">
             <Galerie galerie={resteGalerie} />
@@ -216,18 +211,6 @@ const caracteristiques = [projet.typeDeProjet && {libelle: 'Projet', valeur: pro
   }
   .fil a {
     text-decoration: none;
-  }
-  .intro__textes {
-    display: grid;
-    gap: 2.5rem;
-  }
-  @media (min-width: 64rem) {
-    .intro__textes {
-      grid-template-columns: 1fr 1fr;
-    }
-  }
-  .realisation {
-    margin-bottom: clamp(3rem, 7vw, 6rem);
   }
   .galerie-bloc + .galerie-bloc {
     margin-top: clamp(1rem, 3vw, 2rem);
