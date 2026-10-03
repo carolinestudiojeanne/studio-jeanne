@@ -26,6 +26,13 @@ const place = (i: number, centre: number) => placeCarrousel(i, centre, n)
     )
   }
   {
+    Astro.slots.has('lien') && (
+      <div class="carrousel__lien-tous" data-lien-tous>
+        <slot name="lien" />
+      </div>
+    )
+  }
+  {
     n > 1 && (
       <button type="button" class="carrousel__fleche" data-sens="-1" aria-label="Projet précédent">
         <svg viewBox="0 0 20 16" aria-hidden="true"><path d="M20 8H1M8 1 1 8l7 7" /></svg>
@@ -72,10 +79,34 @@ const place = (i: number, centre: number) => placeCarrousel(i, centre, n)
         item.querySelector('a')?.setAttribute('tabindex', auCentre ? '0' : '-1')
       })
     }
+    // Lien « voir tous les projets » : à droite, à mi-hauteur entre le haut des deux photos les plus à droite.
+    const lien = carrousel.querySelector<HTMLElement>('[data-lien-tous]')
+    const placerLien = () => {
+      if (!lien) return
+      lien.style.removeProperty('top')
+      lien.style.removeProperty('right')
+      lien.removeAttribute('data-place')
+      const visibles = items
+        .filter((item) => item.offsetParent)
+        .map((item) => item.querySelector('.image__cadre')!.getBoundingClientRect())
+        .sort((a, b) => b.right - a.right)
+      if (visibles.length < 2) return
+      const [derniere, avantDerniere] = visibles
+      const cadre = carrousel.getBoundingClientRect()
+      const milieu = (derniere.top + avantDerniere.top) / 2 - cadre.top
+      lien.dataset.place = ''
+      lien.style.top = `${milieu - lien.offsetHeight / 2}px`
+      lien.style.right = `${cadre.right - derniere.right}px`
+    }
+    placerLien()
+    window.addEventListener('resize', placerLien)
+    document.fonts?.ready.then(placerLien)
+
     carrousel.querySelectorAll<HTMLButtonElement>('.carrousel__fleche').forEach((bouton) => {
       bouton.addEventListener('click', () => {
         centre = (centre + Number(bouton.dataset.sens) + n) % n
         afficher()
+        placerLien()
       })
     })
   })
@@ -84,11 +115,25 @@ const place = (i: number, centre: number) => placeCarrousel(i, centre, n)
 <style>
   /* Grille : flèche | photos | flèche. L'en-tête (titre, texte, lien) s'aligne sur les photos. */
   .carrousel {
+    position: relative;
     display: grid;
     grid-template-columns: auto minmax(0, 1fr) auto;
     align-items: center;
     column-gap: clamp(0.25rem, 1.5vw, 1.25rem);
     padding-inline: clamp(0.25rem, 1.5vw, 1.25rem);
+  }
+  .carrousel__lien-tous {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
+    align-self: end;
+  }
+  /* Placé par le script entre le haut des deux dernières photos. */
+  .carrousel__lien-tous[data-place] {
+    position: absolute;
+  }
+  .carrousel__lien-tous[data-place] > :global(*) {
+    margin: 0;
   }
   .carrousel__entete {
     grid-column: 2;

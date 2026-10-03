@@ -38,7 +38,7 @@ const colonnes = [
             {projetsRecents?.texte && <p>{projetsRecents.texte}</p>}
           </div>
           {projetsRecents?.lienLibelle && (
-            <p class="voir-projets">
+            <p class="voir-projets" slot="lien">
               <a class="lien-fleche" href="/projets">
                 {projetsRecents.lienLibelle}
               </a>
@@ -172,7 +172,7 @@ const colonnes = [
   }
   /* Juste au-dessus des photos, à droite, sans soulignement. */
   .voir-projets {
-    margin: 3rem 0 0.5rem;
+    margin: 1.5rem 0 0.75rem;
     text-align: right;
   }
   .voir-projets .lien-fleche {
