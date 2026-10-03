@@ -15,10 +15,8 @@ interface Props {
   bande: ImageData[]
   /** Ligne de détails sous le type de projet (bien, surface, lieu…). */
   details: string[]
-  /** Ancre du bouton « Découvrir ». */
-  ancre: string
 }
-const {projet, portrait, bande, details, ancre} = Astro.props
+const {projet, portrait, bande, details} = Astro.props
 ---
 
 <section class="ep">
@@ -28,7 +26,6 @@ const {projet, portrait, bande, details, ancre} = Astro.props
     <div class="ep__haut">
       <h1 class="ep__titre">{projet.titre}</h1>
       {projet.resume && <p class="ep__resume">{projet.resume}</p>}
-      <a class="bouton bouton--contour" href={`#${ancre}`}>Découvrir</a>
     </div>
   </div>
 
@@ -101,7 +98,7 @@ const {projet, portrait, bande, details, ancre} = Astro.props
   }
   .ep__resume {
     font-size: var(--t-s);
-    margin-bottom: 1.75rem;
+    margin-bottom: 0;
   }
 
   /* 2. Photo verticale à cheval sur le bas du visuel */

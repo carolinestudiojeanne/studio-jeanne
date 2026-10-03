@@ -85,7 +85,7 @@ const ligneDetails = [projet.typeDeBien, projet.surface && `${projet.surface} m�
   {apercu && <div class="apercu">Aperçu du brouillon : cette page n’est pas encore publiée.</div>}
 
   <!-- 1. Grand visuel, photo à cheval, type de projet, bande de photos -->
-  <EnTeteProjet projet={projet} portrait={portrait} bande={bande.map((g) => g.image)} details={ligneDetails} ancre="projet" />
+  <EnTeteProjet projet={projet} portrait={portrait} bande={bande.map((g) => g.image)} details={ligneDetails} />
 
   <nav class="conteneur fil" aria-label="Fil d’Ariane">
     <ol>
@@ -98,7 +98,7 @@ const ligneDetails = [projet.typeDeBien, projet.surface && `${projet.surface} m�
   </nav>
 
   <!-- 2. Le contexte + 3. La demande -->
-  <section class="section section--serree" id="projet">
+  <section class="section section--serree">
     <div class="conteneur intro">
       <dl class="intro__details">
         {
