@@ -79,8 +79,8 @@ const place = (i: number, centre: number) => placeCarrousel(i, centre, n)
         item.querySelector('a')?.setAttribute('tabindex', auCentre ? '0' : '-1')
       })
     }
-    // Lien « voir tous les projets » : au-dessus de la 2e photo en partant de la droite,
-    // à mi-hauteur entre son haut et celui de la 3e (sur tablette, 3 photos : entre la 1re et la 2e).
+    // Lien « voir tous les projets » : aligné à droite sur la dernière photo, à mi-hauteur entre
+    // le haut de la 2e et de la 3e photo en partant de la droite (sur tablette, 3 photos : 1re et 2e).
     const lien = carrousel.querySelector<HTMLElement>('[data-lien-tous]')
     const placerLien = () => {
       if (!lien) return
@@ -97,7 +97,7 @@ const place = (i: number, centre: number) => placeCarrousel(i, centre, n)
       const milieu = (derniere.top + avantDerniere.top) / 2 - cadre.top
       lien.dataset.place = ''
       lien.style.top = `${milieu - lien.offsetHeight / 2}px`
-      lien.style.right = `${cadre.right - derniere.right}px`
+      lien.style.right = `${cadre.right - visibles[0].right}px`
     }
     placerLien()
     window.addEventListener('resize', placerLien)
