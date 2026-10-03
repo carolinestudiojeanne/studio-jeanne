@@ -1,0 +1,28 @@
+---
+import Base from '../layouts/Base.astro'
+import {getPageLegale, getReglages} from '../lib/contenu'
+import {texteEnHtml} from '../lib/texte'
+
+interface Props {
+  id: 'mentions-legales' | 'politique-de-confidentialite' | 'cgv'
+}
+const [page, reglages] = await Promise.all([getPageLegale(Astro.props.id), getReglages()])
+const date = page.miseAJour ? new Date(page.miseAJour).toLocaleDateString('fr-FR', {day: 'numeric', month: 'long', year: 'numeric'}) : null
+---
+
+<Base titre={page.seo?.metaTitle || `${page.titre}${reglages.suffixeTitre}`} description={page.seo?.metaDescription}>
+  <section class="section">
+    <div class="colonne">
+      <h1>{page.titre}</h1>
+      {date && <p class="maj">Mis à jour le {date}</p>}
+      <div class="texte" set:html={texteEnHtml(page.texte)} />
+    </div>
+  </section>
+</Base>
+
+<style>
+  .maj {
+    font-size: var(--t-s);
+    margin-bottom: 2.5rem;
+  }
+</style>

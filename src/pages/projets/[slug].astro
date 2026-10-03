@@ -1,0 +1,15 @@
+---
+import PageProjet from '../../components/projet/PageProjet.astro'
+import {getProjets, getProjetsComplets} from '../../lib/contenu'
+import type {Projet} from '../../lib/types'
+
+export async function getStaticPaths() {
+  const projets = await getProjetsComplets()
+  return projets.map((projet) => ({params: {slug: projet.slug}, props: {projet}}))
+}
+
+const {projet} = Astro.props as {projet: Projet}
+const tous = await getProjets()
+---
+
+<PageProjet projet={projet} tous={tous} />

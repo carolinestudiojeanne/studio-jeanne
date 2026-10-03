@@ -1,0 +1,85 @@
+---
+import Base from '../layouts/Base.astro'
+import Image from '../components/Image.astro'
+import AppelAction from '../components/sections/AppelAction.astro'
+import {getPageAPropos, getReglages} from '../lib/contenu'
+import {texteEnHtml} from '../lib/texte'
+import {SITE} from '../lib/seo'
+
+const [page, reglages] = await Promise.all([getPageAPropos(), getReglages()])
+const titre = page.seo?.metaTitle || `À propos${reglages.suffixeTitre}`
+const personne = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  '@id': `${SITE}/a-propos#caroline`,
+  name: 'Caroline Canova',
+  jobTitle: 'Architecte et décoratrice d’intérieur',
+  worksFor: [
+    {'@id': `${SITE}/#entreprise`},
+    {'@type': 'RealEstateAgent', name: 'Homelike Home', url: reglages.homelikehome},
+  ],
+  sameAs: [reglages.linkedin, reglages.instagram].filter(Boolean),
+}
+---
+
+<Base titre={titre} description={page.seo?.metaDescription} imagePartage={page.seo?.imagePartage || page.portrait} schemas={[personne]}>
+  <section class="section">
+    <div class="conteneur apropos">
+      <div class="apropos__portrait">
+        <Image image={page.portrait} ratio={4 / 5} arche prioritaire sizes="(min-width: 52rem) 35vw, 90vw" />
+      </div>
+      <div class="apropos__texte">
+        <h1>{page.titre}</h1>
+        <div class="texte" set:html={texteEnHtml(page.texte)} />
+        {
+          page.lienAvisLibelle && (
+            <p class="apropos__avis">
+              <a class="lien-fleche" href="/avis-clients">
+                {page.lienAvisLibelle}
+              </a>
+            </p>
+          )
+        }
+      </div>
+    </div>
+    {
+      page.imageEchoppe && (
+        <div class="conteneur apropos__echoppe">
+          <Image image={page.imageEchoppe} sizes="(min-width: 82rem) 82rem, 100vw" />
+        </div>
+      )
+    }
+  </section>
+
+  <AppelAction appel={page.appel} />
+</Base>
+
+<style>
+  .apropos {
+    display: grid;
+    gap: 3rem;
+  }
+  @media (min-width: 52rem) {
+    .apropos {
+      grid-template-columns: 1fr 1.3fr;
+      gap: clamp(3rem, 8vw, 8rem);
+      align-items: start;
+    }
+    .apropos__portrait {
+      position: sticky;
+      top: 7rem;
+    }
+  }
+  .apropos__portrait {
+    max-width: 26rem;
+  }
+  .apropos__texte {
+    max-width: var(--etroit);
+  }
+  .apropos__avis {
+    margin-top: 2.5rem;
+  }
+  .apropos__echoppe {
+    margin-top: var(--section);
+  }
+</style>

@@ -1,0 +1,13 @@
+---
+import PageOffre from '../components/PageOffre.astro'
+import {getPageTrouverVotreBien, getReglages} from '../lib/contenu'
+
+const [page, reglages] = await Promise.all([getPageTrouverVotreBien(), getReglages()])
+---
+
+<PageOffre
+  page={page}
+  titre={page.seo?.metaTitle || `Trouver votre bien${reglages.suffixeTitre}`}
+  aiguillageHref="/accompagnement"
+  lienSortant={{libelle: page.lienHomelikeLibelle, href: reglages.homelikehome}}
+/>

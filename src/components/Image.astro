@@ -1,0 +1,58 @@
+---
+import {rendreImage} from '../lib/image'
+import type {ImageData} from '../lib/types'
+
+interface Props {
+  image: ImageData | undefined
+  /** Largeur / hauteur pour recadrer (ex. 4/5). Sans ratio : format d'origine. */
+  ratio?: number
+  /** Largeur d'affichage, pour que le navigateur choisisse la bonne taille. */
+  sizes?: string
+  /** Image du premier écran : chargée tout de suite, en priorité. */
+  prioritaire?: boolean
+  arche?: boolean
+  legende?: boolean
+  class?: string
+}
+const {image, ratio, sizes = '100vw', prioritaire = false, arche = false, legende = true, class: classe} = Astro.props
+const img = rendreImage(image, {ratio})
+const avecLegende = legende && (img?.legende || img?.rendu3D)
+---
+
+{
+  img && (
+    <figure class:list={['image', classe]}>
+      <div class:list={['image__cadre', {arche}]} style={ratio ? `aspect-ratio: ${ratio}` : undefined}>
+        <img
+          src={img.src}
+          srcset={img.srcset}
+          sizes={img.srcset ? sizes : undefined}
+          width={img.width}
+          height={img.height}
+          alt={img.alt}
+          loading={prioritaire ? 'eager' : 'lazy'}
+          fetchpriority={prioritaire ? 'high' : undefined}
+          decoding={prioritaire ? 'sync' : 'async'}
+        />
+      </div>
+      {avecLegende && (
+        <figcaption>
+          {img.legende}
+          {img.rendu3D && <span class="mention-3d">{img.legende ? ' · ' : ''}Rendu 3D</span>}
+        </figcaption>
+      )}
+    </figure>
+  )
+}
+
+<style>
+  .image__cadre {
+    overflow: hidden;
+    background: var(--creme-soutenu);
+  }
+  .image__cadre img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+</style>

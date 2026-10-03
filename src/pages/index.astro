@@ -1,0 +1,207 @@
+---
+import Base from '../layouts/Base.astro'
+import Hero from '../components/sections/Hero.astro'
+import GrilleProjets from '../components/sections/GrilleProjets.astro'
+import ListeAvis from '../components/sections/ListeAvis.astro'
+import AppelAction from '../components/sections/AppelAction.astro'
+import Image from '../components/Image.astro'
+import {getAvisAccueil, getPageAccueil, getProjetsAccueil, getReglages} from '../lib/contenu'
+import {texteEnHtml} from '../lib/texte'
+
+const [page, projets, avis, reglages] = await Promise.all([getPageAccueil(), getProjetsAccueil(), getAvisAccueil(), getReglages()])
+const titre = page.seo?.metaTitle || `Architecte d’intérieur à Bordeaux${reglages.suffixeTitre}`
+const {hero, projetsRecents, deroule, aiguillage, caroline} = page
+const colonnes = [
+  {...aiguillage?.colonne1, href: '/accompagnement'},
+  {...aiguillage?.colonne2, href: '/trouver-votre-bien'},
+]
+---
+
+<Base titre={titre} description={page.seo?.metaDescription} imagePartage={page.seo?.imagePartage || hero?.image}>
+  <!-- 1. Grand visuel -->
+  <Hero
+    image={hero?.image}
+    surtitre={hero?.h1}
+    surtitreEstH1
+    titre={hero?.accroche}
+    sousTitre={hero?.sousTitre}
+    bouton={{libelle: hero?.boutonLibelle, href: '/contact'}}
+  />
+
+  <!-- 2. Projets récents -->
+  {
+    projets.length > 0 && (
+      <section class="section">
+        <div class="conteneur">
+          <div class="entete-section">
+            <div>
+              <h2>{projetsRecents?.titre}</h2>
+              {projetsRecents?.texte && <p>{projetsRecents.texte}</p>}
+            </div>
+            {projetsRecents?.lienLibelle && (
+              <a class="lien-fleche" href="/projets">
+                {projetsRecents.lienLibelle}
+              </a>
+            )}
+          </div>
+          <GrilleProjets projets={projets.slice(0, projets.length === 4 ? 4 : 3)} colonnes={projets.length === 4 ? 2 : 3} />
+        </div>
+      </section>
+    )
+  }
+
+  <!-- 3. Le déroulé -->
+  {
+    deroule?.titre && (
+      <section class="section fond-soutenu">
+        <div class="colonne">
+          <h2>{deroule.titre}</h2>
+          <div class="texte" set:html={texteEnHtml(deroule.texte)} />
+          {deroule.lienLibelle && (
+            <p class="lien-bas">
+              <a class="lien-fleche" href="/accompagnement">
+                {deroule.lienLibelle}
+              </a>
+            </p>
+          )}
+        </div>
+      </section>
+    )
+  }
+
+  <!-- 4. Deux points de départ -->
+  {
+    aiguillage?.titre && (
+      <section class="section">
+        <div class="conteneur">
+          <h2 class="aiguillage__titre">{aiguillage.titre}</h2>
+          <div class="aiguillage">
+            {colonnes.map((c) => (
+              <div class="aiguillage__colonne">
+                <h3>{c.titre}</h3>
+                {c.texte && <p>{c.texte}</p>}
+                {c.boutonLibelle && (
+                  <a class="bouton bouton--contour" href={c.href}>
+                    {c.boutonLibelle}
+                  </a>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- 5. Caroline -->
+  {
+    caroline?.texte && (
+      <section class="section fond-soutenu">
+        <div class="conteneur caroline">
+          <div class="caroline__image">
+            <Image image={caroline.image} ratio={4 / 5} arche legende={false} sizes="(min-width: 52rem) 30vw, 80vw" />
+          </div>
+          <div class="caroline__texte">
+            <p>{caroline.texte}</p>
+            {caroline.lienLibelle && (
+              <a class="lien-fleche" href="/a-propos">
+                {caroline.lienLibelle}
+              </a>
+            )}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- 6. Les avis -->
+  {
+    avis.length > 0 && (
+      <section class="section">
+        <div class="conteneur">
+          <div class="entete-section">
+            <div>
+              <h2>{page.avis?.titre}</h2>
+              {reglages.nombreAvis ? (
+                <p>
+                  {reglages.nombreAvis} avis {reglages.noteGoogle === 5 ? '5 étoiles ' : ''}sur Google.
+                </p>
+              ) : null}
+            </div>
+            <a class="lien-fleche" href="/avis-clients">
+              {page.avis?.lienLibelle || 'Lire tous les avis'}
+            </a>
+          </div>
+          <ListeAvis avis={avis} />
+        </div>
+      </section>
+    )
+  }
+
+  <!-- 7. La première étape -->
+  <AppelAction appel={page.appel} />
+</Base>
+
+<style>
+  .entete-section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 1.5rem 3rem;
+    margin-bottom: clamp(2.5rem, 5vw, 4rem);
+  }
+  .entete-section h2 {
+    margin-bottom: 0.5rem;
+  }
+  .entete-section p {
+    max-width: 36rem;
+  }
+  .lien-bas {
+    margin-top: 2.5rem;
+  }
+  .aiguillage__titre {
+    text-align: center;
+    margin-bottom: clamp(2.5rem, 5vw, 4rem);
+  }
+  .aiguillage {
+    display: grid;
+    gap: 1.5rem;
+  }
+  @media (min-width: 52rem) {
+    .aiguillage {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .aiguillage__colonne {
+    border: 1px solid color-mix(in srgb, var(--ardoise) 22%, transparent);
+    border-radius: 999px 999px 0 0;
+    padding: clamp(4rem, 8vw, 6rem) clamp(1.75rem, 5vw, 4rem) clamp(2.5rem, 5vw, 3.5rem);
+    text-align: center;
+  }
+  .aiguillage__colonne p {
+    max-width: 26rem;
+    margin-inline: auto;
+    margin-bottom: 2rem;
+  }
+  .caroline {
+    display: grid;
+    gap: 2.5rem;
+    align-items: center;
+  }
+  @media (min-width: 52rem) {
+    .caroline {
+      grid-template-columns: 1fr 1.4fr;
+      gap: clamp(3rem, 8vw, 8rem);
+    }
+  }
+  .caroline__image {
+    max-width: 24rem;
+  }
+  .caroline__texte p {
+    font-size: var(--t-l);
+    line-height: 1.5;
+    color: var(--ardoise);
+    margin-bottom: 2rem;
+  }
+</style>

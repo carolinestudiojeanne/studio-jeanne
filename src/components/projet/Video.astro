@@ -1,0 +1,48 @@
+---
+/** Vidéo d'un projet : sans le son, avec contrôles, chargée seulement à la lecture. */
+import {rendreImage} from '../../lib/image'
+import type {Projet} from '../../lib/types'
+
+interface Props {
+  video: NonNullable<Projet['video']>
+  titre: string
+}
+const {video, titre} = Astro.props
+const affiche = rendreImage(video.imageAttente, {ratio: 16 / 9, maxWidth: 1920})
+
+/** Lien Vimeo / YouTube en version sans cookies. */
+function intégration(lien: string): string | null {
+  const yt = lien.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/shorts\/)([\w-]{6,})/)
+  if (yt) return `https://www.youtube-nocookie.com/embed/${yt[1]}`
+  const vimeo = lien.match(/vimeo\.com\/(?:video\/)?(\d+)/)
+  if (vimeo) return `https://player.vimeo.com/video/${vimeo[1]}?dnt=1`
+  return null
+}
+const iframe = !video.fichierUrl && video.lien ? intégration(video.lien) : null
+---
+
+{
+  video.fichierUrl ? (
+    <video class="video" controls muted playsinline preload="none" poster={affiche?.src} width="1920" height="1080">
+      <source src={video.fichierUrl} />
+    </video>
+  ) : iframe ? (
+    <div class="video video--iframe">
+      <iframe src={iframe} title={`Vidéo du projet ${titre}`} loading="lazy" allow="fullscreen; picture-in-picture" allowfullscreen />
+    </div>
+  ) : null
+}
+
+<style>
+  .video {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    background: var(--creme-soutenu);
+  }
+  .video--iframe iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+</style>

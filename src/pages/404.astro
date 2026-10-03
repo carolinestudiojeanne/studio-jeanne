@@ -1,0 +1,29 @@
+---
+import Base from '../layouts/Base.astro'
+---
+
+<Base titre="Page introuvable · Studio Jeanne" noindex>
+  <section class="section">
+    <div class="colonne introuvable">
+      <span class="surtitre">Erreur 404</span>
+      <h1>Cette page n’existe pas, ou plus.</h1>
+      <p>Elle a peut-être changé d’adresse. Vous retrouverez sans doute ce que vous cherchez ici :</p>
+      <ul>
+        <li><a class="lien-fleche" href="/projets">Les projets</a></li>
+        <li><a class="lien-fleche" href="/accompagnement">L’accompagnement</a></li>
+        <li><a class="lien-fleche" href="/contact">Contact</a></li>
+      </ul>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .introuvable ul {
+    list-style: none;
+    padding: 0;
+    margin: 2.5rem 0 0;
+    display: grid;
+    gap: 1.25rem;
+    justify-items: start;
+  }
+</style>

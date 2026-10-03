@@ -1,0 +1,259 @@
+---
+/**
+ * Gabarit unique des pages projet (cahier des charges §7.3).
+ * Les sections 3 à 6 disparaissent si Caroline ne les remplit pas.
+ */
+import Base from '../../layouts/Base.astro'
+import Hero from '../sections/Hero.astro'
+import SectionTexte from '../sections/SectionTexte.astro'
+import GrilleProjets from '../sections/GrilleProjets.astro'
+import AppelAction from '../sections/AppelAction.astro'
+import ListeAvis from '../sections/ListeAvis.astro'
+import Galerie from './Galerie.astro'
+import AvantApres from './AvantApres.astro'
+import Video from './Video.astro'
+import {getReglages, projetsLies} from '../../lib/contenu'
+import {texteBrut, texteEnHtml} from '../../lib/texte'
+import {canonique, ligneLieu, schemaFilAriane, titreProjet, SITE} from '../../lib/seo'
+import {imagePartageUrl} from '../../lib/image'
+import type {Projet, ProjetCarte} from '../../lib/types'
+
+interface Props {
+  projet: Projet
+  tous: ProjetCarte[]
+  apercu?: boolean
+}
+const {projet, tous, apercu = false} = Astro.props
+const reglages = await getReglages()
+const lies = projetsLies(projet, tous)
+const pro = projet.categorie === 'professionnel'
+const chemin = `/projets/${projet.slug}`
+const description = projet.seo?.metaDescription || projet.resume || ''
+
+const filAriane = [
+  {nom: 'Accueil', chemin: '/'},
+  pro ? {nom: 'Professionnels', chemin: '/professionnels'} : {nom: 'Projets', chemin: '/projets'},
+  {nom: projet.titre, chemin},
+]
+
+const schemaProjet = {
+  '@context': 'https://schema.org',
+  '@type': 'CreativeWork',
+  name: projet.titre,
+  headline: `${projet.titre}, ${ligneLieu(projet)}`,
+  description,
+  url: canonique(chemin),
+  image: imagePartageUrl(projet.imagePrincipale),
+  creator: {'@id': `${SITE}/#entreprise`},
+  locationCreated: projet.commune ? {'@type': 'Place', name: [projet.commune, projet.departement].filter(Boolean).join(', ')} : undefined,
+  dateCreated: projet.annee ? String(projet.annee) : undefined,
+  dateModified: projet._updatedAt,
+  about: [projet.typeDeProjet, projet.typeDeBien].filter(Boolean).join(' · '),
+  text: texteBrut(projet.realisation).slice(0, 500) || undefined,
+}
+
+const details = [
+  projet.typeDeBien && {libelle: 'Bien', valeur: projet.typeDeBien},
+  projet.surface && {libelle: 'Surface', valeur: `${projet.surface} m²`},
+  projet.annee && {libelle: 'Année', valeur: String(projet.annee)},
+  projet.commune && {libelle: 'Lieu', valeur: [projet.commune, projet.departement].filter(Boolean).join(', ')},
+].filter(Boolean) as Array<{libelle: string; valeur: string}>
+
+const realisationHtml = texteEnHtml(projet.realisation)
+---
+
+<Base
+  titre={titreProjet(projet, reglages.suffixeTitre)}
+  description={description}
+  imagePartage={projet.seo?.imagePartage || projet.imagePrincipale}
+  schemas={[schemaProjet, schemaFilAriane(filAriane)]}
+  type="article"
+  noindex={apercu}
+>
+  {apercu && <div class="apercu">Aperçu du brouillon : cette page n’est pas encore publiée.</div>}
+
+  <!-- 1. Grand visuel -->
+  <Hero image={projet.imagePrincipale} titre={projet.titre} sousTitre={ligneLieu(projet)} />
+
+  <nav class="conteneur fil" aria-label="Fil d’Ariane">
+    <ol>
+      {
+        filAriane.map((e, i) => (
+          <li>{i < filAriane.length - 1 ? <a href={e.chemin}>{e.nom}</a> : <span aria-current="page">{e.nom}</span>}</li>
+        ))
+      }
+    </ol>
+  </nav>
+
+  <!-- 2. Le contexte + 3. La demande -->
+  <section class="section section--serree">
+    <div class="conteneur intro">
+      <dl class="intro__details">
+        {
+          details.map((d) => (
+            <div>
+              <dt>{d.libelle}</dt>
+              <dd>{d.valeur}</dd>
+            </div>
+          ))
+        }
+      </dl>
+      <div class="intro__textes">
+        {
+          projet.contexte?.length ? (
+            <div>
+              <h2 class="surtitre">Le contexte</h2>
+              <div class="texte" set:html={texteEnHtml(projet.contexte)} />
+            </div>
+          ) : null
+        }
+        {
+          projet.demande?.length ? (
+            <div>
+              <h2 class="surtitre">La demande</h2>
+              <div class="texte" set:html={texteEnHtml(projet.demande)} />
+            </div>
+          ) : null
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Ce qui a été fait + galerie -->
+  {
+    (realisationHtml || projet.galerie?.length) && (
+      <section class="section section--serree">
+        {realisationHtml && (
+          <div class="colonne realisation">
+            <h2>Ce qui a été fait</h2>
+            <div class="texte" set:html={realisationHtml} />
+          </div>
+        )}
+        {projet.galerie?.length ? (
+          <div class="conteneur galerie-bloc">
+            <Galerie galerie={projet.galerie} />
+          </div>
+        ) : null}
+        {projet.video && (projet.video.fichierUrl || projet.video.lien) && (
+          <div class="conteneur galerie-bloc">
+            <Video video={projet.video} titre={projet.titre} />
+          </div>
+        )}
+      </section>
+    )
+  }
+
+  <!-- 5. Avant / après -->
+  {
+    projet.avantApres?.length ? (
+      <section class="section fond-soutenu">
+        <div class="conteneur">
+          <h2>Avant, après</h2>
+          <AvantApres paires={projet.avantApres} />
+        </div>
+      </section>
+    ) : null
+  }
+
+  <!-- 6. Le retour du client -->
+  {
+    projet.retourClient?.citation && (
+      <SectionTexte surtitre="Le retour du client">
+        <ListeAvis avis={[{texte: projet.retourClient.citation, prenom: projet.retourClient.prenom || ''}]} colonnes={false} />
+      </SectionTexte>
+    )
+  }
+
+  <!-- 7. Autres projets -->
+  {
+    lies.length > 0 && (
+      <section class="section fond-soutenu">
+        <div class="conteneur">
+          <h2>Autres projets</h2>
+          <GrilleProjets projets={lies} />
+        </div>
+      </section>
+    )
+  }
+
+  <!-- 8. Appel à l'action -->
+  <AppelAction
+    appel={{
+      titre: 'Un projet comme celui-ci ?',
+      texte: 'Un formulaire d’une dizaine de minutes, puis un échange d’une heure en visio.',
+      boutonLibelle: 'Parler de votre projet',
+    }}
+    lien={{libelle: 'Le détail de l’accompagnement', href: '/accompagnement'}}
+  />
+</Base>
+
+<style>
+  .apercu {
+    background: var(--ardoise);
+    color: var(--creme);
+    text-align: center;
+    padding: 0.6rem 1rem;
+    font-size: var(--t-s);
+  }
+  .fil ol {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 1.5rem 0 0;
+    font-size: var(--t-xs);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .fil li + li::before {
+    content: '›';
+    margin-right: 0.5rem;
+    color: var(--ocre);
+  }
+  .fil a {
+    text-decoration: none;
+  }
+  .intro {
+    display: grid;
+    gap: 3rem;
+  }
+  @media (min-width: 52rem) {
+    .intro {
+      grid-template-columns: 1fr 2fr;
+      gap: clamp(3rem, 8vw, 8rem);
+    }
+  }
+  .intro__details {
+    margin: 0;
+    display: grid;
+    gap: 1.25rem;
+    align-content: start;
+    border-top: 1px solid var(--ocre);
+    padding-top: 1.5rem;
+  }
+  .intro__details dt {
+    font-size: var(--t-xs);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ardoise);
+  }
+  .intro__details dd {
+    margin: 0.2rem 0 0;
+  }
+  .intro__textes {
+    display: grid;
+    gap: 2.5rem;
+  }
+  @media (min-width: 64rem) {
+    .intro__textes {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .realisation {
+    margin-bottom: clamp(3rem, 7vw, 6rem);
+  }
+  .galerie-bloc + .galerie-bloc {
+    margin-top: clamp(1rem, 3vw, 2rem);
+  }
+</style>

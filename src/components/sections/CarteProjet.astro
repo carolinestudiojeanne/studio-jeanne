@@ -1,0 +1,52 @@
+---
+import Image from '../Image.astro'
+import type {ProjetCarte} from '../../lib/types'
+
+interface Props {
+  projet: ProjetCarte
+  titre?: 'h2' | 'h3'
+}
+const {projet, titre = 'h3'} = Astro.props
+const Titre = titre
+---
+
+<article class="carte">
+  <a href={`/projets/${projet.slug}`} class="carte__lien">
+    <Image image={projet.imagePrincipale} ratio={4 / 5} legende={false} sizes="(min-width: 64rem) 30vw, (min-width: 40rem) 45vw, 100vw" />
+    <div class="carte__texte">
+      <Titre class="carte__titre">{projet.titre}</Titre>
+      {projet.commune && <span class="carte__lieu">{projet.commune}</span>}
+    </div>
+  </a>
+</article>
+
+<style>
+  .carte__lien {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+  .carte__lien :global(img) {
+    transition: transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .carte__lien:hover :global(img) {
+    transform: scale(1.03);
+  }
+  .carte__texte {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    padding-top: 1.1rem;
+  }
+  .carte__titre {
+    font-size: var(--t-l);
+    margin: 0;
+  }
+  .carte__lieu {
+    font-size: var(--t-xs);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+</style>

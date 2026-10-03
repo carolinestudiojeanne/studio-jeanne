@@ -1,0 +1,54 @@
+# Studio Jeanne : site et interface d’édition
+
+Site de Caroline Canova, architecte d’intérieur à Bordeaux. Référence : le cahier des charges du 3 octobre 2026.
+
+| Dossier | Ce que c’est | Hébergement |
+|---|---|---|
+| `/` (racine) | Le site, en Astro (pages statiques, très rapides) | Netlify |
+| `/studio` | L’interface d’édition de Caroline (Sanity Studio) | `https://studio-jeanne.sanity.studio` |
+
+Tant que le site n’est pas relié à Sanity, il s’affiche avec du **contenu d’exemple** (les textes du brief, des projets fictifs et des images « Photo à venir ») et un bandeau le signale.
+
+## Travailler en local
+
+```bash
+npm install
+npm run dev            # le site sur http://localhost:4321
+
+cd studio && npm install
+npm run dev            # l’interface d’édition sur http://localhost:3333
+```
+
+Copier `.env.example` en `.env` (et `studio/.env.example` en `studio/.env`) et remplir les valeurs.
+
+## Mise en place (une seule fois, comptes au nom de Caroline)
+
+1. **Sanity** : créer un compte sur sanity.io, puis un projet « Studio Jeanne » (plan gratuit), jeu de données `production`. Noter le *Project ID*.
+   - Dans *API > CORS origins*, ajouter `http://localhost:4321`, `http://localhost:3333`, l’adresse Netlify et `https://www.studio-jeanne.com`.
+   - Dans *API > Tokens*, créer un jeton **Viewer** (pour l’aperçu) et un jeton **Editor** (pour l’import des textes, à supprimer ensuite).
+2. **Pré-remplir les textes** : `PUBLIC_SANITY_PROJECT_ID=… SANITY_API_WRITE_TOKEN=… npm run importer-textes`.
+3. **Publier l’interface d’édition** : `cd studio && npx sanity login && npx sanity deploy`.
+4. **Netlify** : nouveau site depuis ce dépôt GitHub. Les réglages de construction sont lus dans `netlify.toml`. Variables d’environnement à saisir :
+   - `PUBLIC_SANITY_PROJECT_ID`, `PUBLIC_SANITY_DATASET=production`
+   - `SANITY_API_READ_TOKEN` (jeton Viewer) et `SANITY_PREVIEW_SECRET` (un mot de passe au choix)
+   - `PUBLIC_GA_ID` (identifiant de mesure Google Analytics existant de Caroline)
+   - `PUBLIC_NOINDEX=true` jusqu’au jour de la mise en ligne
+5. **Publication automatique** : dans Netlify, *Build hooks* > créer un hook ; dans Sanity, *API > Webhooks* > coller l’adresse du hook (déclencheur : création, mise à jour, suppression). Chaque publication de Caroline reconstruit le site en une à deux minutes.
+6. **Bouton « Voir la page »** : dans `studio/.env`, `SANITY_STUDIO_SITE_URL` = l’adresse Netlify et `SANITY_STUDIO_PREVIEW_SECRET` = la même valeur que `SANITY_PREVIEW_SECRET`, puis redéployer le Studio.
+
+## Où changer quoi
+
+| Pour… | Fichier |
+|---|---|
+| Basculer le texte courant de gris à ardoise | `src/styles/global.css`, variable `--texte` |
+| Couleurs, tailles, espacements | `src/styles/global.css` (haut du fichier) |
+| Remplacer le logo provisoire | `src/components/Logo.astro`, `public/logo.svg`, `public/favicon.svg` |
+| Le menu | `src/lib/navigation.ts` |
+| Les redirections 301 | `public/_redirects` |
+| Les champs que Caroline remplit | `studio/schemaTypes/` |
+| Le gabarit des pages projet | `src/components/projet/PageProjet.astro` |
+
+## À savoir
+
+- La police Glacial Indifference (licence libre OFL) est servie depuis `public/fonts`. Elle n’a pas les guillemets « » ni le point médian : le navigateur les affiche avec la police de secours, l’écart est minime.
+- Les textes marqués « exemple » ou « à écrire » sont à remplacer dans Sanity.

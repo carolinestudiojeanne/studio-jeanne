@@ -1,0 +1,48 @@
+---
+import Base from '../layouts/Base.astro'
+import SectionTexte from '../components/sections/SectionTexte.astro'
+import ListeAvis from '../components/sections/ListeAvis.astro'
+import AppelAction from '../components/sections/AppelAction.astro'
+import {getAvis, getPageAvisClients, getReglages} from '../lib/contenu'
+
+const [page, avis, r] = await Promise.all([getPageAvisClients(), getAvis(), getReglages()])
+const titre = page.seo?.metaTitle || `Avis clients${r.suffixeTitre}`
+---
+
+<Base titre={titre} description={page.seo?.metaDescription} imagePartage={page.seo?.imagePartage}>
+  <SectionTexte titre={page.intro?.titre || 'Avis clients'} niveau="h1" texte={page.intro?.texte} serree>
+    {
+      r.nombreAvis ? (
+        <p class="note">
+          {r.noteGoogle ? `${String(r.noteGoogle).replace('.', ',')} sur 5, ` : ''}
+          {r.nombreAvis} avis sur Google.
+        </p>
+      ) : null
+    }
+    <p class="liens">
+      {r.ficheGoogle && <a class="lien-fleche" href={r.ficheGoogle} target="_blank" rel="noopener">Tous les avis sur Google</a>}
+      {r.lienLaisserAvis && <a class="lien-fleche" href={r.lienLaisserAvis} target="_blank" rel="noopener">Laisser un avis</a>}
+    </p>
+  </SectionTexte>
+
+  <section class="section section--serree">
+    <div class="colonne">
+      <ListeAvis avis={avis} colonnes={false} />
+    </div>
+  </section>
+
+  <AppelAction appel={page.appel} />
+</Base>
+
+<style>
+  .note {
+    font-size: var(--t-l);
+    color: var(--ardoise);
+  }
+  .liens {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 2rem;
+    margin-top: 1.5rem;
+  }
+</style>

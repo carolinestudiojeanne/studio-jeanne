@@ -1,0 +1,31 @@
+---
+/** S2 : texte seul en colonne étroite, titre facultatif. */
+import {texteEnHtml} from '../../lib/texte'
+import type {PortableText} from '../../lib/types'
+
+interface Props {
+  surtitre?: string
+  titre?: string
+  niveau?: 'h1' | 'h2'
+  texte?: PortableText
+  fond?: 'creme' | 'soutenu'
+  serree?: boolean
+}
+const {surtitre, titre, niveau = 'h2', texte, fond = 'creme', serree = false} = Astro.props
+const Titre = niveau
+const html = texteEnHtml(texte)
+const vide = !titre && !html && !Astro.slots.has('default')
+---
+
+{
+  !vide && (
+    <section class:list={['section', {'section--serree': serree, 'fond-soutenu': fond === 'soutenu'}]}>
+      <div class="colonne">
+        {surtitre && <span class="surtitre">{surtitre}</span>}
+        {titre && <Titre>{titre}</Titre>}
+        {html && <div class="texte" set:html={html} />}
+        <slot />
+      </div>
+    </section>
+  )
+}

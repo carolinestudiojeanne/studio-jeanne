@@ -1,0 +1,53 @@
+---
+/** S3 : texte + image, en alternance gauche / droite. */
+import Image from '../Image.astro'
+import {texteEnHtml} from '../../lib/texte'
+import type {SectionTexteImage} from '../../lib/types'
+
+interface Props {
+  bloc: SectionTexteImage
+  inverse?: boolean
+  numero?: string
+}
+const {bloc, inverse = false, numero} = Astro.props
+---
+
+<div class:list={['ti', {'ti--inverse': inverse}]}>
+  <div class="ti__image">
+    <Image image={bloc.image} ratio={4 / 5} arche sizes="(min-width: 64rem) 40vw, 100vw" />
+  </div>
+  <div class="ti__texte">
+    {numero && <span class="surtitre">{numero}</span>}
+    {bloc.titre && <h3>{bloc.titre}</h3>}
+    <div class="texte" set:html={texteEnHtml(bloc.texte)} />
+    <slot />
+  </div>
+</div>
+
+<style>
+  .ti {
+    display: grid;
+    gap: 2.5rem;
+    align-items: center;
+  }
+  .ti + :global(.ti) {
+    margin-top: clamp(4rem, 9vw, 8rem);
+  }
+  .ti__image {
+    max-width: 30rem;
+    width: 100%;
+  }
+  @media (min-width: 52rem) {
+    .ti {
+      grid-template-columns: 5fr 6fr;
+      gap: clamp(3rem, 8vw, 8rem);
+    }
+    .ti--inverse .ti__image {
+      order: 2;
+      justify-self: end;
+    }
+  }
+  .ti__texte {
+    max-width: var(--etroit);
+  }
+</style>

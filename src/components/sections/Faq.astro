@@ -1,0 +1,64 @@
+---
+/** Bloc questions fréquentes (balisé FAQPage par la page). */
+import type {QuestionReponse} from '../../lib/types'
+
+interface Props {
+  faq?: QuestionReponse[]
+  titre?: string
+}
+const {faq = [], titre = 'Questions fréquentes'} = Astro.props
+---
+
+{
+  faq.length > 0 && (
+    <section class="section fond-soutenu">
+      <div class="colonne">
+        <h2>{titre}</h2>
+        <div class="faq">
+          {faq.map((q) => (
+            <details class="faq__item">
+              <summary>{q.question}</summary>
+              <p>{q.reponse}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .faq {
+    border-top: 1px solid color-mix(in srgb, var(--ardoise) 25%, transparent);
+  }
+  .faq__item {
+    border-bottom: 1px solid color-mix(in srgb, var(--ardoise) 25%, transparent);
+  }
+  .faq__item summary {
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 1.4rem 0;
+    color: var(--ardoise);
+    font-size: var(--t-m);
+  }
+  .faq__item summary::-webkit-details-marker {
+    display: none;
+  }
+  .faq__item summary::after {
+    content: '+';
+    font-size: 1.5rem;
+    line-height: 1;
+    color: var(--ocre);
+    transition: transform 0.3s;
+  }
+  .faq__item[open] summary::after {
+    transform: rotate(45deg);
+  }
+  .faq__item p {
+    padding-bottom: 1.5rem;
+    margin: 0;
+  }
+</style>

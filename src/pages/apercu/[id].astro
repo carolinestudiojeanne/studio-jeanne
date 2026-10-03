@@ -1,0 +1,31 @@
+---
+/**
+ * Aperçu d'un projet avant publication (bouton « Voir la page » dans Sanity).
+ * Page calculée à la demande sur Netlify, protégée par un mot de passe partagé, jamais indexée.
+ */
+import PageProjet from '../../components/projet/PageProjet.astro'
+import {clientApercu} from '../../lib/sanity'
+import {Q} from '../../lib/queries'
+import type {Projet, ProjetCarte} from '../../lib/types'
+
+export const prerender = false
+
+const secret = import.meta.env.SANITY_PREVIEW_SECRET
+const token = import.meta.env.SANITY_API_READ_TOKEN
+Astro.response.headers.set('X-Robots-Tag', 'noindex, nofollow')
+Astro.response.headers.set('Cache-Control', 'no-store')
+
+if (!secret || !token || Astro.url.searchParams.get('secret') !== secret) {
+  return new Response('Aperçu non autorisé.', {status: 401})
+}
+const client = clientApercu(token)
+const id = Astro.params.id
+const [projet, tous] = client
+  ? await Promise.all([client.fetch<Projet | null>(Q.projetParId, {id}), client.fetch<ProjetCarte[]>(Q.projets)])
+  : [null, []]
+if (!projet) {
+  return new Response('Projet introuvable. Enregistrez-le une première fois, puis réessayez.', {status: 404})
+}
+---
+
+<PageProjet projet={{...projet, slug: projet.slug || 'apercu'}} tous={tous} apercu />

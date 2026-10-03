@@ -1,0 +1,125 @@
+---
+import Logo from './Logo.astro'
+import {MENU} from '../lib/navigation'
+import type {Reglages} from '../lib/types'
+
+interface Props {
+  reglages: Reglages
+  analytics: boolean
+}
+const {reglages: r, analytics} = Astro.props
+const tel = r.telephone?.replace(/\s/g, '')
+const annee = new Date().getFullYear()
+---
+
+<footer class="pied fond-ardoise">
+  <div class="conteneur pied__grille">
+    <div class="pied__marque">
+      <a href="/" aria-label="Studio Jeanne, retour à l’accueil"><Logo clair /></a>
+      {r.phraseLocale && <p class="pied__phrase">{r.phraseLocale}</p>}
+    </div>
+
+    <nav class="pied__nav" aria-label="Pages du site">
+      <ul>
+        {MENU.map((i) => <li><a href={i.href}>{i.libelle}</a></li>)}
+        <li><a href="/professionnels">Professionnels</a></li>
+        <li><a href="/avis-clients">Avis clients</a></li>
+      </ul>
+    </nav>
+
+    <div class="pied__contact">
+      <p>
+        {tel && <><a href={`tel:${tel}`}>{r.telephone}</a><br /></>}
+        {r.email && <a href={`mailto:${r.email}`}>{r.email}</a>}
+      </p>
+      <p>
+        {r.afficherAdresse && r.adresse && <>{r.adresse}, {r.codePostal} {r.ville}<br /></>}
+        {r.zone}
+      </p>
+      <ul class="pied__reseaux">
+        {r.instagram && <li><a href={r.instagram} target="_blank" rel="noopener">Instagram</a></li>}
+        {r.linkedin && <li><a href={r.linkedin} target="_blank" rel="noopener">LinkedIn</a></li>}
+      </ul>
+    </div>
+  </div>
+
+  <div class="conteneur pied__bas">
+    <span>© {annee} Studio Jeanne</span>
+    <ul>
+      <li><a href="/mentions-legales">Mentions légales</a></li>
+      <li><a href="/politique-de-confidentialite">Politique de confidentialité</a></li>
+      <li><a href="/cgv">CGV</a></li>
+      {analytics && <li><button type="button" class="pied__cookies" data-gerer-cookies>Gérer les cookies</button></li>}
+    </ul>
+  </div>
+</footer>
+
+<style>
+  .pied {
+    padding-block: clamp(4rem, 8vw, 6rem) 2rem;
+    font-size: var(--t-s);
+  }
+  .pied a {
+    text-decoration: none;
+  }
+  .pied a:hover {
+    text-decoration: underline;
+    text-decoration-color: var(--ocre);
+  }
+  .pied__grille {
+    display: grid;
+    gap: 3rem;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 48rem) {
+    .pied__grille {
+      grid-template-columns: 1.4fr 1fr 1fr;
+    }
+  }
+  .pied__phrase {
+    margin-top: 2rem;
+    max-width: 26rem;
+    opacity: 0.85;
+  }
+  .pied ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .pied__nav li + li {
+    margin-top: 0.6rem;
+  }
+  .pied__reseaux {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 1.25rem !important;
+  }
+  .pied__bas {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 1rem 2rem;
+    margin-top: clamp(3rem, 6vw, 5rem);
+    padding-top: 1.5rem;
+    border-top: 1px solid color-mix(in srgb, var(--creme) 25%, transparent);
+    font-size: var(--t-xs);
+    letter-spacing: 0.06em;
+  }
+  .pied__bas ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+  }
+  .pied__cookies {
+    background: none;
+    border: 0;
+    padding: 0;
+    color: inherit;
+    font: inherit;
+    letter-spacing: inherit;
+    cursor: pointer;
+  }
+  .pied__cookies:hover {
+    text-decoration: underline;
+  }
+</style>

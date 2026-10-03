@@ -1,0 +1,293 @@
+import {defineArrayMember, defineField, defineType} from 'sanity'
+import {DocumentIcon} from '@sanity/icons/Document'
+
+/**
+ * Pages fixes : un document unique par page, un groupe de champs par section.
+ * L'ordre et la mise en page des sections sont codés dans le site.
+ */
+
+const seoField = defineField({name: 'seo', title: 'Référencement (Google)', type: 'seo', group: 'seo', validation: (r) => r.required()})
+const groups = [
+  {name: 'contenu', title: 'Contenu', default: true},
+  {name: 'seo', title: 'Google'},
+]
+const appel = defineField({name: 'appel', title: 'Appel à l’action (bas de page)', type: 'appelAction', group: 'contenu'})
+const faq = defineField({
+  name: 'faq',
+  title: 'Questions fréquentes',
+  type: 'array',
+  group: 'contenu',
+  description: 'De 3 à 8 questions courtes, une par vraie question de client.',
+  of: [defineArrayMember({type: 'questionReponse'})],
+  validation: (r) => r.min(3).max(8),
+})
+const etapes = (title: string, description: string) =>
+  defineField({
+    name: 'etapes',
+    title,
+    type: 'array',
+    group: 'contenu',
+    description,
+    of: [defineArrayMember({type: 'sectionTexteImage'})],
+    validation: (r) => r.length(3).warning('La mise en page est prévue pour trois blocs.'),
+  })
+
+export const pageAccueil = defineType({
+  name: 'pageAccueil',
+  title: 'Accueil',
+  type: 'document',
+  icon: DocumentIcon,
+  groups,
+  fields: [
+    defineField({
+      name: 'hero',
+      title: '1. Grand visuel',
+      type: 'object',
+      group: 'contenu',
+      options: {collapsible: true, collapsed: false},
+      fields: [
+        defineField({name: 'image', title: 'Photo', type: 'imageAlt', validation: (r) => r.required()}),
+        defineField({
+          name: 'h1',
+          title: 'Petite ligne au-dessus de l’accroche',
+          type: 'string',
+          description: 'C’est le titre principal pour Google : gardez « architecte d’intérieur » et « Bordeaux ».',
+        }),
+        defineField({name: 'accroche', title: 'Accroche', type: 'string'}),
+        defineField({name: 'sousTitre', title: 'Sous-titre', type: 'string'}),
+        defineField({name: 'boutonLibelle', title: 'Texte du bouton', type: 'string', description: 'Le bouton mène à la page Contact.'}),
+      ],
+    }),
+    defineField({
+      name: 'projetsRecents',
+      title: '2. Projets récents',
+      type: 'object',
+      group: 'contenu',
+      description: 'Les projets affichés sont ceux cochés « Mettre en avant sur l’accueil ».',
+      options: {collapsible: true, collapsed: false},
+      fields: [
+        defineField({name: 'titre', title: 'Titre', type: 'string'}),
+        defineField({name: 'texte', title: 'Phrase', type: 'text', rows: 2}),
+        defineField({name: 'lienLibelle', title: 'Texte du lien', type: 'string'}),
+      ],
+    }),
+    defineField({
+      name: 'deroule',
+      title: '3. Le déroulé',
+      type: 'object',
+      group: 'contenu',
+      options: {collapsible: true, collapsed: false},
+      fields: [
+        defineField({name: 'titre', title: 'Titre', type: 'string'}),
+        defineField({name: 'texte', title: 'Texte', type: 'texteRiche'}),
+        defineField({name: 'lienLibelle', title: 'Texte du lien', type: 'string'}),
+      ],
+    }),
+    defineField({
+      name: 'aiguillage',
+      title: '4. Deux points de départ',
+      type: 'object',
+      group: 'contenu',
+      options: {collapsible: true, collapsed: false},
+      fields: [
+        defineField({name: 'titre', title: 'Titre', type: 'string'}),
+        ...(['colonne1', 'colonne2'] as const).map((name, i) =>
+          defineField({
+            name,
+            title: i === 0 ? 'Colonne « déjà votre maison » (vers L’accompagnement)' : 'Colonne « pas encore trouvée » (vers Trouver votre bien)',
+            type: 'object',
+            fields: [
+              defineField({name: 'titre', title: 'Titre', type: 'string'}),
+              defineField({name: 'texte', title: 'Texte', type: 'text', rows: 3}),
+              defineField({name: 'boutonLibelle', title: 'Texte du bouton', type: 'string'}),
+            ],
+          }),
+        ),
+      ],
+    }),
+    defineField({
+      name: 'caroline',
+      title: '5. Caroline',
+      type: 'object',
+      group: 'contenu',
+      options: {collapsible: true, collapsed: false},
+      fields: [
+        defineField({name: 'image', title: 'Photo', type: 'imageAlt'}),
+        defineField({name: 'texte', title: 'Texte', type: 'text', rows: 4}),
+        defineField({name: 'lienLibelle', title: 'Texte du lien', type: 'string'}),
+      ],
+    }),
+    defineField({
+      name: 'avis',
+      title: '6. Avis',
+      type: 'object',
+      group: 'contenu',
+      description: 'Les avis affichés sont ceux cochés « Afficher sur l’accueil ». Le nombre d’avis se règle dans Réglages.',
+      options: {collapsible: true, collapsed: false},
+      fields: [
+        defineField({name: 'titre', title: 'Titre', type: 'string'}),
+        defineField({name: 'lienLibelle', title: 'Texte du lien', type: 'string'}),
+      ],
+    }),
+    {...appel, title: '7. Appel à l’action'},
+    seoField,
+  ],
+  preview: {prepare: () => ({title: 'Accueil'})},
+})
+
+export const pageProjets = defineType({
+  name: 'pageProjets',
+  title: 'Projets',
+  type: 'document',
+  icon: DocumentIcon,
+  groups,
+  fields: [
+    defineField({name: 'intro', title: '1. Introduction', type: 'sectionTexte', group: 'contenu'}),
+    defineField({
+      name: 'blocPro',
+      title: '3. Bloc Professionnels',
+      type: 'object',
+      group: 'contenu',
+      description: 'En bas de la page, après la grille des projets. Mène à la page Professionnels.',
+      options: {collapsible: true, collapsed: false},
+      fields: [
+        defineField({name: 'image', title: 'Image', type: 'imageAlt'}),
+        defineField({name: 'titre', title: 'Titre', type: 'string'}),
+        defineField({name: 'texte', title: 'Phrase', type: 'text', rows: 2}),
+        defineField({name: 'lienLibelle', title: 'Texte du lien', type: 'string'}),
+      ],
+    }),
+    seoField,
+  ],
+  preview: {prepare: () => ({title: 'Projets'})},
+})
+
+export const pageAccompagnement = defineType({
+  name: 'pageAccompagnement',
+  title: 'L’accompagnement',
+  type: 'document',
+  icon: DocumentIcon,
+  groups,
+  fields: [
+    defineField({name: 'aiguillage', title: '1. Ligne vers Trouver votre bien', type: 'ligneAiguillage', group: 'contenu'}),
+    defineField({name: 'intro', title: '2. Titre et introduction', type: 'sectionTexte', group: 'contenu'}),
+    etapes('3. Le déroulé en trois temps', 'Écoute, conception, plans et artisans : un texte et une image par temps.'),
+    defineField({name: 'horsPerimetre', title: '4. Le chantier', type: 'sectionTexte', group: 'contenu'}),
+    defineField({name: 'commandes', title: '5. Les commandes', type: 'sectionTexte', group: 'contenu'}),
+    faq,
+    appel,
+    seoField,
+  ],
+  preview: {prepare: () => ({title: 'L’accompagnement'})},
+})
+
+export const pageTrouverVotreBien = defineType({
+  name: 'pageTrouverVotreBien',
+  title: 'Trouver votre bien',
+  type: 'document',
+  icon: DocumentIcon,
+  groups,
+  fields: [
+    defineField({name: 'aiguillage', title: '1. Ligne vers L’accompagnement', type: 'ligneAiguillage', group: 'contenu'}),
+    defineField({name: 'intro', title: '2. Titre et introduction', type: 'sectionTexte', group: 'contenu'}),
+    etapes('3. Trois blocs', 'Le regard sur les biens, la double compétence, ce qu’on voit avant de signer.'),
+    defineField({name: 'apresAchat', title: '4. Après l’achat', type: 'sectionTexte', group: 'contenu'}),
+    defineField({name: 'deuxStructures', title: '5. Deux structures', type: 'sectionTexte', group: 'contenu'}),
+    faq,
+    appel,
+    defineField({
+      name: 'lienHomelikeLibelle',
+      title: 'Texte du lien vers Homelike Home',
+      type: 'string',
+      group: 'contenu',
+      description: 'Affiché tout en bas de la page, s’ouvre dans un nouvel onglet.',
+    }),
+    seoField,
+  ],
+  preview: {prepare: () => ({title: 'Trouver votre bien'})},
+})
+
+export const pageAPropos = defineType({
+  name: 'pageAPropos',
+  title: 'À propos',
+  type: 'document',
+  icon: DocumentIcon,
+  groups,
+  fields: [
+    defineField({name: 'titre', title: 'Titre', type: 'string', group: 'contenu'}),
+    defineField({name: 'texte', title: 'Texte', type: 'texteRiche', group: 'contenu'}),
+    defineField({name: 'portrait', title: 'Portrait', type: 'imageAlt', group: 'contenu'}),
+    defineField({name: 'imageEchoppe', title: 'Image de l’échoppe', type: 'imageAlt', group: 'contenu'}),
+    defineField({name: 'lienAvisLibelle', title: 'Texte du lien vers les avis', type: 'string', group: 'contenu'}),
+    appel,
+    seoField,
+  ],
+  preview: {prepare: () => ({title: 'À propos'})},
+})
+
+export const pageContact = defineType({
+  name: 'pageContact',
+  title: 'Contact',
+  type: 'document',
+  icon: DocumentIcon,
+  groups,
+  fields: [
+    defineField({name: 'intro', title: '1. Texte', type: 'sectionTexte', group: 'contenu'}),
+    defineField({
+      name: 'boutonLibelle',
+      title: 'Texte du bouton vers le formulaire',
+      type: 'string',
+      group: 'contenu',
+      description: 'Le formulaire Tally s’affiche dans la page ; ce bouton sert si le formulaire ne peut pas s’afficher.',
+    }),
+    defineField({
+      name: 'coordonnees',
+      title: '3. Phrase des coordonnées',
+      type: 'string',
+      group: 'contenu',
+      description: 'Le téléphone et l’e-mail (pris dans les Réglages) sont ajoutés automatiquement, cliquables.',
+    }),
+    defineField({name: 'zone', title: '4. Zone d’intervention', type: 'sectionTexte', group: 'contenu'}),
+    seoField,
+  ],
+  preview: {prepare: () => ({title: 'Contact'})},
+})
+
+export const pageProfessionnels = defineType({
+  name: 'pageProfessionnels',
+  title: 'Professionnels',
+  type: 'document',
+  icon: DocumentIcon,
+  groups,
+  fields: [
+    defineField({name: 'intro', title: '1. Introduction', type: 'sectionTexte', group: 'contenu'}),
+    appel,
+    seoField,
+  ],
+  preview: {prepare: () => ({title: 'Professionnels'})},
+})
+
+export const pageAvisClients = defineType({
+  name: 'pageAvisClients',
+  title: 'Avis clients',
+  type: 'document',
+  icon: DocumentIcon,
+  groups,
+  fields: [
+    defineField({name: 'intro', title: '1. Introduction', type: 'sectionTexte', group: 'contenu'}),
+    appel,
+    seoField,
+  ],
+  preview: {prepare: () => ({title: 'Avis clients'})},
+})
+
+export const pagesFixes = [
+  pageAccueil,
+  pageProjets,
+  pageAccompagnement,
+  pageTrouverVotreBien,
+  pageAPropos,
+  pageContact,
+  pageProfessionnels,
+  pageAvisClients,
+]

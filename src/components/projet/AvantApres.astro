@@ -1,0 +1,128 @@
+---
+/**
+ * Avant / après : un curseur à faire glisser, utilisable au clavier.
+ * Sans JavaScript, les deux images restent visibles côte à côte.
+ */
+import {rendreImage} from '../../lib/image'
+import type {Projet} from '../../lib/types'
+
+interface Props {
+  paires: NonNullable<Projet['avantApres']>
+}
+const {paires} = Astro.props
+const RATIO = 3 / 2
+const items = paires
+  .map((p) => ({avant: rendreImage(p.avant, {ratio: RATIO}), apres: rendreImage(p.apres, {ratio: RATIO}), legende: p.legende}))
+  .filter((p) => p.avant && p.apres)
+---
+
+<div class="aa-liste">
+  {
+    items.map((p) => (
+      <figure class="aa">
+        <div class="aa__cadre" style={`aspect-ratio: ${RATIO}`}>
+          <img class="aa__img" src={p.apres!.src} srcset={p.apres!.srcset} sizes="(min-width: 82rem) 82rem, 100vw" width={p.apres!.width} height={p.apres!.height} alt={`Après : ${p.apres!.alt}`} loading="lazy" />
+          <div class="aa__avant">
+            <img class="aa__img" src={p.avant!.src} srcset={p.avant!.srcset} sizes="(min-width: 82rem) 82rem, 100vw" width={p.avant!.width} height={p.avant!.height} alt={`Avant : ${p.avant!.alt}`} loading="lazy" />
+          </div>
+          <span class="aa__etiquette aa__etiquette--avant" aria-hidden="true">Avant</span>
+          <span class="aa__etiquette aa__etiquette--apres" aria-hidden="true">Après</span>
+          <div class="aa__poignee" aria-hidden="true" />
+          <input class="aa__curseur" type="range" min="0" max="100" value="50" aria-label="Comparer avant et après" />
+        </div>
+        {p.legende && <figcaption>{p.legende}</figcaption>}
+      </figure>
+    ))
+  }
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.aa__cadre').forEach((cadre) => {
+    const curseur = cadre.querySelector<HTMLInputElement>('.aa__curseur')
+    const maj = () => cadre.style.setProperty('--pos', `${curseur?.value ?? 50}%`)
+    curseur?.addEventListener('input', maj)
+    maj()
+  })
+</script>
+
+<style>
+  .aa-liste {
+    display: grid;
+    gap: clamp(3rem, 6vw, 5rem);
+  }
+  .aa__cadre {
+    --pos: 50%;
+    position: relative;
+    overflow: hidden;
+    background: var(--creme-soutenu);
+  }
+  .aa__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .aa__avant {
+    position: absolute;
+    inset: 0;
+    clip-path: inset(0 calc(100% - var(--pos)) 0 0);
+  }
+  .aa__poignee {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: var(--pos);
+    width: 2px;
+    margin-left: -1px;
+    background: var(--creme);
+    pointer-events: none;
+  }
+  .aa__poignee::after {
+    content: '‹ ›';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 3rem;
+    height: 3rem;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--creme);
+    color: var(--ardoise);
+    font-size: 1.1rem;
+    letter-spacing: 0.1em;
+  }
+  .aa__curseur {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: ew-resize;
+    margin: 0;
+  }
+  .aa__curseur:focus-visible + .aa__poignee,
+  .aa__cadre:has(.aa__curseur:focus-visible) {
+    outline: 2px solid var(--ardoise);
+    outline-offset: 3px;
+  }
+  .aa__etiquette {
+    position: absolute;
+    top: 1rem;
+    padding: 0.35rem 0.8rem;
+    background: var(--creme);
+    color: var(--ardoise);
+    font-size: var(--t-xs);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    border-radius: 999px;
+  }
+  .aa__etiquette--avant {
+    left: 1rem;
+  }
+  .aa__etiquette--apres {
+    right: 1rem;
+  }
+</style>

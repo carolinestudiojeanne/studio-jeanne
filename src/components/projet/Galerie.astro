@@ -1,0 +1,58 @@
+---
+/**
+ * Galerie de grandes photos. Chaque photo est « pleine largeur » ou « par paire » :
+ * deux photos « par paire » qui se suivent s'affichent côte à côte.
+ */
+import Image from '../Image.astro'
+import type {Projet} from '../../lib/types'
+
+interface Props {
+  galerie: NonNullable<Projet['galerie']>
+}
+const {galerie} = Astro.props
+
+type Ligne = {type: 'pleine'; items: typeof galerie} | {type: 'paire'; items: typeof galerie}
+const lignes: Ligne[] = []
+for (let i = 0; i < galerie.length; i++) {
+  const item = galerie[i]
+  const suivant = galerie[i + 1]
+  if (item.affichage === 'paire' && suivant?.affichage === 'paire') {
+    lignes.push({type: 'paire', items: [item, suivant]})
+    i++
+  } else {
+    lignes.push({type: 'pleine', items: [item]})
+  }
+}
+---
+
+<div class="galerie">
+  {
+    lignes.map((ligne) =>
+      ligne.type === 'paire' ? (
+        <div class="galerie__paire">
+          {ligne.items.map((g) => (
+            <Image image={g.image} ratio={4 / 5} sizes="(min-width: 52rem) 45vw, 100vw" />
+          ))}
+        </div>
+      ) : (
+        <Image image={ligne.items[0].image} sizes="(min-width: 82rem) 82rem, 100vw" />
+      ),
+    )
+  }
+</div>
+
+<style>
+  .galerie {
+    display: grid;
+    gap: clamp(1rem, 3vw, 2rem);
+  }
+  .galerie__paire {
+    display: grid;
+    gap: clamp(1rem, 3vw, 2rem);
+  }
+  @media (min-width: 40rem) {
+    .galerie__paire {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>

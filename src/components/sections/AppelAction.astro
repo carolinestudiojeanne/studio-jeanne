@@ -1,0 +1,52 @@
+---
+/** S5 : bloc d'appel à l'action, en fin de chaque page. Le bouton mène toujours à /contact. */
+import type {AppelAction} from '../../lib/types'
+
+interface Props {
+  appel?: AppelAction
+  /** Lien secondaire facultatif (ex. vers L'accompagnement sur les pages projet). */
+  lien?: {libelle: string; href: string}
+}
+const {appel, lien} = Astro.props
+---
+
+{
+  appel?.titre && (
+    <section class="section appel fond-ardoise">
+      <div class="colonne appel__contenu">
+        <h2>{appel.titre}</h2>
+        {appel.texte && <p>{appel.texte}</p>}
+        <div class="appel__actions">
+          {appel.boutonLibelle && (
+            <a class="bouton" href="/contact">
+              {appel.boutonLibelle}
+            </a>
+          )}
+          {lien && (
+            <a class="lien-fleche" href={lien.href}>
+              {lien.libelle}
+            </a>
+          )}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .appel__contenu {
+    text-align: center;
+  }
+  .appel__contenu p {
+    font-size: var(--t-m);
+    opacity: 0.92;
+  }
+  .appel__actions {
+    margin-top: 2.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem 2.5rem;
+  }
+</style>

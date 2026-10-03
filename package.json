@@ -1,0 +1,26 @@
+{
+  "name": "studio-jeanne-site",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "importer-textes": "tsx scripts/importer-textes.ts",
+    "studio": "npm --prefix studio run dev"
+  },
+  "dependencies": {
+    "@astrojs/netlify": "^8.2.6",
+    "@astrojs/sitemap": "^3.7.4",
+    "@portabletext/to-html": "^6.0.0",
+    "@sanity/client": "^8.9.0",
+    "@sanity/image-url": "^2.1.1",
+    "astro": "^7.3.5"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "tsx": "^4.23.15",
+    "typescript": "^6.0.3"
+  }
+}

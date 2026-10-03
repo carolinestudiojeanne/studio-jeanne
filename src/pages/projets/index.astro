@@ -1,0 +1,76 @@
+---
+import Base from '../../layouts/Base.astro'
+import SectionTexte from '../../components/sections/SectionTexte.astro'
+import GrilleProjets from '../../components/sections/GrilleProjets.astro'
+import Image from '../../components/Image.astro'
+import {getPageProjets, getProjets, getReglages} from '../../lib/contenu'
+
+const [page, projets, reglages] = await Promise.all([getPageProjets(), getProjets(), getReglages()])
+const residentiels = projets.filter((p) => p.categorie !== 'professionnel')
+const titre = page.seo?.metaTitle || `Projets${reglages.suffixeTitre}`
+---
+
+<Base titre={titre} description={page.seo?.metaDescription} imagePartage={page.seo?.imagePartage}>
+  <!-- 1. Introduction -->
+  <SectionTexte titre={page.intro?.titre || 'Projets'} niveau="h1" texte={page.intro?.texte} serree />
+
+  <!-- 2. Grille des projets résidentiels, dans l'ordre choisi par Caroline -->
+  <section class="conteneur grille-projets">
+    <h2 class="visuellement-cache">Tous les projets</h2>
+    <GrilleProjets projets={residentiels} />
+  </section>
+
+  <!-- 3. Bloc Professionnels, avec image -->
+  {
+    page.blocPro?.titre && (
+      <section class="section">
+        <div class="conteneur">
+          <a class="bloc-pro fond-ardoise" href="/professionnels">
+            <Image image={page.blocPro.image} ratio={3 / 2} legende={false} sizes="(min-width: 52rem) 50vw, 100vw" />
+            <div class="bloc-pro__texte">
+              <span class="surtitre">Professionnels</span>
+              <h2>{page.blocPro.titre}</h2>
+              {page.blocPro.texte && <p>{page.blocPro.texte}</p>}
+              {page.blocPro.lienLibelle && <span class="lien-fleche">{page.blocPro.lienLibelle}</span>}
+            </div>
+          </a>
+        </div>
+      </section>
+    )
+  }
+</Base>
+
+<style>
+  .grille-projets {
+    padding-bottom: var(--section);
+  }
+  .bloc-pro {
+    display: grid;
+    text-decoration: none;
+    overflow: hidden;
+  }
+  @media (min-width: 52rem) {
+    .bloc-pro {
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+    }
+  }
+  .bloc-pro__texte {
+    padding: clamp(2rem, 6vw, 5rem);
+  }
+  .bloc-pro__texte h2 {
+    font-size: var(--t-l);
+  }
+  .bloc-pro__texte p {
+    margin-bottom: 2rem;
+  }
+  .bloc-pro .lien-fleche {
+    color: var(--creme);
+  }
+  .bloc-pro :global(img) {
+    transition: transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .bloc-pro:hover :global(img) {
+    transform: scale(1.03);
+  }
+</style>

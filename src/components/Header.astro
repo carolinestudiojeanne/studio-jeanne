@@ -1,0 +1,189 @@
+---
+import Logo from './Logo.astro'
+import type {Reglages} from '../lib/types'
+import {MENU} from '../lib/navigation'
+
+interface Props {
+  reglages: Reglages
+}
+const {reglages} = Astro.props
+const chemin = Astro.url.pathname.replace(/\.html$/, '')
+
+const actif = (href: string) => chemin === href || chemin.startsWith(`${href}/`)
+const tel = reglages.telephone?.replace(/\s/g, '')
+---
+
+<header class="entete">
+  <div class="conteneur entete__barre">
+    <a href="/" class="entete__logo" aria-label="Studio Jeanne, retour à l’accueil">
+      <Logo />
+    </a>
+
+    <button class="entete__bouton" type="button" aria-expanded="false" aria-controls="menu-principal">
+      <span class="entete__bouton-texte">Menu</span>
+      <span class="entete__burger" aria-hidden="true"><span></span><span></span></span>
+    </button>
+
+    <nav id="menu-principal" class="menu" aria-label="Menu principal">
+      <ul class="menu__liste">
+        {
+          MENU.map((item) => (
+            <li>
+              <a href={item.href} class="menu__lien" aria-current={actif(item.href) ? 'page' : undefined}>
+                {item.libelle}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      {tel && <a class="menu__tel" href={`tel:${tel}`}>{reglages.telephone}</a>}
+    </nav>
+  </div>
+</header>
+
+<script>
+  const bouton = document.querySelector<HTMLButtonElement>('.entete__bouton')
+  const menu = document.getElementById('menu-principal')
+  const fermer = () => {
+    bouton?.setAttribute('aria-expanded', 'false')
+    document.documentElement.classList.remove('menu-ouvert')
+  }
+  bouton?.addEventListener('click', () => {
+    const ouvert = bouton.getAttribute('aria-expanded') === 'true'
+    bouton.setAttribute('aria-expanded', String(!ouvert))
+    document.documentElement.classList.toggle('menu-ouvert', !ouvert)
+    if (!ouvert) menu?.querySelector('a')?.focus()
+  })
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && bouton?.getAttribute('aria-expanded') === 'true') {
+      fermer()
+      bouton.focus()
+    }
+  })
+  window.matchMedia('(min-width: 64rem)').addEventListener('change', fermer)
+</script>
+
+<style>
+  .entete {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: color-mix(in srgb, var(--creme) 94%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid color-mix(in srgb, var(--ardoise) 10%, transparent);
+  }
+  .entete__barre {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    min-height: 5.25rem;
+  }
+  .entete__logo {
+    text-decoration: none;
+    position: relative;
+    z-index: 2;
+  }
+
+  .menu__liste {
+    display: flex;
+    gap: clamp(1.25rem, 2.4vw, 2.5rem);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .menu__lien {
+    font-size: var(--t-xs);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--ardoise);
+    padding-block: 0.5rem;
+    border-bottom: 1px solid transparent;
+  }
+  .menu__lien:hover,
+  .menu__lien[aria-current='page'] {
+    border-bottom-color: var(--ocre);
+  }
+  .menu__tel {
+    display: none;
+  }
+
+  .entete__bouton {
+    display: none;
+    align-items: center;
+    gap: 0.75rem;
+    background: none;
+    border: 0;
+    padding: 0.5rem 0;
+    color: var(--ardoise);
+    font: inherit;
+    font-size: var(--t-xs);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    cursor: pointer;
+    position: relative;
+    z-index: 2;
+  }
+  .entete__burger {
+    display: grid;
+    gap: 6px;
+    width: 1.6rem;
+  }
+  .entete__burger span {
+    height: 1px;
+    background: currentColor;
+    transition: transform 0.3s;
+  }
+  .entete__bouton[aria-expanded='true'] .entete__burger span:first-child {
+    transform: translateY(3.5px) rotate(45deg);
+  }
+  .entete__bouton[aria-expanded='true'] .entete__burger span:last-child {
+    transform: translateY(-3.5px) rotate(-45deg);
+  }
+
+  /* Mobile et tablette : menu plein écran */
+  @media (max-width: 63.99rem) {
+    .entete__bouton {
+      display: inline-flex;
+    }
+    .menu {
+      position: fixed;
+      inset: 0;
+      background: var(--creme);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 6rem var(--gouttiere) 3rem;
+      gap: 3rem;
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity 0.3s, visibility 0.3s;
+    }
+    :global(.menu-ouvert) .menu {
+      visibility: visible;
+      opacity: 1;
+    }
+    :global(.menu-ouvert) body {
+      overflow: hidden;
+    }
+    .menu__liste {
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    .menu__lien {
+      font-size: var(--t-l);
+      letter-spacing: 0.04em;
+      text-transform: none;
+    }
+    .menu__tel {
+      display: inline-block;
+      font-size: var(--t-m);
+      letter-spacing: 0.08em;
+      text-decoration: none;
+      border-top: 1px solid var(--ocre);
+      padding-top: 1.5rem;
+      align-self: flex-start;
+    }
+  }
+</style>

@@ -1,0 +1,89 @@
+---
+import '../styles/global.css'
+import Header from '../components/Header.astro'
+import Footer from '../components/Footer.astro'
+import Cookies from '../components/Cookies.astro'
+import {getReglages} from '../lib/contenu'
+import {sanityActif} from '../lib/sanity'
+import {imagePartageUrl} from '../lib/image'
+import {canonique, schemaEntreprise, SITE} from '../lib/seo'
+import type {ImageData} from '../lib/types'
+
+interface Props {
+  /** Title complet (déjà suffixé si besoin). */
+  titre: string
+  description?: string
+  imagePartage?: ImageData
+  /** Données structurées propres à la page, en plus de celles de l'entreprise. */
+  schemas?: Array<Record<string, unknown> | null>
+  type?: 'website' | 'article'
+  noindex?: boolean
+}
+
+const {titre, description, imagePartage, schemas = [], type = 'website', noindex = false} = Astro.props
+const reglages = await getReglages()
+const url = canonique(Astro.url.pathname)
+const image = imagePartageUrl(imagePartage) || imagePartageUrl(reglages.imagePartage) || '/partage.png'
+const imageAbsolue = image.startsWith('http') ? image : `${SITE}${image}`
+const gaId = (import.meta.env.PUBLIC_GA_ID as string | undefined) || ''
+const sansIndex = noindex || import.meta.env.PUBLIC_NOINDEX === 'true'
+const jsonLd = [schemaEntreprise(reglages), ...schemas].filter(Boolean)
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{titre}</title>
+    {description && <meta name="description" content={description} />}
+    <link rel="canonical" href={url} />
+    {sansIndex && <meta name="robots" content="noindex, nofollow" />}
+
+    <link rel="preload" href="/fonts/glacial-indifference-400.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta name="theme-color" content="#FBF7EF" />
+
+    <meta property="og:type" content={type} />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:site_name" content="Studio Jeanne" />
+    <meta property="og:title" content={titre} />
+    {description && <meta property="og:description" content={description} />}
+    <meta property="og:url" content={url} />
+    <meta property="og:image" content={imageAbsolue} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={titre} />
+    {description && <meta name="twitter:description" content={description} />}
+    <meta name="twitter:image" content={imageAbsolue} />
+
+    {jsonLd.map((s) => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
+  </head>
+  <body>
+    <a class="lien-evitement" href="#contenu">Aller au contenu</a>
+    {
+      !sanityActif && (
+        <div class="bandeau-exemple" role="note">
+          Aperçu avec du contenu d’exemple : le site n’est pas encore relié à Sanity.
+        </div>
+      )
+    }
+    <Header reglages={reglages} />
+    <main id="contenu">
+      <slot />
+    </main>
+    <Footer reglages={reglages} analytics={Boolean(gaId)} />
+    {gaId && <Cookies gaId={gaId} />}
+  </body>
+</html>
+
+<style>
+  .bandeau-exemple {
+    background: var(--ardoise);
+    color: var(--creme);
+    text-align: center;
+    font-size: var(--t-xs);
+    letter-spacing: 0.08em;
+    padding: 0.5rem 1rem;
+  }
+</style>
