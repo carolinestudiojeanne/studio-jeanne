@@ -14,7 +14,7 @@ const tel = reglages.telephone?.replace(/\s/g, '')
 ---
 
 <header class="entete">
-  <div class="conteneur entete__barre">
+  <div class="entete__barre">
     <a href="/" class="entete__logo" aria-label="Studio Jeanne, retour à l’accueil">
       <Logo />
     </a>
@@ -68,8 +68,7 @@ const tel = reglages.telephone?.replace(/\s/g, '')
     position: sticky;
     top: 0;
     z-index: 50;
-    background: color-mix(in srgb, var(--creme) 94%, transparent);
-    backdrop-filter: blur(8px);
+    background: var(--blanc);
     border-bottom: 1px solid color-mix(in srgb, var(--ardoise) 10%, transparent);
   }
   .entete__barre {
@@ -77,14 +76,20 @@ const tel = reglages.telephone?.replace(/\s/g, '')
     align-items: center;
     justify-content: space-between;
     gap: 2rem;
-    min-height: 5.25rem;
+    min-height: 4.5rem;
+    padding-inline: clamp(1rem, 2.5vw, 2rem);
   }
   .entete__logo {
     text-decoration: none;
+    display: block;
+    width: 5.25rem;
     position: relative;
     z-index: 2;
   }
 
+  .entete__logo :global(.logo) {
+    width: 100%;
+  }
   .menu__liste {
     display: flex;
     gap: clamp(1.25rem, 2.4vw, 2.5rem);
@@ -150,7 +155,7 @@ const tel = reglages.telephone?.replace(/\s/g, '')
     .menu {
       position: fixed;
       inset: 0;
-      background: var(--creme);
+      background: var(--blanc);
       display: flex;
       flex-direction: column;
       justify-content: center;
