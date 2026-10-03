@@ -42,6 +42,7 @@
 
   /* Espacements */
   --gouttiere: clamp(1.25rem, 4vw, 3rem);
+  --arrondi: 0.75rem; /* coins arrondis de toutes les images */
   --section: clamp(4.5rem, 10vw, 9rem);
   --large: 82rem;
   --etroit: 40rem;
@@ -248,6 +249,8 @@ a:hover {
 .arche {
   border-top-left-radius: 9999px;
   border-top-right-radius: 9999px;
+  border-bottom-left-radius: var(--arrondi);
+  border-bottom-right-radius: var(--arrondi);
   overflow: hidden;
 }
 figure {

@@ -48,7 +48,12 @@ const avecLegende = legende && (img?.legende || img?.rendu3D)
 <style>
   .image__cadre {
     overflow: hidden;
+    border-radius: var(--arrondi);
     background: var(--creme-soutenu);
+  }
+  /* Image en arche : haut en demi-cercle, bas légèrement arrondi. */
+  .image__cadre.arche {
+    border-radius: 9999px 9999px var(--arrondi) var(--arrondi);
   }
   .image__cadre img {
     width: 100%;
