@@ -213,7 +213,7 @@ export const pageAccueil: PageAccueil = {
   },
   projetsRecents: {
     titre: 'Projets récents',
-    texte: 'Maisons de famille et résidences secondaires, à Bordeaux, en Gironde et sur la côte atlantique.',
+    texte: 'Rénovation complète de maisons et d’appartements, aménagement de bars et restaurants, à Bordeaux, en Gironde et sur la côte atlantique.',
     lienLibelle: 'Voir tous les projets',
   },
   deroule: {
