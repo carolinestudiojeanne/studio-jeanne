@@ -89,8 +89,9 @@ const place = (i: number, centre: number) => placeCarrousel(i, centre, n)
     padding: 0;
     display: grid;
     grid-template-columns: 1fr;
+    /* Photos collées les unes aux autres, alignées sur leur milieu. */
     align-items: center;
-    gap: clamp(1rem, 2vw, 2rem);
+    gap: 0;
   }
   .carrousel__item {
     display: none;
@@ -106,6 +107,10 @@ const place = (i: number, centre: number) => placeCarrousel(i, centre, n)
     text-decoration: none;
     color: inherit;
     text-align: center;
+  }
+  .carrousel__titre,
+  .carrousel__lieu {
+    padding-inline: 0.5rem;
   }
   .carrousel__titre {
     display: block;
@@ -125,7 +130,7 @@ const place = (i: number, centre: number) => placeCarrousel(i, centre, n)
   /* Tablette : un voisin de chaque côté. */
   @media (min-width: 52rem) {
     .carrousel__piste {
-      grid-template-columns: 1fr 1.4fr 1fr;
+      grid-template-columns: 1.4fr 2fr 1.4fr;
     }
     .carrousel__item[data-place='g1'],
     .carrousel__item[data-place='d1'] {
@@ -141,10 +146,6 @@ const place = (i: number, centre: number) => placeCarrousel(i, centre, n)
     .carrousel__item[data-place='d1'] {
       grid-column: 3;
     }
-    /* Les voisins : format paysage, plus petits que le projet du centre. */
-    .carrousel__item:not([data-place='centre']) :global(.image__cadre) {
-      aspect-ratio: 5 / 4 !important;
-    }
     .carrousel__item:not([data-place='centre']) .carrousel__titre {
       font-size: var(--t-s);
     }
@@ -153,7 +154,7 @@ const place = (i: number, centre: number) => placeCarrousel(i, centre, n)
   /* Grand écran : deux voisins de chaque côté. */
   @media (min-width: 75rem) {
     .carrousel__piste {
-      grid-template-columns: 1fr 1fr 1.9fr 1fr 1fr;
+      grid-template-columns: 1fr 1.4fr 2fr 1.4fr 1fr;
     }
     .carrousel__item[data-place='g2'],
     .carrousel__item[data-place='d2'] {
