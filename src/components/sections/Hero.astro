@@ -11,13 +11,15 @@ interface Props {
   titre?: string
   sousTitre?: string
   bouton?: {libelle?: string; href: string}
+  /** Texte centré, grand titre sur deux lignes (accueil). */
+  centre?: boolean
 }
-const {image, surtitre, surtitreEstH1 = false, titre, sousTitre, bouton} = Astro.props
+const {image, surtitre, surtitreEstH1 = false, titre, sousTitre, bouton, centre = false} = Astro.props
 const TitreTag = surtitreEstH1 ? 'p' : 'h1'
 const SurtitreTag = surtitreEstH1 ? 'h1' : 'p'
 ---
 
-<section class="hero">
+<section class:list={['hero', {'hero--centre': centre}]}>
   <div class="hero__image">
     <Image image={image} sizes="100vw" prioritaire legende={false} />
   </div>
@@ -80,5 +82,18 @@ const SurtitreTag = surtitreEstH1 ? 'h1' : 'p'
   .hero__sous-titre {
     font-size: var(--t-l);
     margin-bottom: 2.25rem;
+  }
+
+  /* Version centrée : titre sur deux lignes, au milieu. */
+  .hero--centre {
+    align-items: center;
+  }
+  .hero--centre .hero__contenu {
+    text-align: center;
+  }
+  .hero--centre .hero__titre {
+    max-width: none;
+    font-size: clamp(2rem, 4.2vw, 4.75rem);
+    text-wrap: balance;
   }
 </style>
