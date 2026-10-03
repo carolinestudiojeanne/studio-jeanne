@@ -19,6 +19,13 @@ const place = (i: number, centre: number) => placeCarrousel(i, centre, n)
 
 <div class="carrousel" data-carrousel>
   {
+    Astro.slots.has('default') && (
+      <div class="carrousel__entete">
+        <slot />
+      </div>
+    )
+  }
+  {
     n > 1 && (
       <button type="button" class="carrousel__fleche" data-sens="-1" aria-label="Projet précédent">
         <svg viewBox="0 0 20 16" aria-hidden="true"><path d="M20 8H1M8 1 1 8l7 7" /></svg>
@@ -75,15 +82,24 @@ const place = (i: number, centre: number) => placeCarrousel(i, centre, n)
 </script>
 
 <style>
+  /* Grille : flèche | photos | flèche. L'en-tête (titre, texte, lien) s'aligne sur les photos. */
   .carrousel {
-    display: flex;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
     align-items: center;
-    gap: clamp(0.25rem, 1.5vw, 1.25rem);
+    column-gap: clamp(0.25rem, 1.5vw, 1.25rem);
     padding-inline: clamp(0.25rem, 1.5vw, 1.25rem);
   }
+  .carrousel__entete {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .carrousel__fleche,
   .carrousel__piste {
-    flex: 1;
-    min-width: 0;
+    grid-row: 2;
+  }
+  .carrousel__piste {
+    grid-column: 2;
     list-style: none;
     margin: 0;
     padding: 0;

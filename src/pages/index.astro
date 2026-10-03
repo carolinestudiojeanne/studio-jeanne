@@ -32,22 +32,19 @@ const colonnes = [
   {
     projets.length > 0 && (
       <section class="section">
-        <div class="conteneur">
-          <div class="entete-section">
-            <div>
-              <h2>{projetsRecents?.titre}</h2>
-              {projetsRecents?.texte && <p>{projetsRecents.texte}</p>}
-            </div>
+        <CarrouselProjets projets={projets}>
+          <div class="projets-recents">
+            <h2>{projetsRecents?.titre}</h2>
+            {projetsRecents?.texte && <p>{projetsRecents.texte}</p>}
           </div>
-        </div>
-        {projetsRecents?.lienLibelle && (
-          <p class="voir-projets">
-            <a class="lien-fleche" href="/projets">
-              {projetsRecents.lienLibelle}
-            </a>
-          </p>
-        )}
-        <CarrouselProjets projets={projets} />
+          {projetsRecents?.lienLibelle && (
+            <p class="voir-projets">
+              <a class="lien-fleche" href="/projets">
+                {projetsRecents.lienLibelle}
+              </a>
+            </p>
+          )}
+        </CarrouselProjets>
       </section>
     )
   }
@@ -159,10 +156,23 @@ const colonnes = [
   .entete-section p {
     max-width: 36rem;
   }
+  /* Titre et phrase alignés sur la photo la plus à gauche ; phrase sur une seule ligne sur grand écran. */
+  .projets-recents h2 {
+    margin-bottom: 0.5rem;
+  }
+  .projets-recents p {
+    margin: 0;
+  }
+  @media (min-width: 80rem) {
+    .projets-recents p {
+      white-space: nowrap;
+      /* La taille suit la largeur d'écran pour que la phrase tienne sur une ligne. */
+      font-size: min(var(--t-m), calc((100vw - 10rem) / 84));
+    }
+  }
   /* Juste au-dessus des photos, à droite, sans soulignement. */
   .voir-projets {
     margin: 1.5rem 0 0.75rem;
-    padding-inline: clamp(1rem, 4vw, 4rem);
     text-align: right;
   }
   .voir-projets .lien-fleche {
