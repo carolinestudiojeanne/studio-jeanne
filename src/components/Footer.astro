@@ -15,7 +15,7 @@ const annee = new Date().getFullYear()
 <footer class="pied fond-ardoise">
   <div class="conteneur pied__grille">
     <div class="pied__marque">
-      <a href="/" aria-label="Studio Jeanne, retour à l’accueil"><Logo clair /></a>
+      <a href="/" aria-label="Studio Jeanne, retour à l’accueil"><Logo clair class="pied__logo" /></a>
       {r.phraseLocale && <p class="pied__phrase">{r.phraseLocale}</p>}
     </div>
 
@@ -75,6 +75,9 @@ const annee = new Date().getFullYear()
     .pied__grille {
       grid-template-columns: 1.4fr 1fr 1fr;
     }
+  }
+  .pied__marque :global(.pied__logo) {
+    width: 9rem;
   }
   .pied__phrase {
     margin-top: 2rem;
