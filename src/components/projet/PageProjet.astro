@@ -69,9 +69,10 @@ const portrait = galerie[iPortrait]?.image
 const autres = galerie.filter((_, i) => i !== iPortrait)
 const bande = autres.length > 1 ? autres.slice(0, 4) : []
 const resteGalerie = autres.slice(bande.length)
-const ligneDetails = [projet.typeDeBien, projet.surface && `${projet.surface} m²`, projet.commune, projet.annee && String(projet.annee)].filter(
-  Boolean,
-) as string[]
+const caracteristiques = [projet.typeDeProjet && {libelle: 'Projet', valeur: projet.typeDeProjet}, ...details].filter(Boolean) as Array<{
+  libelle: string
+  valeur: string
+}>
 ---
 
 <Base
@@ -85,7 +86,7 @@ const ligneDetails = [projet.typeDeBien, projet.surface && `${projet.surface} m�
   {apercu && <div class="apercu">Aperçu du brouillon : cette page n’est pas encore publiée.</div>}
 
   <!-- 1. Grand visuel, photo à cheval, type de projet, bande de photos -->
-  <EnTeteProjet projet={projet} portrait={portrait} bande={bande.map((g) => g.image)} details={ligneDetails} />
+  <EnTeteProjet projet={projet} portrait={portrait} bande={bande.map((g) => g.image)} caracteristiques={caracteristiques} />
 
   <nav class="conteneur fil" aria-label="Fil d’Ariane">
     <ol>
@@ -100,16 +101,6 @@ const ligneDetails = [projet.typeDeBien, projet.surface && `${projet.surface} m�
   <!-- 2. Le contexte + 3. La demande -->
   <section class="section section--serree">
     <div class="conteneur intro">
-      <dl class="intro__details">
-        {
-          details.map((d) => (
-            <div>
-              <dt>{d.libelle}</dt>
-              <dd>{d.valeur}</dd>
-            </div>
-          ))
-        }
-      </dl>
       <div class="intro__textes">
         {
           projet.contexte?.length ? (
@@ -225,33 +216,6 @@ const ligneDetails = [projet.typeDeBien, projet.surface && `${projet.surface} m�
   }
   .fil a {
     text-decoration: none;
-  }
-  .intro {
-    display: grid;
-    gap: 3rem;
-  }
-  @media (min-width: 52rem) {
-    .intro {
-      grid-template-columns: 1fr 2fr;
-      gap: clamp(3rem, 8vw, 8rem);
-    }
-  }
-  .intro__details {
-    margin: 0;
-    display: grid;
-    gap: 1.25rem;
-    align-content: start;
-    border-top: 1px solid var(--ocre);
-    padding-top: 1.5rem;
-  }
-  .intro__details dt {
-    font-size: var(--t-xs);
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--ardoise);
-  }
-  .intro__details dd {
-    margin: 0.2rem 0 0;
   }
   .intro__textes {
     display: grid;

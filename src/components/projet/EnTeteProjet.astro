@@ -1,8 +1,8 @@
 ---
 /**
  * Haut des pages projet : grand visuel avec titre centré, une photo verticale à cheval
- * sur le bas du visuel, le type de projet et ses détails, puis une bande de photos
- * sur toute la largeur.
+ * sur le bas du visuel, les caractéristiques du projet, une bande de photos sur toute
+ * la largeur, puis le bouton « Parlons de votre projet ».
  */
 import Image from '../Image.astro'
 import type {ImageData, Projet} from '../../lib/types'
@@ -13,10 +13,10 @@ interface Props {
   portrait?: ImageData
   /** Photos de la bande pleine largeur (4 au plus). */
   bande: ImageData[]
-  /** Ligne de détails sous le type de projet (bien, surface, lieu…). */
-  details: string[]
+  /** Caractéristiques du projet (type, bien, surface, année, lieu…). */
+  caracteristiques: Array<{libelle: string; valeur: string}>
 }
-const {projet, portrait, bande, details} = Astro.props
+const {projet, portrait, bande, caracteristiques} = Astro.props
 ---
 
 <section class="ep">
@@ -37,11 +37,18 @@ const {projet, portrait, bande, details} = Astro.props
     )
   }
 
-  <div class="ep__infos">
-    {projet.typeDeProjet && <h2 class="ep__type">{projet.typeDeProjet}</h2>}
-    {details.length > 0 && <p class="ep__details">{details.join(' · ')}</p>}
-    <a class="bouton bouton--contour" href="/contact">Parler de votre projet</a>
-  </div>
+  {
+    caracteristiques.length > 0 && (
+      <dl class="ep__carac">
+        {caracteristiques.map((c) => (
+          <div>
+            <dt>{c.libelle}</dt>
+            <dd>{c.valeur}</dd>
+          </div>
+        ))}
+      </dl>
+    )
+  }
 
   {
     bande.length > 1 && (
@@ -56,6 +63,10 @@ const {projet, portrait, bande, details} = Astro.props
       </div>
     )
   }
+
+  <div class="ep__appel">
+    <a class="bouton bouton--contour" href="/contact">Parlons de votre projet</a>
+  </div>
 </section>
 
 <style>
@@ -122,20 +133,37 @@ const {projet, portrait, bande, details} = Astro.props
   }
 
   /* 3. Type de projet et détails */
-  .ep__infos {
-    max-width: 34rem;
+  /* 3. Caractéristiques du projet, sur une ligne, séparées par un filet */
+  .ep__carac {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem 0;
+    max-width: 64rem;
     margin: 0 auto;
     padding: clamp(2.5rem, 5vw, 4rem) var(--gouttiere) clamp(3rem, 6vw, 5rem);
   }
-  .ep__type {
-    font-size: var(--t-xl);
-    margin-bottom: 0.75rem;
-    text-wrap: balance;
+  .ep__carac > div {
+    padding-inline: clamp(1.25rem, 3vw, 2.5rem);
   }
-  .ep__details {
+  .ep__carac > div + div {
+    border-left: 1px solid color-mix(in srgb, var(--ocre) 60%, transparent);
+  }
+  .ep__carac dt {
     font-size: var(--t-xs);
-    letter-spacing: 0.12em;
-    margin-bottom: 1.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ardoise);
+    margin-bottom: 0.4rem;
+  }
+  .ep__carac dd {
+    margin: 0;
+    font-size: var(--t-m);
+  }
+
+  /* 5. Bouton sous les photos */
+  .ep__appel {
+    padding: clamp(2.5rem, 5vw, 4rem) var(--gouttiere) 0;
   }
 
   /* 4. Bande de photos sur toute la largeur, coupée aux bords */
