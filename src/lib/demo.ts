@@ -213,7 +213,7 @@ export const pageAccueil: PageAccueil = {
   },
   projetsRecents: {
     titre: 'Projets récents',
-    texte: 'Rénovation complète de maisons et d’appartements, aménagement de bars et restaurants, à Bordeaux, en Gironde et sur la côte atlantique.',
+    texte: 'Rénovation et aménagement intérieur, d’une seule pièce à la maison entière, pour les particuliers comme pour les bars et restaurants, à Bordeaux, en Gironde et sur la côte atlantique.',
     lienLibelle: 'Voir tous les projets',
   },
   deroule: {
