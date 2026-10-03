@@ -1,27 +1,36 @@
 ---
 /**
- * Carrousel de l'accueil : un grand projet au centre, ses voisins plus petits de chaque côté,
- * flèches pour défiler (en boucle). Sur mobile, seul le projet du centre est affiché.
+ * Carrousel de l'accueil, sur toute la largeur : un grand projet au centre, jusqu'à deux voisins
+ * plus petits de chaque côté, flèches sur les côtés pour défiler (en boucle).
+ * Sur tablette, un seul voisin de chaque côté ; sur mobile, seul le projet du centre.
  */
 import Image from '../Image.astro'
 import type {ProjetCarte} from '../../lib/types'
+import {placeCarrousel} from '../../lib/carrousel'
 
 interface Props {
   projets: ProjetCarte[]
 }
 const {projets} = Astro.props
 const n = projets.length
-// Position de départ (sans JavaScript) : premier projet au centre, dernier à gauche, deuxième à droite.
-const place = (i: number) => (i === 0 ? 'centre' : n > 2 && i === n - 1 ? 'gauche' : i === 1 ? 'droite' : undefined)
+// Position de départ (sans JavaScript) : premier projet au centre.
+const place = (i: number, centre: number) => placeCarrousel(i, centre, n)
 ---
 
 <div class="carrousel" data-carrousel>
+  {
+    n > 1 && (
+      <button type="button" class="carrousel__fleche" data-sens="-1" aria-label="Projet précédent">
+        ←
+      </button>
+    )
+  }
   <ul class="carrousel__piste" aria-live="polite">
     {
       projets.map((p, i) => (
-        <li class="carrousel__item" data-place={place(i)} aria-hidden={place(i) === 'centre' ? undefined : 'true'}>
-          <a href={`/projets/${p.slug}`} class="carrousel__lien" tabindex={place(i) === 'centre' ? undefined : '-1'}>
-            <Image image={p.imagePrincipale} ratio={4 / 5} legende={false} sizes="(min-width: 52rem) 36vw, 90vw" />
+        <li class="carrousel__item" data-place={place(i, 0)} aria-hidden={i === 0 ? undefined : 'true'}>
+          <a href={`/projets/${p.slug}`} class="carrousel__lien" tabindex={i === 0 ? undefined : '-1'}>
+            <Image image={p.imagePrincipale} ratio={4 / 5} legende={false} sizes="(min-width: 52rem) 30vw, 90vw" />
             <span class="carrousel__titre">{p.titre}</span>
             {p.commune && <span class="carrousel__lieu">{p.commune}</span>}
           </a>
@@ -31,27 +40,23 @@ const place = (i: number) => (i === 0 ? 'centre' : n > 2 && i === n - 1 ? 'gauch
   </ul>
   {
     n > 1 && (
-      <div class="carrousel__fleches">
-        <button type="button" class="carrousel__fleche" data-sens="-1" aria-label="Projet précédent">
-          ←
-        </button>
-        <button type="button" class="carrousel__fleche" data-sens="1" aria-label="Projet suivant">
-          →
-        </button>
-      </div>
+      <button type="button" class="carrousel__fleche" data-sens="1" aria-label="Projet suivant">
+        →
+      </button>
     )
   }
 </div>
 
 <script>
+  import {placeCarrousel} from '../../lib/carrousel'
+
   document.querySelectorAll<HTMLElement>('[data-carrousel]').forEach((carrousel) => {
     const items = [...carrousel.querySelectorAll<HTMLElement>('.carrousel__item')]
     const n = items.length
     let centre = 0
     const afficher = () => {
       items.forEach((item, i) => {
-        const place =
-          i === centre ? 'centre' : n > 2 && i === (centre - 1 + n) % n ? 'gauche' : i === (centre + 1) % n ? 'droite' : ''
+        const place = placeCarrousel(i, centre, n)
         if (place) item.dataset.place = place
         else delete item.dataset.place
         const auCentre = place === 'centre'
@@ -70,13 +75,22 @@ const place = (i: number) => (i === 0 ? 'centre' : n > 2 && i === n - 1 ? 'gauch
 </script>
 
 <style>
+  .carrousel {
+    display: flex;
+    align-items: center;
+    gap: clamp(0.25rem, 1.5vw, 1.25rem);
+    padding-inline: clamp(0.25rem, 1.5vw, 1.25rem);
+  }
   .carrousel__piste {
+    flex: 1;
+    min-width: 0;
     list-style: none;
     margin: 0;
     padding: 0;
     display: grid;
     grid-template-columns: 1fr;
     align-items: center;
+    gap: clamp(1rem, 2vw, 2rem);
   }
   .carrousel__item {
     display: none;
@@ -108,22 +122,23 @@ const place = (i: number) => (i === 0 ? 'centre' : n > 2 && i === n - 1 ? 'gauch
     letter-spacing: 0.1em;
   }
 
+  /* Tablette : un voisin de chaque côté. */
   @media (min-width: 52rem) {
     .carrousel__piste {
-      grid-template-columns: 1fr 1.25fr 1fr;
-      gap: clamp(1.5rem, 3vw, 2.5rem);
+      grid-template-columns: 1fr 1.4fr 1fr;
     }
-    .carrousel__item[data-place] {
+    .carrousel__item[data-place='g1'],
+    .carrousel__item[data-place='d1'] {
       display: block;
       animation: apparition 0.5s ease;
     }
-    .carrousel__item[data-place='gauche'] {
+    .carrousel__item[data-place='g1'] {
       grid-column: 1;
     }
     .carrousel__item[data-place='centre'] {
       grid-column: 2;
     }
-    .carrousel__item[data-place='droite'] {
+    .carrousel__item[data-place='d1'] {
       grid-column: 3;
     }
     /* Les voisins : format paysage, plus petits que le projet du centre. */
@@ -135,27 +150,53 @@ const place = (i: number) => (i === 0 ? 'centre' : n > 2 && i === n - 1 ? 'gauch
     }
   }
 
-  .carrousel__fleches {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin-top: 2rem;
+  /* Grand écran : deux voisins de chaque côté. */
+  @media (min-width: 75rem) {
+    .carrousel__piste {
+      grid-template-columns: 1fr 1fr 1.9fr 1fr 1fr;
+    }
+    .carrousel__item[data-place='g2'],
+    .carrousel__item[data-place='d2'] {
+      display: block;
+      animation: apparition 0.5s ease;
+    }
+    .carrousel__item[data-place='g2'] {
+      grid-column: 1;
+    }
+    .carrousel__item[data-place='g1'] {
+      grid-column: 2;
+    }
+    .carrousel__item[data-place='centre'] {
+      grid-column: 3;
+    }
+    .carrousel__item[data-place='d1'] {
+      grid-column: 4;
+    }
+    .carrousel__item[data-place='d2'] {
+      grid-column: 5;
+    }
   }
+
   .carrousel__fleche {
-    width: 3rem;
-    height: 3rem;
-    border-radius: 50%;
-    border: 1px solid color-mix(in srgb, var(--ardoise) 30%, transparent);
+    flex: none;
     background: none;
+    border: 0;
+    padding: 0.75rem 0.5rem;
     color: var(--ardoise);
     font: inherit;
-    font-size: var(--t-m);
+    font-size: var(--t-l);
+    line-height: 1;
     cursor: pointer;
-    transition: background 0.25s, color 0.25s;
+    transition: transform 0.25s, color 0.25s;
   }
   .carrousel__fleche:hover {
-    background: var(--ardoise);
-    color: var(--blanc);
+    color: var(--ocre);
+  }
+  .carrousel__fleche[data-sens='-1']:hover {
+    transform: translateX(-4px);
+  }
+  .carrousel__fleche[data-sens='1']:hover {
+    transform: translateX(4px);
   }
 
   @keyframes apparition {
