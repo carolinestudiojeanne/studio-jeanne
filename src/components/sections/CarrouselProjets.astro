@@ -1,0 +1,171 @@
+---
+/**
+ * Carrousel de l'accueil : un grand projet au centre, ses voisins plus petits de chaque côté,
+ * flèches pour défiler (en boucle). Sur mobile, seul le projet du centre est affiché.
+ */
+import Image from '../Image.astro'
+import type {ProjetCarte} from '../../lib/types'
+
+interface Props {
+  projets: ProjetCarte[]
+}
+const {projets} = Astro.props
+const n = projets.length
+// Position de départ (sans JavaScript) : premier projet au centre, dernier à gauche, deuxième à droite.
+const place = (i: number) => (i === 0 ? 'centre' : n > 2 && i === n - 1 ? 'gauche' : i === 1 ? 'droite' : undefined)
+---
+
+<div class="carrousel" data-carrousel>
+  <ul class="carrousel__piste" aria-live="polite">
+    {
+      projets.map((p, i) => (
+        <li class="carrousel__item" data-place={place(i)} aria-hidden={place(i) === 'centre' ? undefined : 'true'}>
+          <a href={`/projets/${p.slug}`} class="carrousel__lien" tabindex={place(i) === 'centre' ? undefined : '-1'}>
+            <Image image={p.imagePrincipale} ratio={4 / 5} legende={false} sizes="(min-width: 52rem) 36vw, 90vw" />
+            <span class="carrousel__titre">{p.titre}</span>
+            {p.commune && <span class="carrousel__lieu">{p.commune}</span>}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+  {
+    n > 1 && (
+      <div class="carrousel__fleches">
+        <button type="button" class="carrousel__fleche" data-sens="-1" aria-label="Projet précédent">
+          ←
+        </button>
+        <button type="button" class="carrousel__fleche" data-sens="1" aria-label="Projet suivant">
+          →
+        </button>
+      </div>
+    )
+  }
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-carrousel]').forEach((carrousel) => {
+    const items = [...carrousel.querySelectorAll<HTMLElement>('.carrousel__item')]
+    const n = items.length
+    let centre = 0
+    const afficher = () => {
+      items.forEach((item, i) => {
+        const place =
+          i === centre ? 'centre' : n > 2 && i === (centre - 1 + n) % n ? 'gauche' : i === (centre + 1) % n ? 'droite' : ''
+        if (place) item.dataset.place = place
+        else delete item.dataset.place
+        const auCentre = place === 'centre'
+        if (auCentre) item.removeAttribute('aria-hidden')
+        else item.setAttribute('aria-hidden', 'true')
+        item.querySelector('a')?.setAttribute('tabindex', auCentre ? '0' : '-1')
+      })
+    }
+    carrousel.querySelectorAll<HTMLButtonElement>('.carrousel__fleche').forEach((bouton) => {
+      bouton.addEventListener('click', () => {
+        centre = (centre + Number(bouton.dataset.sens) + n) % n
+        afficher()
+      })
+    })
+  })
+</script>
+
+<style>
+  .carrousel__piste {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: center;
+  }
+  .carrousel__item {
+    display: none;
+    grid-row: 1;
+  }
+  .carrousel__item[data-place='centre'] {
+    display: block;
+    grid-column: 1;
+    animation: apparition 0.5s ease;
+  }
+  .carrousel__lien {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    text-align: center;
+  }
+  .carrousel__titre {
+    display: block;
+    margin-top: 1.1rem;
+    font-size: var(--t-m);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ardoise);
+  }
+  .carrousel__lieu {
+    display: block;
+    margin-top: 0.35rem;
+    font-size: var(--t-xs);
+    letter-spacing: 0.1em;
+  }
+
+  @media (min-width: 52rem) {
+    .carrousel__piste {
+      grid-template-columns: 1fr 1.25fr 1fr;
+      gap: clamp(1.5rem, 3vw, 2.5rem);
+    }
+    .carrousel__item[data-place] {
+      display: block;
+      animation: apparition 0.5s ease;
+    }
+    .carrousel__item[data-place='gauche'] {
+      grid-column: 1;
+    }
+    .carrousel__item[data-place='centre'] {
+      grid-column: 2;
+    }
+    .carrousel__item[data-place='droite'] {
+      grid-column: 3;
+    }
+    /* Les voisins : format paysage, plus petits que le projet du centre. */
+    .carrousel__item:not([data-place='centre']) :global(.image__cadre) {
+      aspect-ratio: 5 / 4 !important;
+    }
+    .carrousel__item:not([data-place='centre']) .carrousel__titre {
+      font-size: var(--t-s);
+    }
+  }
+
+  .carrousel__fleches {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+  .carrousel__fleche {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    border: 1px solid color-mix(in srgb, var(--ardoise) 30%, transparent);
+    background: none;
+    color: var(--ardoise);
+    font: inherit;
+    font-size: var(--t-m);
+    cursor: pointer;
+    transition: background 0.25s, color 0.25s;
+  }
+  .carrousel__fleche:hover {
+    background: var(--ardoise);
+    color: var(--blanc);
+  }
+
+  @keyframes apparition {
+    from {
+      opacity: 0;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .carrousel__item[data-place] {
+      animation: none;
+    }
+  }
+</style>

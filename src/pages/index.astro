@@ -1,14 +1,14 @@
 ---
 import Base from '../layouts/Base.astro'
 import Hero from '../components/sections/Hero.astro'
-import GrilleProjets from '../components/sections/GrilleProjets.astro'
+import CarrouselProjets from '../components/sections/CarrouselProjets.astro'
 import ListeAvis from '../components/sections/ListeAvis.astro'
 import AppelAction from '../components/sections/AppelAction.astro'
 import Image from '../components/Image.astro'
-import {getAvisAccueil, getPageAccueil, getProjetsAccueil, getReglages} from '../lib/contenu'
+import {getAvisAccueil, getPageAccueil, getProjets, getReglages} from '../lib/contenu'
 import {texteEnHtml} from '../lib/texte'
 
-const [page, projets, avis, reglages] = await Promise.all([getPageAccueil(), getProjetsAccueil(), getAvisAccueil(), getReglages()])
+const [page, projets, avis, reglages] = await Promise.all([getPageAccueil(), getProjets(), getAvisAccueil(), getReglages()])
 const titre = page.seo?.metaTitle || `Architecte d’intérieur à Bordeaux${reglages.suffixeTitre}`
 const {hero, projetsRecents, deroule, aiguillage, caroline} = page
 const colonnes = [
@@ -44,7 +44,7 @@ const colonnes = [
               </a>
             )}
           </div>
-          <GrilleProjets projets={projets.slice(0, projets.length === 4 ? 4 : 3)} colonnes={projets.length === 4 ? 2 : 3} />
+          <CarrouselProjets projets={projets} />
         </div>
       </section>
     )
