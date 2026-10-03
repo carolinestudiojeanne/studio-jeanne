@@ -40,7 +40,6 @@ const colonnes = [
             </div>
           </div>
         </div>
-        <CarrouselProjets projets={projets} />
         {projetsRecents?.lienLibelle && (
           <p class="voir-projets">
             <a class="lien-fleche" href="/projets">
@@ -48,6 +47,7 @@ const colonnes = [
             </a>
           </p>
         )}
+        <CarrouselProjets projets={projets} />
       </section>
     )
   }
@@ -159,9 +159,9 @@ const colonnes = [
   .entete-section p {
     max-width: 36rem;
   }
-  /* Sous le carrousel, à droite, sans soulignement. */
+  /* Juste au-dessus des photos, à droite, sans soulignement. */
   .voir-projets {
-    margin: 2.5rem 0 0;
+    margin: 0 0 1.5rem;
     padding-inline: clamp(1rem, 4vw, 4rem);
     text-align: right;
   }
