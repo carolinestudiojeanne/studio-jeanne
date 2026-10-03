@@ -79,7 +79,8 @@ const place = (i: number, centre: number) => placeCarrousel(i, centre, n)
         item.querySelector('a')?.setAttribute('tabindex', auCentre ? '0' : '-1')
       })
     }
-    // Lien « voir tous les projets » : à droite, à mi-hauteur entre le haut des deux photos les plus à droite.
+    // Lien « voir tous les projets » : au-dessus de la 2e photo en partant de la droite,
+    // à mi-hauteur entre son haut et celui de la 3e (sur tablette, 3 photos : entre la 1re et la 2e).
     const lien = carrousel.querySelector<HTMLElement>('[data-lien-tous]')
     const placerLien = () => {
       if (!lien) return
@@ -91,7 +92,7 @@ const place = (i: number, centre: number) => placeCarrousel(i, centre, n)
         .map((item) => item.querySelector('.image__cadre')!.getBoundingClientRect())
         .sort((a, b) => b.right - a.right)
       if (visibles.length < 2) return
-      const [derniere, avantDerniere] = visibles
+      const [derniere, avantDerniere] = visibles.length >= 5 ? visibles.slice(1, 3) : visibles
       const cadre = carrousel.getBoundingClientRect()
       const milieu = (derniere.top + avantDerniere.top) / 2 - cadre.top
       lien.dataset.place = ''
