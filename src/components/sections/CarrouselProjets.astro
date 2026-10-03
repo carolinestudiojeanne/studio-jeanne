@@ -21,7 +21,7 @@ const place = (i: number, centre: number) => placeCarrousel(i, centre, n)
   {
     n > 1 && (
       <button type="button" class="carrousel__fleche" data-sens="-1" aria-label="Projet précédent">
-        ←
+        <svg viewBox="0 0 40 16" aria-hidden="true"><path d="M40 8H1M8 1 1 8l7 7" /></svg>
       </button>
     )
   }
@@ -41,7 +41,7 @@ const place = (i: number, centre: number) => placeCarrousel(i, centre, n)
   {
     n > 1 && (
       <button type="button" class="carrousel__fleche" data-sens="1" aria-label="Projet suivant">
-        →
+        <svg viewBox="0 0 40 16" aria-hidden="true"><path d="M0 8h39M32 1l7 7-7 7" /></svg>
       </button>
     )
   }
@@ -182,13 +182,20 @@ const place = (i: number, centre: number) => placeCarrousel(i, centre, n)
     flex: none;
     background: none;
     border: 0;
-    padding: 0.75rem 0.5rem;
+    padding: 1rem 0.5rem;
     color: var(--ardoise);
-    font: inherit;
-    font-size: var(--t-l);
-    line-height: 1;
+    line-height: 0;
     cursor: pointer;
     transition: transform 0.25s, color 0.25s;
+  }
+  /* Flèche fine, en trait. */
+  .carrousel__fleche svg {
+    width: clamp(1.75rem, 2.5vw, 2.5rem);
+    height: auto;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1;
+    overflow: visible;
   }
   .carrousel__fleche:hover {
     color: var(--ocre);
