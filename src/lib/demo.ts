@@ -77,6 +77,8 @@ export const projets: Projet[] = [
       {image: img('creme', 'Arche entre l’entrée et le séjour, maison Ornano', 'portrait'), affichage: 'paire'},
       {image: img('lin', 'Salle de bain en terre cuite et lin, maison Ornano', 'portrait'), affichage: 'paire'},
       {image: img('ocre', 'Séjour et bibliothèque sur mesure, maison Ornano à Mérignac'), affichage: 'pleine'},
+      {image: img('sauge', 'Chambre parentale au calme, maison Ornano', 'portrait'), affichage: 'pleine'},
+      {image: img('ardoise', 'Entrée et rangements sur mesure, maison Ornano', 'portrait'), affichage: 'pleine'},
     ],
     avantApres: [
       {

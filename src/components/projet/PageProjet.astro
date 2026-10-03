@@ -4,7 +4,7 @@
  * Les sections 3 à 6 disparaissent si Caroline ne les remplit pas.
  */
 import Base from '../../layouts/Base.astro'
-import Hero from '../sections/Hero.astro'
+import EnTeteProjet from './EnTeteProjet.astro'
 import SectionTexte from '../sections/SectionTexte.astro'
 import GrilleProjets from '../sections/GrilleProjets.astro'
 import AppelAction from '../sections/AppelAction.astro'
@@ -60,6 +60,18 @@ const details = [
 ].filter(Boolean) as Array<{libelle: string; valeur: string}>
 
 const realisationHtml = texteEnHtml(projet.realisation)
+
+// Haut de page : une photo verticale (de préférence une photo « par paire ») et une bande de 4 photos ;
+// la galerie plus bas reprend les photos restantes.
+const galerie = projet.galerie ?? []
+const iPortrait = Math.max(0, galerie.findIndex((g) => g.affichage === 'paire'))
+const portrait = galerie[iPortrait]?.image
+const autres = galerie.filter((_, i) => i !== iPortrait)
+const bande = autres.length > 1 ? autres.slice(0, 4) : []
+const resteGalerie = autres.slice(bande.length)
+const ligneDetails = [projet.typeDeBien, projet.surface && `${projet.surface} m²`, projet.commune, projet.annee && String(projet.annee)].filter(
+  Boolean,
+) as string[]
 ---
 
 <Base
@@ -72,8 +84,8 @@ const realisationHtml = texteEnHtml(projet.realisation)
 >
   {apercu && <div class="apercu">Aperçu du brouillon : cette page n’est pas encore publiée.</div>}
 
-  <!-- 1. Grand visuel -->
-  <Hero image={projet.imagePrincipale} titre={projet.titre} sousTitre={ligneLieu(projet)} />
+  <!-- 1. Grand visuel, photo à cheval, type de projet, bande de photos -->
+  <EnTeteProjet projet={projet} portrait={portrait} bande={bande.map((g) => g.image)} details={ligneDetails} ancre="projet" />
 
   <nav class="conteneur fil" aria-label="Fil d’Ariane">
     <ol>
@@ -86,7 +98,7 @@ const realisationHtml = texteEnHtml(projet.realisation)
   </nav>
 
   <!-- 2. Le contexte + 3. La demande -->
-  <section class="section section--serree">
+  <section class="section section--serree" id="projet">
     <div class="conteneur intro">
       <dl class="intro__details">
         {
@@ -121,7 +133,7 @@ const realisationHtml = texteEnHtml(projet.realisation)
 
   <!-- 4. Ce qui a été fait + galerie -->
   {
-    (realisationHtml || projet.galerie?.length) && (
+    (realisationHtml || resteGalerie.length > 0) && (
       <section class="section section--serree">
         {realisationHtml && (
           <div class="colonne realisation">
@@ -129,11 +141,11 @@ const realisationHtml = texteEnHtml(projet.realisation)
             <div class="texte" set:html={realisationHtml} />
           </div>
         )}
-        {projet.galerie?.length ? (
+        {resteGalerie.length > 0 && (
           <div class="conteneur galerie-bloc">
-            <Galerie galerie={projet.galerie} />
+            <Galerie galerie={resteGalerie} />
           </div>
-        ) : null}
+        )}
         {projet.video && (projet.video.fichierUrl || projet.video.lien) && (
           <div class="conteneur galerie-bloc">
             <Video video={projet.video} titre={projet.titre} />

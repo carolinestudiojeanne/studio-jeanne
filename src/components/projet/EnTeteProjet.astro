@@ -1,0 +1,156 @@
+---
+/**
+ * Haut des pages projet : grand visuel avec titre centré, une photo verticale à cheval
+ * sur le bas du visuel, le type de projet et ses détails, puis une bande de photos
+ * sur toute la largeur.
+ */
+import Image from '../Image.astro'
+import type {ImageData, Projet} from '../../lib/types'
+
+interface Props {
+  projet: Projet
+  /** Photo verticale à cheval sur le visuel. */
+  portrait?: ImageData
+  /** Photos de la bande pleine largeur (4 au plus). */
+  bande: ImageData[]
+  /** Ligne de détails sous le type de projet (bien, surface, lieu…). */
+  details: string[]
+  /** Ancre du bouton « Découvrir ». */
+  ancre: string
+}
+const {projet, portrait, bande, details, ancre} = Astro.props
+---
+
+<section class="ep">
+  <div class="ep__visuel">
+    <Image image={projet.imagePrincipale} sizes="100vw" prioritaire legende={false} />
+    <div class="ep__voile"></div>
+    <div class="ep__haut">
+      <h1 class="ep__titre">{projet.titre}</h1>
+      {projet.resume && <p class="ep__resume">{projet.resume}</p>}
+      <a class="bouton bouton--contour" href={`#${ancre}`}>Découvrir</a>
+    </div>
+  </div>
+
+  {
+    portrait && (
+      <div class="ep__portrait">
+        <Image image={portrait} ratio={4 / 5} legende={false} sizes="(min-width: 52rem) 26vw, 70vw" />
+      </div>
+    )
+  }
+
+  <div class="ep__infos">
+    {projet.typeDeProjet && <h2 class="ep__type">{projet.typeDeProjet}</h2>}
+    {details.length > 0 && <p class="ep__details">{details.join(' · ')}</p>}
+    <a class="bouton bouton--contour" href="/contact">Parler de votre projet</a>
+  </div>
+
+  {
+    bande.length > 1 && (
+      <div class="ep__bande-cadre">
+        <ul class="ep__bande">
+          {bande.map((image) => (
+            <li>
+              <Image image={image} ratio={3 / 4} legende={false} sizes="(min-width: 52rem) 28vw, 50vw" />
+            </li>
+          ))}
+        </ul>
+      </div>
+    )
+  }
+</section>
+
+<style>
+  .ep {
+    text-align: center;
+  }
+
+  /* 1. Grand visuel, titre en haut sur un léger voile crème */
+  .ep__visuel {
+    position: relative;
+    min-height: min(68svh, 42rem);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .ep__visuel > :global(figure),
+  .ep__visuel > :global(figure .image__cadre) {
+    position: absolute;
+    inset: 0;
+    height: 100%;
+    margin: 0;
+  }
+  .ep__visuel :global(.image__cadre) {
+    border-radius: 0;
+  }
+  .ep__voile {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgb(251 247 239 / 0.9), rgb(251 247 239 / 0.55) 30%, rgb(251 247 239 / 0) 60%);
+  }
+  .ep__haut {
+    position: relative;
+    max-width: 34rem;
+    padding: clamp(3.5rem, 8vw, 6rem) var(--gouttiere) 0;
+  }
+  .ep__titre {
+    font-size: var(--t-xl);
+    margin-bottom: 1.25rem;
+    text-wrap: balance;
+  }
+  .ep__resume {
+    font-size: var(--t-s);
+    margin-bottom: 1.75rem;
+  }
+
+  /* 2. Photo verticale à cheval sur le bas du visuel */
+  .ep__portrait {
+    position: relative;
+    z-index: 1;
+    width: clamp(13rem, 26vw, 22rem);
+    margin: calc(-1 * clamp(9rem, 18vw, 17rem)) auto 0;
+  }
+
+  /* 3. Type de projet et détails */
+  .ep__infos {
+    max-width: 34rem;
+    margin: 0 auto;
+    padding: clamp(2.5rem, 5vw, 4rem) var(--gouttiere) clamp(3rem, 6vw, 5rem);
+  }
+  .ep__type {
+    font-size: var(--t-xl);
+    margin-bottom: 0.75rem;
+    text-wrap: balance;
+  }
+  .ep__details {
+    font-size: var(--t-xs);
+    letter-spacing: 0.12em;
+    margin-bottom: 1.75rem;
+  }
+
+  /* 4. Bande de photos sur toute la largeur, coupée aux bords */
+  .ep__bande-cadre {
+    overflow: hidden;
+  }
+  .ep__bande {
+    list-style: none;
+    margin: 0 -6%;
+    padding: 0;
+    display: grid;
+    /* Toujours la largeur de 4 photos, même s'il y en a moins (elles restent centrées). */
+    grid-auto-flow: column;
+    grid-auto-columns: calc((100% - 3 * var(--ecart)) / 4);
+    justify-content: center;
+    --ecart: clamp(0.5rem, 1vw, 0.875rem);
+    gap: var(--ecart);
+  }
+  @media (max-width: 51.99rem) {
+    .ep__bande {
+      grid-auto-flow: row;
+      grid-template-columns: repeat(2, 1fr);
+      margin: 0;
+      padding-inline: var(--gouttiere);
+    }
+  }
+</style>
