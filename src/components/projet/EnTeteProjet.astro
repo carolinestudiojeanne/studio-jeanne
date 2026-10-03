@@ -61,6 +61,8 @@ const {projet, portrait, bande, details} = Astro.props
 <style>
   .ep {
     text-align: center;
+    /* Hauteur de la photo verticale qui chevauche le bas du grand visuel. */
+    --chevauchement: clamp(9rem, 18vw, 17rem);
   }
 
   /* 1. Grand visuel, titre en haut sur un léger voile crème */
@@ -70,6 +72,8 @@ const {projet, portrait, bande, details} = Astro.props
     display: flex;
     flex-direction: column;
     align-items: center;
+    /* Le titre et la phrase se centrent entre le haut du visuel et le haut de la photo verticale. */
+    padding-bottom: var(--chevauchement);
   }
   .ep__visuel > :global(figure),
   .ep__visuel > :global(figure .image__cadre) {
@@ -88,8 +92,8 @@ const {projet, portrait, bande, details} = Astro.props
   }
   .ep__haut {
     position: relative;
-    max-width: 34rem;
-    padding: clamp(3.5rem, 8vw, 6rem) var(--gouttiere) 0;
+    margin-block: auto;
+    padding: 2rem var(--gouttiere);
   }
   .ep__titre {
     font-size: var(--t-xl);
@@ -98,7 +102,15 @@ const {projet, portrait, bande, details} = Astro.props
   }
   .ep__resume {
     font-size: var(--t-s);
-    margin-bottom: 0;
+    margin: 0 auto;
+    max-width: 34rem;
+  }
+  /* Sur grand écran, la phrase tient sur une seule ligne. */
+  @media (min-width: 64rem) {
+    .ep__resume {
+      max-width: none;
+      white-space: nowrap;
+    }
   }
 
   /* 2. Photo verticale à cheval sur le bas du visuel */
@@ -106,7 +118,7 @@ const {projet, portrait, bande, details} = Astro.props
     position: relative;
     z-index: 1;
     width: clamp(13rem, 26vw, 22rem);
-    margin: calc(-1 * clamp(9rem, 18vw, 17rem)) auto 0;
+    margin: calc(-1 * var(--chevauchement)) auto 0;
   }
 
   /* 3. Type de projet et détails */
