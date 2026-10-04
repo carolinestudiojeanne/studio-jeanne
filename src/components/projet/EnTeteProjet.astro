@@ -120,12 +120,12 @@ const {projet, portrait, bande, caracteristiques} = Astro.props
     text-wrap: balance;
   }
   .ep__resume {
-    font-size: var(--t-s);
+    font-size: var(--t-m);
     margin: 0 auto;
     max-width: 34rem;
   }
   /* Sur grand écran, la phrase tient sur une seule ligne. */
-  @media (min-width: 64rem) {
+  @media (min-width: 72rem) {
     .ep__resume {
       max-width: none;
       white-space: nowrap;
@@ -172,11 +172,14 @@ const {projet, portrait, bande, caracteristiques} = Astro.props
   /* 4. Textes du projet (la demande, ce qui a été fait), avant les photos */
   .ep__textes {
     text-align: left;
-    max-width: calc(var(--etroit) + 2 * var(--gouttiere));
+    max-width: calc(64rem + 2 * var(--gouttiere));
     margin: 0 auto;
     padding: 0 var(--gouttiere) clamp(3rem, 6vw, 5rem);
     display: grid;
     gap: clamp(2.5rem, 5vw, 3.5rem);
+  }
+  .ep__textes :global(.surtitre) {
+    text-align: center;
   }
 
   /* 5. Bouton sous les photos */
