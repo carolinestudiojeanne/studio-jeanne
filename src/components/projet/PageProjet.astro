@@ -63,13 +63,13 @@ const details = [
 
 const realisationHtml = texteEnHtml(projet.realisation)
 
-// Haut de page : une photo verticale (de préférence une photo « par paire ») et une bande de 4 photos ;
-// la galerie plus bas reprend les photos restantes.
+// Haut de page : une photo verticale (de préférence une photo « par paire ») et une bande qui montre
+// 4 photos à la fois ; toutes les autres photos y défilent avec les flèches (plus de longue galerie en bas).
 const galerie = projet.galerie ?? []
 const iPortrait = Math.max(0, galerie.findIndex((g) => g.affichage === 'paire'))
 const portrait = galerie[iPortrait]?.image
 const autres = galerie.filter((_, i) => i !== iPortrait)
-const bande = autres.length > 1 ? autres.slice(0, 4) : []
+const bande = autres.length > 1 ? autres : []
 const resteGalerie = autres.slice(bande.length)
 const caracteristiques = [projet.typeDeProjet && {libelle: 'Projet', valeur: projet.typeDeProjet}, ...details].filter(Boolean) as Array<{
   libelle: string

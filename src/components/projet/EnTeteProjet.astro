@@ -11,7 +11,7 @@ interface Props {
   projet: Projet
   /** Photo verticale à cheval sur le visuel. */
   portrait?: ImageData
-  /** Photos de la bande pleine largeur (4 au plus). */
+  /** Photos de la bande : 4 visibles à la fois, les autres défilent en boucle avec les flèches. */
   bande: ImageData[]
   /** Caractéristiques du projet (type, bien, surface, année, lieu…). */
   caracteristiques: Array<{libelle: string; valeur: string}>
@@ -60,14 +60,26 @@ const {projet, portrait, bande, caracteristiques} = Astro.props
 
   {
     bande.length > 1 && (
-      <div class="ep__bande-cadre">
-        <ul class="ep__bande">
-          {bande.map((image) => (
-            <li>
-              <Image image={image} ratio={3 / 4} legende={false} sizes="(min-width: 52rem) 28vw, 50vw" />
-            </li>
-          ))}
-        </ul>
+      <div class:list={['ep__bande-cadre', {'ep__bande-cadre--defile': bande.length > 4}]} data-bande>
+        {bande.length > 4 && (
+          <button type="button" class="ep__fleche" data-sens="-1" aria-label="Photos précédentes">
+            <svg viewBox="0 0 10 18" aria-hidden="true"><path d="M9 1 1 9l8 8" /></svg>
+          </button>
+        )}
+        <div class="ep__bande-fenetre">
+          <ul class="ep__bande">
+            {bande.map((image) => (
+              <li>
+                <Image image={image} ratio={3 / 4} sizes="(min-width: 52rem) 24vw, 50vw" />
+              </li>
+            ))}
+          </ul>
+        </div>
+        {bande.length > 4 && (
+          <button type="button" class="ep__fleche" data-sens="1" aria-label="Photos suivantes">
+            <svg viewBox="0 0 10 18" aria-hidden="true"><path d="m1 1 8 8-8 8" /></svg>
+          </button>
+        )}
       </div>
     )
   }
@@ -76,6 +88,43 @@ const {projet, portrait, bande, caracteristiques} = Astro.props
     <a class="bouton bouton--contour" href="/contact">Parlons de votre projet</a>
   </div>
 </section>
+
+<script>
+  // Bande de photos : chaque flèche fait glisser d'une photo ; la photo qui sort d'un côté
+  // revient de l'autre, pour tourner en boucle quel que soit le nombre de photos.
+  document.querySelectorAll<HTMLElement>('[data-bande]').forEach((cadre) => {
+    const piste = cadre.querySelector<HTMLElement>('.ep__bande')!
+    let occupe = false
+    const pas = () => {
+      const li = piste.querySelector('li')!
+      return li.getBoundingClientRect().width + (parseFloat(getComputedStyle(piste).columnGap) || 0)
+    }
+    const glisser = (sens: number) => {
+      if (occupe) return
+      occupe = true
+      const p = pas()
+      if (sens < 0) {
+        piste.prepend(piste.lastElementChild!)
+        piste.style.transition = 'none'
+        piste.style.transform = `translateX(${-p}px)`
+        piste.getBoundingClientRect()
+      }
+      piste.style.transition = 'transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1)'
+      piste.style.transform = sens > 0 ? `translateX(${-p}px)` : 'translateX(0)'
+      piste.addEventListener(
+        'transitionend',
+        () => {
+          if (sens > 0) piste.append(piste.firstElementChild!)
+          piste.style.transition = 'none'
+          piste.style.transform = 'translateX(0)'
+          occupe = false
+        },
+        {once: true},
+      )
+    }
+    cadre.querySelectorAll<HTMLButtonElement>('.ep__fleche').forEach((b) => b.addEventListener('click', () => glisser(Number(b.dataset.sens))))
+  })
+</script>
 
 <style>
   .ep {
@@ -184,28 +233,66 @@ const {projet, portrait, bande, caracteristiques} = Astro.props
     padding: clamp(2.5rem, 5vw, 4rem) var(--gouttiere) 0;
   }
 
-  /* 4. Bande de photos sur toute la largeur, coupée aux bords */
+  /* 4. Bande de photos sur toute la largeur : 4 visibles, les autres défilent avec les flèches */
   .ep__bande-cadre {
+    display: flex;
+    align-items: center;
+    gap: clamp(0.25rem, 1.5vw, 1rem);
+    padding-inline: clamp(0.25rem, 1.5vw, 1rem);
+  }
+  .ep__bande-fenetre {
+    flex: 1;
+    min-width: 0;
     overflow: hidden;
   }
   .ep__bande {
-    list-style: none;
-    margin: 0 -6%;
-    padding: 0;
-    display: grid;
-    /* Toujours la largeur de 4 photos, même s'il y en a moins (elles restent centrées). */
-    grid-auto-flow: column;
-    grid-auto-columns: calc((100% - 3 * var(--ecart)) / 4);
-    justify-content: center;
     --ecart: clamp(0.5rem, 1vw, 0.875rem);
+    --visibles: 4;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
     gap: var(--ecart);
+  }
+  /* Moins de 4 photos : elles restent centrées. */
+  .ep__bande-cadre:not(.ep__bande-cadre--defile) .ep__bande {
+    justify-content: center;
+  }
+  .ep__bande li {
+    flex: none;
+    width: calc((100% - (var(--visibles) - 1) * var(--ecart)) / var(--visibles));
+  }
+  .ep__bande :global(figcaption) {
+    margin-top: 0.5rem;
+    font-size: var(--t-xs);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
   }
   @media (max-width: 51.99rem) {
     .ep__bande {
-      grid-auto-flow: row;
-      grid-template-columns: repeat(2, 1fr);
-      margin: 0;
-      padding-inline: var(--gouttiere);
+      --visibles: 2;
     }
+  }
+  /* Têtes de flèches fines */
+  .ep__fleche {
+    flex: none;
+    background: none;
+    border: 0;
+    padding: 0.75rem 0.5rem;
+    color: var(--ardoise);
+    line-height: 0;
+    cursor: pointer;
+    transition: color 0.25s;
+  }
+  .ep__fleche:hover {
+    color: var(--ocre);
+  }
+  .ep__fleche svg {
+    width: 0.7rem;
+    height: auto;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.2;
+    overflow: visible;
   }
 </style>
