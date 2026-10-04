@@ -36,7 +36,7 @@ const {appel, lien} = Astro.props
 <style>
   /* Bloc plus compact, pour ne pas former une énorme bande bleue avec le pied de page. */
   .appel {
-    padding-block: clamp(2.5rem, 5vw, 4rem);
+    padding-block: clamp(1.75rem, 3vw, 2.5rem);
     border-bottom: 1px solid color-mix(in srgb, var(--creme) 18%, transparent);
   }
   .appel__contenu {
@@ -50,7 +50,7 @@ const {appel, lien} = Astro.props
     opacity: 0.92;
   }
   .appel__actions {
-    margin-top: 1.5rem;
+    margin-top: 1rem;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
