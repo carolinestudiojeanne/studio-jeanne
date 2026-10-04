@@ -6,7 +6,7 @@
 import Base from '../../layouts/Base.astro'
 import EnTeteProjet from './EnTeteProjet.astro'
 import SectionTexte from '../sections/SectionTexte.astro'
-import GrilleProjets from '../sections/GrilleProjets.astro'
+import BandeauProjets from './BandeauProjets.astro'
 import AppelAction from '../sections/AppelAction.astro'
 import ListeAvis from '../sections/ListeAvis.astro'
 import Galerie from './Galerie.astro'
@@ -26,6 +26,8 @@ interface Props {
 const {projet, tous, apercu = false} = Astro.props
 const reglages = await getReglages()
 const lies = projetsLies(projet, tous)
+// Bandeau du bas : les projets liés d'abord, puis tous les autres.
+const autresProjets = [...lies, ...tous.filter((p) => p.slug !== projet.slug && !lies.some((l) => l.slug === p.slug))]
 const pro = projet.categorie === 'professionnel'
 const chemin = `/projets/${projet.slug}`
 const description = projet.seo?.metaDescription || projet.resume || ''
@@ -155,16 +157,7 @@ const caracteristiques = [projet.typeDeProjet && {libelle: 'Projet', valeur: pro
   }
 
   <!-- 7. Autres projets -->
-  {
-    lies.length > 0 && (
-      <section class="section fond-soutenu">
-        <div class="conteneur">
-          <h2>Autres projets</h2>
-          <GrilleProjets projets={lies} />
-        </div>
-      </section>
-    )
-  }
+  {autresProjets.length > 0 && <BandeauProjets projets={autresProjets} />}
 
   <!-- 8. Appel à l'action -->
   <AppelAction

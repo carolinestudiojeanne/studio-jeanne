@@ -1,0 +1,187 @@
+---
+/**
+ * Bandeau « Autres projets » en bas des pages projet : une fine rangée de photos
+ * rectangulaires qui défile toute seule en boucle, avec une flèche de chaque côté
+ * pour avancer ou reculer. Le défilement s'arrête au survol.
+ */
+import Image from '../Image.astro'
+import type {ProjetCarte} from '../../lib/types'
+
+interface Props {
+  projets: ProjetCarte[]
+  titre?: string
+}
+const {projets, titre = 'Autres projets'} = Astro.props
+---
+
+<section class="bandeau" aria-labelledby="bandeau-titre" data-bandeau>
+  <h2 id="bandeau-titre" class="bandeau__titre">{titre}</h2>
+  <div class="bandeau__cadre">
+    <button type="button" class="bandeau__fleche" data-sens="-1" aria-label="Projet précédent">
+      <svg viewBox="0 0 10 18" aria-hidden="true"><path d="M9 1 1 9l8 8" /></svg>
+    </button>
+    <div class="bandeau__fenetre">
+      <ul class="bandeau__piste">
+        {
+          // La liste est affichée trois fois pour que la boucle soit continue sur grand écran ; les copies sont masquées aux lecteurs d'écran.
+          [0, 1, 2].map((copie) =>
+            projets.map((p) => (
+              <li aria-hidden={copie ? 'true' : undefined}>
+                <a href={`/projets/${p.slug}`} class="bandeau__lien" tabindex={copie ? '-1' : undefined}>
+                  <Image image={p.imagePrincipale} ratio={3 / 2} legende={false} sizes="18rem" />
+                  <span class="bandeau__nom">{p.titre}</span>
+                </a>
+              </li>
+            )),
+          )
+        }
+      </ul>
+    </div>
+    <button type="button" class="bandeau__fleche" data-sens="1" aria-label="Projet suivant">
+      <svg viewBox="0 0 10 18" aria-hidden="true"><path d="m1 1 8 8-8 8" /></svg>
+    </button>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-bandeau]').forEach((bandeau) => {
+    const piste = bandeau.querySelector<HTMLElement>('.bandeau__piste')!
+    const fenetre = bandeau.querySelector<HTMLElement>('.bandeau__fenetre')!
+    const reduit = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const vitesse = 30 // pixels par seconde
+    let position = 0
+    let cible: number | null = null
+    let pause = false
+    let avant = performance.now()
+
+    const tour = () => piste.scrollWidth / 3
+    const pas = () => {
+      const li = piste.querySelector('li')
+      const ecart = parseFloat(getComputedStyle(piste).columnGap) || 0
+      return (li?.getBoundingClientRect().width ?? 200) + ecart
+    }
+    const boucler = (x: number) => {
+      const m = tour()
+      return m ? ((x % m) + m) % m : 0
+    }
+
+    const image = (maintenant: number) => {
+      const dt = Math.min(maintenant - avant, 100) / 1000
+      avant = maintenant
+      if (cible !== null) {
+        // Glissement doux vers la photo demandée par la flèche.
+        const reste = cible - position
+        position += reste * Math.min(1, dt * 8)
+        if (Math.abs(reste) < 0.5) {
+          position = cible
+          cible = null
+        }
+      } else if (!pause && !reduit) {
+        position += vitesse * dt
+      }
+      const m = tour()
+      if (m && (position >= m || position < 0)) {
+        const decalage = boucler(position) - position
+        position += decalage
+        if (cible !== null) cible += decalage
+      }
+      piste.style.transform = `translateX(${-position}px)`
+      requestAnimationFrame(image)
+    }
+    requestAnimationFrame(image)
+
+    bandeau.querySelectorAll<HTMLButtonElement>('.bandeau__fleche').forEach((bouton) => {
+      bouton.addEventListener('click', () => {
+        const p = pas()
+        const depart = cible ?? position
+        // Se cale sur la photo suivante ou précédente.
+        cible = (Math.round(depart / p) + Number(bouton.dataset.sens)) * p
+      })
+    })
+    fenetre.addEventListener('mouseenter', () => (pause = true))
+    fenetre.addEventListener('mouseleave', () => (pause = false))
+    fenetre.addEventListener('focusin', () => (pause = true))
+    fenetre.addEventListener('focusout', () => (pause = false))
+  })
+</script>
+
+<style>
+  .bandeau {
+    padding-block: clamp(2.5rem, 5vw, 3.5rem);
+    background: var(--creme-soutenu);
+    text-align: center;
+  }
+  .bandeau__titre {
+    font-size: var(--t-m);
+    letter-spacing: 0.2em;
+    margin-bottom: clamp(1.25rem, 2.5vw, 1.75rem);
+  }
+  .bandeau__cadre {
+    display: flex;
+    align-items: center;
+    gap: clamp(0.25rem, 1.5vw, 1rem);
+    padding-inline: clamp(0.25rem, 1.5vw, 1rem);
+  }
+  .bandeau__fenetre {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+  }
+  .bandeau__piste {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: clamp(0.75rem, 1.5vw, 1.25rem);
+    width: max-content;
+    will-change: transform;
+  }
+  .bandeau__piste li {
+    width: clamp(11rem, 16vw, 15rem);
+    flex: none;
+  }
+  .bandeau__lien {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+  .bandeau__lien :global(img) {
+    transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .bandeau__lien:hover :global(img) {
+    transform: scale(1.05);
+  }
+  .bandeau__nom {
+    display: block;
+    margin-top: 0.6rem;
+    font-size: var(--t-xs);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ardoise);
+  }
+  .bandeau__lien:hover .bandeau__nom {
+    color: var(--ocre);
+  }
+  /* Têtes de flèches fines */
+  .bandeau__fleche {
+    flex: none;
+    background: none;
+    border: 0;
+    padding: 0.75rem 0.5rem;
+    color: var(--ardoise);
+    line-height: 0;
+    cursor: pointer;
+    transition: color 0.25s;
+  }
+  .bandeau__fleche:hover {
+    color: var(--ocre);
+  }
+  .bandeau__fleche svg {
+    width: 0.7rem;
+    height: auto;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.2;
+    overflow: visible;
+  }
+</style>
