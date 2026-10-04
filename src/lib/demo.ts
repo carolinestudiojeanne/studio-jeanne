@@ -39,7 +39,7 @@ export const reglages: Reglages = {
   lienTally: '',
   instagram: 'https://www.instagram.com/studio._.jeanne/',
   linkedin: 'https://www.linkedin.com/in/caroline-canova-0401a571',
-  ficheGoogle: '',
+  ficheGoogle: 'https://maps.app.goo.gl/EzdGncGurQL38N6LA',
   lienLaisserAvis: '',
   homelikehome: 'https://www.homelikehome.com',
   nombreAvis: 53,
