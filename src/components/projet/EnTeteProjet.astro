@@ -171,15 +171,12 @@ const {projet, portrait, bande, caracteristiques} = Astro.props
 
   /* 4. Textes du projet (la demande, ce qui a été fait), avant les photos */
   .ep__textes {
-    text-align: left;
+    text-align: center;
     max-width: calc(64rem + 2 * var(--gouttiere));
     margin: 0 auto;
     padding: 0 var(--gouttiere) clamp(3rem, 6vw, 5rem);
     display: grid;
     gap: clamp(2.5rem, 5vw, 3.5rem);
-  }
-  .ep__textes :global(.surtitre) {
-    text-align: center;
   }
 
   /* 5. Bouton sous les photos */
