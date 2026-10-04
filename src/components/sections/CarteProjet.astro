@@ -21,16 +21,48 @@ const Titre = titre
 </article>
 
 <style>
+  /* Au survol : la carte remonte, une ombre douce apparaît, la photo zoome et s'assombrit légèrement. */
   .carte__lien {
     display: block;
     text-decoration: none;
     color: inherit;
+    transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .carte__lien :global(.image__cadre) {
+    transition: box-shadow 0.5s ease;
   }
   .carte__lien :global(img) {
-    transition: transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+    transition:
+      transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1),
+      filter 0.5s ease;
   }
-  .carte__lien:hover :global(img) {
-    transform: scale(1.03);
+  .carte__lien:hover,
+  .carte__lien:focus-visible {
+    transform: translateY(-6px);
+  }
+  .carte__lien:hover :global(.image__cadre),
+  .carte__lien:focus-visible :global(.image__cadre) {
+    box-shadow: 0 18px 36px -18px rgb(40 42 56 / 0.45);
+  }
+  .carte__lien:hover :global(img),
+  .carte__lien:focus-visible :global(img) {
+    transform: scale(1.05);
+    filter: brightness(0.92);
+  }
+  .carte__lien:hover .carte__titre {
+    color: var(--ocre);
+  }
+  .carte__titre {
+    transition: color 0.3s;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .carte__lien,
+    .carte__lien :global(img) {
+      transition: none;
+    }
+    .carte__lien:hover {
+      transform: none;
+    }
   }
   .carte__texte {
     display: flex;
