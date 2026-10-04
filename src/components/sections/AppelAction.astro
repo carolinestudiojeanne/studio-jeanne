@@ -34,15 +34,23 @@ const {appel, lien} = Astro.props
 }
 
 <style>
+  /* Bloc plus compact, pour ne pas former une énorme bande bleue avec le pied de page. */
+  .appel {
+    padding-block: clamp(2.5rem, 5vw, 4rem);
+    border-bottom: 1px solid color-mix(in srgb, var(--creme) 18%, transparent);
+  }
   .appel__contenu {
     text-align: center;
+  }
+  .appel__contenu :global(h2) {
+    margin-bottom: 0.75rem;
   }
   .appel__contenu p {
     font-size: var(--t-m);
     opacity: 0.92;
   }
   .appel__actions {
-    margin-top: 2.5rem;
+    margin-top: 1.5rem;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;

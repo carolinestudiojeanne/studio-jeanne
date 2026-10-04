@@ -13,11 +13,8 @@ const annee = new Date().getFullYear()
 ---
 
 <footer class="pied fond-ardoise">
-  <div class="conteneur pied__grille">
-    <div class="pied__marque">
-      <a href="/" aria-label="Studio Jeanne, retour à l’accueil"><Logo clair class="pied__logo" /></a>
-      {r.phraseLocale && <p class="pied__phrase">{r.phraseLocale}</p>}
-    </div>
+  <div class="conteneur pied__haut">
+    <a href="/" class="pied__marque" aria-label="Studio Jeanne, retour à l’accueil"><Logo clair class="pied__logo" /></a>
 
     <nav class="pied__nav" aria-label="Pages du site">
       <ul>
@@ -27,24 +24,18 @@ const annee = new Date().getFullYear()
       </ul>
     </nav>
 
-    <div class="pied__contact">
-      <p>
-        {tel && <><a href={`tel:${tel}`}>{r.telephone}</a><br /></>}
-        {r.email && <a href={`mailto:${r.email}`}>{r.email}</a>}
-      </p>
-      <p>
-        {r.afficherAdresse && r.adresse && <>{r.adresse}, {r.codePostal} {r.ville}<br /></>}
-        {r.zone}
-      </p>
-      <ul class="pied__reseaux">
-        {r.instagram && <li><a href={r.instagram} target="_blank" rel="noopener">Instagram</a></li>}
-        {r.linkedin && <li><a href={r.linkedin} target="_blank" rel="noopener">LinkedIn</a></li>}
-      </ul>
-    </div>
+    <ul class="pied__contact">
+      {tel && <li><a href={`tel:${tel}`}>{r.telephone}</a></li>}
+      {r.email && <li><a href={`mailto:${r.email}`}>{r.email}</a></li>}
+      {r.instagram && <li><a href={r.instagram} target="_blank" rel="noopener">Instagram</a></li>}
+      {r.linkedin && <li><a href={r.linkedin} target="_blank" rel="noopener">LinkedIn</a></li>}
+    </ul>
   </div>
 
   <div class="conteneur pied__bas">
-    <span>© {annee} Studio Jeanne</span>
+    <span>
+      © {annee} Studio Jeanne{r.afficherAdresse && r.adresse ? ` · ${r.adresse}, ${r.codePostal} ${r.ville}` : ''}{r.zone ? ` · ${r.zone}` : ''}
+    </span>
     <ul>
       <li><a href="/mentions-legales">Mentions légales</a></li>
       <li><a href="/politique-de-confidentialite">Politique de confidentialité</a></li>
@@ -55,9 +46,11 @@ const annee = new Date().getFullYear()
 </footer>
 
 <style>
+  /* Pied de page fin : une ligne (logo, menu, contact) puis une ligne de mentions. */
   .pied {
-    padding-block: clamp(4rem, 8vw, 6rem) 2rem;
-    font-size: var(--t-s);
+    padding-block: clamp(1.5rem, 3vw, 2.25rem) 1.25rem;
+    font-size: var(--t-xs);
+    letter-spacing: 0.06em;
   }
   .pied a {
     text-decoration: none;
@@ -66,52 +59,37 @@ const annee = new Date().getFullYear()
     text-decoration: underline;
     text-decoration-color: var(--ocre);
   }
-  .pied__grille {
-    display: grid;
-    gap: 3rem;
-    grid-template-columns: 1fr;
-  }
-  @media (min-width: 48rem) {
-    .pied__grille {
-      grid-template-columns: 1.4fr 1fr 1fr;
-    }
-  }
-  .pied__marque :global(.pied__logo) {
-    width: 9rem;
-  }
-  .pied__phrase {
-    margin-top: 2rem;
-    max-width: 26rem;
-    opacity: 0.85;
-  }
   .pied ul {
     list-style: none;
     margin: 0;
     padding: 0;
-  }
-  .pied__nav li + li {
-    margin-top: 0.6rem;
-  }
-  .pied__reseaux {
     display: flex;
-    gap: 1.5rem;
-    margin-top: 1.25rem !important;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.5rem;
+  }
+  .pied__haut {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.25rem 2.5rem;
+  }
+  .pied__marque :global(.pied__logo) {
+    width: 4.5rem;
+  }
+  .pied__nav ul {
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
   }
   .pied__bas {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    gap: 1rem 2rem;
-    margin-top: clamp(3rem, 6vw, 5rem);
-    padding-top: 1.5rem;
+    gap: 0.5rem 2rem;
+    margin-top: 1.25rem;
+    padding-top: 1rem;
     border-top: 1px solid color-mix(in srgb, var(--creme) 25%, transparent);
-    font-size: var(--t-xs);
-    letter-spacing: 0.06em;
-  }
-  .pied__bas ul {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem 1.5rem;
+    opacity: 0.85;
   }
   .pied__cookies {
     background: none;
