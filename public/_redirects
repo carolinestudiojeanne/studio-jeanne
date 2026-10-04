@@ -15,12 +15,14 @@ http://www.studio-jeanne.com/*  https://www.studio-jeanne.com/:splat  301!
 /realisation/bar-restaurant-le-replay  /projets/le-replay                301
 /realisation/restaurant-le-mirefleurs  /projets/le-mirefleurs            301
 
-# À préciser après la sélection des projets du 5 octobre (vers le projet complet correspondant)
-/realisation/merignac-veuve-crocq      /projets  301
-/realisation/patay                     /projets  301
-/realisation/fabelle                   /projets  301
+# Projets repris sur le nouveau site
+/realisation/merignac-veuve-crocq      /projets/echoppe-double-merignac        301
+/realisation/patay                     /projets/etage-echoppe-double-bordeaux  301
+/realisation/fabelle                   /projets/rdc-maison-cauderan            301
 /realisation/cuisine-le-bouscat        /projets/cuisine-le-bouscat        301
 /realisation/suite-parentale-cauderan  /projets/suite-parentale-cauderan  301
+
+# Anciennes pages déjà en 404 (pas de projet correspondant)
 /realisation/projet-saint-genes        /projets  301
 /realisation/dressing-cauderan         /projets  301
 
