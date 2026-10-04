@@ -126,7 +126,7 @@ export const projets: Projet[] = [
     resume: 'Une très grande cuisine ouverte sur le séjour, pensée pour une famille nombreuse.',
     imagePrincipale: {src: 'https://cdn.prod.website-files.com/6239daed454ddd32df1bfe6d/67a63ae10ad2e6851a74e6b4_STUDIO%20JEANNE%20CUISINE%20LE%20BOUSCAT%207-p-1600.jpg', width: 1600, height: 1067, alt: 'Cuisine Le Bouscat'},
     demande: paragraphes('Mes clients m’ont contactée pour les aider à concevoir cette très grande cuisine pour la maison qu’ils ont fait construire.'),
-    realisation: paragraphes('En leur proposant des visuels 3D, je les ai aidés à choisir le meilleur aménagement pour cette cuisine conçue pour une famille nombreuse, tout en intégrant la partie salon et salle à manger. Je les ai également mis en relation avec un cuisiniste pour la réalisation de ce beau projet.'),
+    realisation: paragraphes('En leur proposant des visuels 3D, je les ai aidés à choisir le meilleur aménagement pour cette cuisine conçue pour une famille nombreuse, tout en intégrant\nla partie salon et salle à manger. Je les ai également mis en relation avec un cuisiniste pour la réalisation de ce beau projet.'),
     galerie: [
       {image: {src: 'https://cdn.prod.website-files.com/6239daed454ddd32df1bfe6d/67a63b7a8aedd53e8ebd3625_STUDIO%20JEANNE%20CUISINE%20LE%20BOUSCAT%202-p-1600.jpg', width: 500, height: 750, alt: 'Cuisine Le Bouscat, photo 2'}, affichage: 'paire'},
       {image: {src: 'https://cdn.prod.website-files.com/6239daed454ddd32df1bfe6d/67a63b7a8691576eea70f813_STUDIO%20JEANNE%20CUISINE%20LE%20BOUSCAT%201-p-1600.jpg', width: 500, height: 750, alt: 'Cuisine Le Bouscat, vue d’ensemble'}, affichage: 'paire'},
