@@ -1,18 +1,10 @@
 import {defineArrayMember, defineField, defineType} from 'sanity'
 import {orderRankField, orderRankOrdering} from '@sanity/orderable-document-list'
 import {HomeIcon} from '@sanity/icons/Home'
+import {COMMUNES} from '../communes'
 
-export const COMMUNES = [
-  'Bordeaux',
-  'Caudéran',
-  'Le Bouscat',
-  'Mérignac',
-  'Talence',
-  'Pessac',
-  'Soulac-sur-Mer',
-  'Montalivet',
-  'La Rochelle',
-]
+export {COMMUNES}
+
 
 const FRAGMENTS = ['cuisine', 'chambre', 'suite', 'dressing', 'salle de bain', 'salle de bains', 'palier']
 
@@ -93,7 +85,7 @@ export const projet = defineType({
       title: 'Type de bien',
       type: 'string',
       group: 'essentiel',
-      options: {list: ['Maison', 'Appartement', 'Échoppe', 'Maison de vacances', 'Commerce', 'Restaurant']},
+      description: 'Ex. : Maison, Appartement, Échoppe double, Restaurant.',
       validation: (rule) => rule.required(),
     }),
     defineField({
@@ -101,7 +93,7 @@ export const projet = defineType({
       title: 'Type de projet',
       type: 'string',
       group: 'essentiel',
-      options: {list: ['Rénovation complète', 'Rénovation partielle', 'Aménagement', 'Décoration']},
+      description: 'Ex. : Rénovation complète, Décoration, Conception d’une cuisine.',
       validation: (rule) => rule.required(),
     }),
     defineField({

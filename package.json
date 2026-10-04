@@ -7,6 +7,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
+    "importer": "tsx --env-file-if-exists=.env scripts/importer.ts",
     "importer-textes": "tsx scripts/importer-textes.ts",
     "studio": "npm --prefix studio run dev"
   },
