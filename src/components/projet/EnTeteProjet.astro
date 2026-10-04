@@ -236,6 +236,11 @@ const {projet, portrait, bande, caracteristiques} = Astro.props
     gap: clamp(2.5rem, 5vw, 3.5rem);
   }
 
+  /* Lignes de longueur égale : pas de dernière ligne avec deux mots. */
+  .ep__textes :global(p) {
+    text-wrap: balance;
+  }
+
   /* 5. Bouton sous les photos */
   .ep__appel {
     padding: clamp(2.5rem, 5vw, 4rem) var(--gouttiere) clamp(3.5rem, 7vw, 6rem);
