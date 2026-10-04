@@ -196,12 +196,20 @@ const {projet, portrait, bande, caracteristiques} = Astro.props
     flex-wrap: wrap;
     justify-content: center;
     gap: 1.5rem 0;
-    max-width: 64rem;
     margin: 0 auto;
     padding: clamp(2.5rem, 5vw, 4rem) var(--gouttiere) clamp(3rem, 6vw, 5rem);
   }
   .ep__carac > div {
     padding-inline: clamp(1.25rem, 3vw, 2.5rem);
+  }
+  /* Sur ordinateur, toutes les caractéristiques tiennent sur une seule ligne. */
+  @media (min-width: 64rem) {
+    .ep__carac {
+      flex-wrap: nowrap;
+    }
+    .ep__carac dd {
+      white-space: nowrap;
+    }
   }
   .ep__carac > div + div {
     border-left: 1px solid color-mix(in srgb, var(--ocre) 60%, transparent);
@@ -230,7 +238,7 @@ const {projet, portrait, bande, caracteristiques} = Astro.props
 
   /* 5. Bouton sous les photos */
   .ep__appel {
-    padding: clamp(2.5rem, 5vw, 4rem) var(--gouttiere) 0;
+    padding: clamp(2.5rem, 5vw, 4rem) var(--gouttiere) clamp(3.5rem, 7vw, 6rem);
   }
 
   /* 4. Bande de photos sur toute la largeur : 4 visibles, les autres défilent avec les flèches */
