@@ -21,7 +21,7 @@ const moisAnnee = (date?: string) =>
 
 {
   avis.length > 0 && (
-    <ul class:list={['mur', `mur--${colonnes}`, {'mur--egales': egales}]} data-mur={!egales && colonnes > 1 ? '' : undefined}>
+    <ul class:list={['mur', `mur--${colonnes}`, {'mur--egales': egales}]}>
       {avis.map((a) => (
         <li class="mur__carte">
           <figure>
@@ -44,56 +44,7 @@ const moisAnnee = (date?: string) =>
   )
 }
 
-<script>
-  // Mur d'avis : les cartes sont réparties colonne par colonne, de gauche à droite
-  // (1re carte en haut à gauche, 2e en haut au milieu…), pour lire les avis du plus récent
-  // au plus ancien ligne par ligne. Sans JavaScript, la mosaïque en colonnes CSS reste en place.
-  document.querySelectorAll<HTMLUListElement>('[data-mur]').forEach((mur) => {
-    const cartes = [...mur.querySelectorAll<HTMLLIElement>(':scope > li')]
-    const max = mur.classList.contains('mur--2') ? 2 : 3
-    let actuel = 0
-    const repartir = () => {
-      const n = Math.min(max, matchMedia('(min-width: 64rem)').matches ? 3 : matchMedia('(min-width: 40rem)').matches ? 2 : 1)
-      if (n === actuel) return
-      actuel = n
-      mur.querySelectorAll('.mur__colonne').forEach((c) => c.remove())
-      mur.classList.toggle('mur--reparti', n > 1)
-      if (n === 1) {
-        cartes.forEach((c) => mur.append(c))
-        return
-      }
-      const colonnes = Array.from({length: n}, () => {
-        const li = document.createElement('li')
-        li.className = 'mur__colonne'
-        const ul = document.createElement('ul')
-        li.append(ul)
-        mur.append(li)
-        return ul
-      })
-      cartes.forEach((c, i) => colonnes[i % n].append(c))
-    }
-    repartir()
-    addEventListener('resize', repartir)
-  })
-</script>
-
 <style>
-  /* Répartition par le script : des colonnes côte à côte. */
-  .mur--reparti {
-    columns: auto;
-    display: flex;
-    align-items: flex-start;
-    gap: clamp(1rem, 2vw, 1.5rem);
-  }
-  .mur--reparti > :global(.mur__colonne) {
-    flex: 1;
-    min-width: 0;
-  }
-  .mur--reparti :global(.mur__colonne > ul) {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
   .mur {
     list-style: none;
     margin: 0;
