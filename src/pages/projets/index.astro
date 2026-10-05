@@ -6,7 +6,6 @@ import Image from '../../components/Image.astro'
 import {getPageProjets, getProjets, getReglages} from '../../lib/contenu'
 
 const [page, projets, reglages] = await Promise.all([getPageProjets(), getProjets(), getReglages()])
-const residentiels = projets.filter((p) => p.categorie !== 'professionnel')
 const titre = page.seo?.metaTitle || `Projets${reglages.suffixeTitre}`
 ---
 
@@ -14,10 +13,10 @@ const titre = page.seo?.metaTitle || `Projets${reglages.suffixeTitre}`
   <!-- 1. Introduction -->
   <SectionTexte titre={page.intro?.titre || 'Projets'} niveau="h1" texte={page.intro?.texte} serree />
 
-  <!-- 2. Grille des projets résidentiels, dans l'ordre choisi par Caroline -->
+  <!-- 2. Grille de tous les projets (particuliers et professionnels), dans l'ordre choisi par Caroline -->
   <section class="conteneur grille-projets">
     <h2 class="visuellement-cache">Tous les projets</h2>
-    <GrilleProjets projets={residentiels} />
+    <GrilleProjets projets={projets} />
   </section>
 
   <!-- 3. Bloc Professionnels, avec image -->
