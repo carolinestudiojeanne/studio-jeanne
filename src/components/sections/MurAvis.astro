@@ -1,0 +1,105 @@
+---
+/**
+ * Mur d'avis (page Avis clients) : une mosaïque de cartes sur 3 colonnes (2 sur tablette,
+ * 1 sur mobile). Chaque carte : étoiles, texte, prénom et date. Les cartes s'emboîtent
+ * selon la longueur du texte.
+ */
+import type {Avis} from '../../lib/types'
+
+interface Props {
+  avis: Avis[]
+}
+const {avis} = Astro.props
+
+const moisAnnee = (date?: string) =>
+  date ? new Date(date).toLocaleDateString('fr-FR', {month: 'long', year: 'numeric'}) : ''
+---
+
+{
+  avis.length > 0 && (
+    <ul class="mur">
+      {avis.map((a) => (
+        <li class="mur__carte">
+          <figure>
+            {a.note ? (
+              <p class="mur__etoiles" aria-label={`${a.note} étoiles sur 5`}>
+                {'★'.repeat(a.note)}
+              </p>
+            ) : null}
+            <blockquote>
+              <p>{a.texte}</p>
+            </blockquote>
+            <figcaption>
+              <span class="mur__prenom">{a.prenom}</span>
+              {a.date && <span class="mur__date">{moisAnnee(a.date)}{a.source ? ` · ${a.source}` : ''}</span>}
+            </figcaption>
+          </figure>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+<style>
+  .mur {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    columns: 1;
+    column-gap: clamp(1rem, 2vw, 1.5rem);
+  }
+  @media (min-width: 40rem) {
+    .mur {
+      columns: 2;
+    }
+  }
+  @media (min-width: 64rem) {
+    .mur {
+      columns: 3;
+    }
+  }
+  .mur__carte {
+    break-inside: avoid;
+    margin-bottom: clamp(1rem, 2vw, 1.5rem);
+    padding: clamp(1.5rem, 2.5vw, 2rem);
+    background: var(--blanc);
+    border-radius: var(--arrondi);
+    border: 1px solid color-mix(in srgb, var(--ardoise) 8%, transparent);
+  }
+  .mur__carte figure {
+    margin: 0;
+  }
+  .mur__etoiles {
+    margin: 0 0 1rem;
+    color: var(--ocre);
+    letter-spacing: 0.2em;
+    font-size: var(--t-s);
+  }
+  .mur__carte blockquote {
+    margin: 0;
+  }
+  .mur__carte blockquote p {
+    margin: 0;
+    font-size: var(--t-s);
+    line-height: 1.65;
+    white-space: pre-line;
+  }
+  .mur__carte figcaption {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.25rem 1rem;
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+    border-top: 1px solid color-mix(in srgb, var(--ocre) 35%, transparent);
+    font-size: var(--t-xs);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .mur__prenom {
+    color: var(--ardoise);
+  }
+  .mur__date {
+    opacity: 0.75;
+  }
+</style>

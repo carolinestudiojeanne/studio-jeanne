@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro'
 import SectionTexte from '../components/sections/SectionTexte.astro'
-import ListeAvis from '../components/sections/ListeAvis.astro'
+import MurAvis from '../components/sections/MurAvis.astro'
 import AppelAction from '../components/sections/AppelAction.astro'
 import {getAvis, getPageAvisClients, getReglages} from '../lib/contenu'
 
@@ -26,8 +26,8 @@ const titre = page.seo?.metaTitle || `Avis clients${r.suffixeTitre}`
   </SectionTexte>
 
   <section class="section section--serree">
-    <div class="colonne">
-      <ListeAvis avis={avis} colonnes={false} />
+    <div class="conteneur">
+      <MurAvis avis={avis} />
     </div>
   </section>
 
