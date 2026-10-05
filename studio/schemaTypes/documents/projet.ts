@@ -123,20 +123,6 @@ export const projet = defineType({
       description: 'Utilisé dans la ligne de lieu et pour Google.',
       initialValue: 'Gironde',
     }),
-    defineField({
-      name: 'porteDEntree',
-      title: 'Point de départ du client',
-      type: 'string',
-      group: 'essentiel',
-      description: 'Facultatif. « Avant achat » relie le projet à la page Trouver votre bien.',
-      options: {
-        list: [
-          {title: 'Avant achat (bien trouvé avec Caroline)', value: 'avant-achat'},
-          {title: 'Achat récent', value: 'achat-recent'},
-          {title: 'Transformation différée', value: 'transformation-differee'},
-        ],
-      },
-    }),
     defineField({name: 'annee', title: 'Année', type: 'number', group: 'essentiel', validation: (r) => r.min(2015).max(2100).integer()}),
     defineField({name: 'surface', title: 'Surface (m²)', type: 'number', group: 'essentiel', validation: (r) => r.positive()}),
     defineField({
@@ -145,19 +131,11 @@ export const projet = defineType({
       type: 'text',
       rows: 2,
       group: 'essentiel',
-      description: 'Une ou deux phrases, utilisées sur les cartes de projet et au partage. 160 caractères maximum.',
-      validation: (rule) => [rule.required().error('Le résumé est obligatoire.'), rule.max(160).warning('Plus court, c’est mieux : 160 caractères maximum.')],
+      description: 'Une phrase courte affichée sous le titre du projet. 120 caractères maximum pour tenir sur une ligne.',
+      validation: (rule) => [rule.required().error('Le résumé est obligatoire.'), rule.max(120).warning('Plus court, c’est mieux : 120 caractères maximum pour tenir sur une ligne.')],
     }),
 
     // 2. Les textes
-    defineField({
-      name: 'contexte',
-      title: 'Le contexte',
-      type: 'texteRiche',
-      group: 'textes',
-      description: 'Le bien et sa situation, en quelques phrases.',
-      validation: (rule) => rule.required().error('Décrivez le contexte.'),
-    }),
     defineField({
       name: 'demande',
       title: 'La demande',
@@ -219,14 +197,6 @@ export const projet = defineType({
       description: 'Trois au maximum. Laissez vide : le site en choisit automatiquement (même commune ou même type de bien).',
       of: [defineArrayMember({type: 'reference', to: [{type: 'projet'}], options: {disableNew: true}})],
       validation: (rule) => rule.max(3).unique(),
-    }),
-    defineField({
-      name: 'miseEnAvantAccueil',
-      title: 'Mettre en avant sur l’accueil',
-      type: 'boolean',
-      group: 'plus',
-      description: 'Le projet apparaît dans « Projets récents » sur la page d’accueil (3 ou 4 projets au total).',
-      initialValue: false,
     }),
 
     // 5. Google
