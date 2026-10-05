@@ -1,15 +1,17 @@
 ---
 /**
- * Mur d'avis (page Avis clients) : une mosaïque de cartes sur 3 colonnes (2 sur tablette,
- * 1 sur mobile). Chaque carte : étoiles, texte, prénom et date. Les cartes s'emboîtent
- * selon la longueur du texte.
+ * Mur d'avis : une mosaïque de cartes sur 3 colonnes (2 sur tablette, 1 sur mobile).
+ * Chaque carte : étoiles, texte, prénom et date. Les cartes s'emboîtent selon la longueur du texte.
+ * Même présentation partout où des avis apparaissent (accueil, page Avis clients, pages projet).
  */
 import type {Avis} from '../../lib/types'
 
 interface Props {
-  avis: Avis[]
+  avis: Array<Pick<Avis, 'texte' | 'prenom'> & Partial<Pick<Avis, '_id' | 'note' | 'date'>>>
+  /** Nombre de colonnes au maximum (1 pour un avis seul). */
+  colonnes?: 1 | 2 | 3
 }
-const {avis} = Astro.props
+const {avis, colonnes = 3} = Astro.props
 
 const moisAnnee = (date?: string) =>
   date ? new Date(date).toLocaleDateString('fr-FR', {month: 'long', year: 'numeric'}) : ''
@@ -17,7 +19,7 @@ const moisAnnee = (date?: string) =>
 
 {
   avis.length > 0 && (
-    <ul class="mur">
+    <ul class:list={['mur', `mur--${colonnes}`]}>
       {avis.map((a) => (
         <li class="mur__carte">
           <figure>
@@ -49,14 +51,20 @@ const moisAnnee = (date?: string) =>
     column-gap: clamp(1rem, 2vw, 1.5rem);
   }
   @media (min-width: 40rem) {
-    .mur {
+    .mur--2,
+    .mur--3 {
       columns: 2;
     }
   }
   @media (min-width: 64rem) {
-    .mur {
+    .mur--3 {
       columns: 3;
     }
+  }
+  /* Avis seul : carte centrée, de largeur de lecture. */
+  .mur--1 {
+    max-width: 40rem;
+    margin-inline: auto;
   }
   .mur__carte {
     break-inside: avoid;

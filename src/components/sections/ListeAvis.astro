@@ -1,70 +1,13 @@
 ---
-/** S7 : avis clients (citation + prénom). */
+/** S7 : avis clients, même présentation en cartes que la page Avis clients (voir MurAvis). */
+import MurAvis from './MurAvis.astro'
 import type {Avis} from '../../lib/types'
 
 interface Props {
-  avis: Array<Pick<Avis, 'texte' | 'prenom'> & {_id?: string}>
+  avis: Array<Pick<Avis, 'texte' | 'prenom'> & Partial<Pick<Avis, '_id' | 'note' | 'date'>>>
   colonnes?: boolean
 }
 const {avis, colonnes = true} = Astro.props
 ---
 
-{
-  avis.length > 0 && (
-    <ul class:list={['avis', {'avis--colonnes': colonnes}]}>
-      {avis.map((a) => (
-        <li>
-          <figure class="avis__item">
-            <blockquote>
-              <p>{a.texte}</p>
-            </blockquote>
-            <figcaption>{a.prenom}</figcaption>
-          </figure>
-        </li>
-      ))}
-    </ul>
-  )
-}
-
-<style>
-  .avis {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    gap: 3rem;
-  }
-  @media (min-width: 52rem) {
-    .avis--colonnes {
-      grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
-      gap: clamp(2rem, 5vw, 4rem);
-    }
-  }
-  .avis__item blockquote {
-    margin: 0;
-    position: relative;
-    padding-top: 2.25rem;
-  }
-  .avis__item blockquote::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 1.5rem;
-    height: 1.5rem;
-    border: 1px solid var(--ocre);
-    border-bottom: 0;
-    border-radius: 999px 999px 0 0;
-  }
-  .avis__item p {
-    font-size: var(--t-m);
-    line-height: 1.6;
-  }
-  .avis__item figcaption {
-    margin-top: 1.25rem;
-    font-size: var(--t-xs);
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--ardoise);
-  }
-</style>
+<MurAvis avis={avis} colonnes={colonnes ? 3 : 1} />
