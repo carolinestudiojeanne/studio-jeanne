@@ -16,14 +16,6 @@ const introHtml = texteEnHtml(page.intro?.texte)
     <div class="conteneur">
       <h1>{page.intro?.titre || 'Avis clients'}</h1>
       {introHtml && <div class="texte" set:html={introHtml} />}
-      {
-        r.nombreAvis ? (
-          <p class="note">
-            {r.noteGoogle ? `${String(r.noteGoogle).replace('.', ',')} sur 5, ` : ''}
-            {r.nombreAvis} avis sur Google.
-          </p>
-        ) : null
-      }
       <p class="liens">
         {r.ficheGoogle && <a class="lien-fleche" href={r.ficheGoogle} target="_blank" rel="noopener">Tous les avis sur Google</a>}
         {r.lienLaisserAvis && <a class="lien-fleche" href={r.lienLaisserAvis} target="_blank" rel="noopener">Laisser un avis</a>}
@@ -31,7 +23,7 @@ const introHtml = texteEnHtml(page.intro?.texte)
     </div>
   </section>
 
-  <section class="section section--serree">
+  <section class="section section--serree mur-section">
     <div class="conteneur">
       <MurAvis avis={avis} />
     </div>
@@ -41,12 +33,12 @@ const introHtml = texteEnHtml(page.intro?.texte)
 </Base>
 
 <style>
-  .note {
-    font-size: var(--t-l);
-    color: var(--ardoise);
-  }
   .entete-avis {
     padding-bottom: 0;
+  }
+  /* Le mur d'avis suit de près le lien « Tous les avis sur Google ». */
+  .mur-section {
+    padding-top: 1.75rem;
   }
   /* Liens sans soulignement */
   .liens .lien-fleche {
@@ -56,6 +48,6 @@ const introHtml = texteEnHtml(page.intro?.texte)
     display: flex;
     flex-wrap: wrap;
     gap: 1rem 2rem;
-    margin-top: 1.5rem;
+    margin: 1rem 0 0;
   }
 </style>
