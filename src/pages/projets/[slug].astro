@@ -3,12 +3,19 @@ import PageProjet from '../../components/projet/PageProjet.astro'
 import {getProjets, getProjetsComplets} from '../../lib/contenu'
 import type {Projet} from '../../lib/types'
 
+// En ligne : pages générées à la construction du site (relancée à chaque publication dans Sanity).
+// En local (npm run dev) : page calculée à chaque visite, pour qu'un projet tout juste créé
+// dans le Studio s'ouvre sans relancer le site.
+export const prerender = import.meta.env.PROD
+
 export async function getStaticPaths() {
   const projets = await getProjetsComplets()
   return projets.map((projet) => ({params: {slug: projet.slug}, props: {projet}}))
 }
 
-const {projet} = Astro.props as {projet: Projet}
+let projet = (Astro.props as {projet?: Projet}).projet
+if (!projet) projet = (await getProjetsComplets()).find((p) => p.slug === Astro.params.slug)
+if (!projet) return Astro.rewrite('/404')
 const tous = await getProjets()
 ---
 
