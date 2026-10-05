@@ -16,7 +16,7 @@ const titre = page.seo?.metaTitle || `Projets${reglages.suffixeTitre}`
   <!-- 2. Grille de tous les projets (particuliers et professionnels), dans l'ordre choisi par Caroline -->
   <section class="conteneur grille-projets">
     <h2 class="visuellement-cache">Tous les projets</h2>
-    <GrilleProjets projets={projets} />
+    <GrilleProjets projets={projets} colonnes={4} />
   </section>
 
   <!-- 3. Bloc Professionnels, avec image -->

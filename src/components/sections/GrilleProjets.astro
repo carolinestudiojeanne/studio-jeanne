@@ -5,7 +5,7 @@ import type {ProjetCarte} from '../../lib/types'
 
 interface Props {
   projets: ProjetCarte[]
-  colonnes?: 2 | 3
+  colonnes?: 2 | 3 | 4
   titreCartes?: 'h2' | 'h3'
 }
 const {projets, colonnes = 3, titreCartes = 'h3'} = Astro.props
@@ -40,6 +40,17 @@ const {projets, colonnes = 3, titreCartes = 'h3'} = Astro.props
   @media (min-width: 64rem) {
     .grille--3 {
       grid-template-columns: repeat(3, 1fr);
+    }
+    .grille--4 {
+      grid-template-columns: repeat(4, 1fr);
+    }
+    /* Cartes plus étroites : titre plus petit, lieu sous le titre. */
+    .grille--4 :global(.carte__texte) {
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+    .grille--4 :global(.carte__titre) {
+      font-size: var(--t-m);
     }
   }
 </style>
