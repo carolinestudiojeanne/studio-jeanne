@@ -22,7 +22,6 @@ const {projet, portrait, bande, caracteristiques} = Astro.props
 <section class="ep">
   <div class="ep__visuel">
     <Image image={projet.imagePrincipale} sizes="100vw" prioritaire legende={false} />
-    <div class="ep__voile"></div>
     <div class="ep__haut">
       <h1 class="ep__titre">{projet.titre}</h1>
       {projet.resume && <p class="ep__resume">{projet.resume}</p>}
@@ -153,17 +152,18 @@ const {projet, portrait, bande, caracteristiques} = Astro.props
   .ep__visuel :global(.image__cadre) {
     border-radius: 0;
   }
-  .ep__voile {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to bottom, rgb(251 247 239 / 0.92), rgb(251 247 239 / 0.8) 45%, rgb(251 247 239 / 0) 80%);
-  }
   .ep__haut {
     position: relative;
     margin-block: auto;
     padding: 2rem var(--gouttiere);
   }
+  /* Sans voile sur la photo : texte blanc avec une ombre douce pour rester lisible. */
+  .ep__haut {
+    color: var(--blanc);
+    text-shadow: 0 1px 18px rgb(0 0 0 / 0.45), 0 0 2px rgb(0 0 0 / 0.25);
+  }
   .ep__titre {
+    color: var(--blanc);
     font-size: var(--t-xl);
     margin-bottom: 1.25rem;
     text-wrap: balance;
