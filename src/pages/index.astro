@@ -122,11 +122,6 @@ const colonnes = [
           <div class="entete-section">
             <div>
               <h2>{page.avis?.titre}</h2>
-              {reglages.nombreAvis ? (
-                <p>
-                  {reglages.nombreAvis} avis {reglages.noteGoogle === 5 ? '5 étoiles ' : ''}sur Google.
-                </p>
-              ) : null}
             </div>
             <a class="lien-fleche" href="/avis-clients">
               {page.avis?.lienLibelle || 'Lire tous les avis'}
