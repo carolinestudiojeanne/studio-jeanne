@@ -39,6 +39,6 @@ export const Q = {
   projetsAccueil: /* groq */ `*[_type == "projet" && defined(slug.current) && miseEnAvantAccueil == true] | order(orderRank asc)[0...4]{${carte}}`,
   projetsComplets: /* groq */ `*[_type == "projet" && defined(slug.current)] | order(orderRank asc){${projetComplet}}`,
   projetParId: /* groq */ `*[_type == "projet" && _id == $id][0]{${projetComplet}}`,
-  avis: /* groq */ `*[_type == "avis"] | order(date desc){_id, prenom, texte, note, date, source}`,
+  avis: /* groq */ `*[_type == "avis"] | order(date desc, _id asc){_id, prenom, texte, note, date, source}`,
   avisAccueil: /* groq */ `*[_type == "avis" && miseEnAvantAccueil == true] | order(date desc)[0...3]{_id, prenom, texte, note, date, source}`,
 }
