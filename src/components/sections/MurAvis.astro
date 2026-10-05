@@ -31,7 +31,7 @@ const moisAnnee = (date?: string) =>
             </blockquote>
             <figcaption>
               <span class="mur__prenom">{a.prenom}</span>
-              {a.date && <span class="mur__date">{moisAnnee(a.date)}{a.source ? ` · ${a.source}` : ''}</span>}
+              {a.date && <span class="mur__date">{moisAnnee(a.date)}</span>}
             </figcaption>
           </figure>
         </li>
