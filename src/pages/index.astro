@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro'
 import Hero from '../components/sections/Hero.astro'
 import CarrouselProjets from '../components/sections/CarrouselProjets.astro'
-import ListeAvis from '../components/sections/ListeAvis.astro'
+import MurAvis from '../components/sections/MurAvis.astro'
 import AppelAction from '../components/sections/AppelAction.astro'
 import Image from '../components/Image.astro'
 import {getAvisAccueil, getPageAccueil, getProjets, getReglages} from '../lib/contenu'
@@ -132,7 +132,7 @@ const colonnes = [
               {page.avis?.lienLibelle || 'Lire tous les avis'}
             </a>
           </div>
-          <ListeAvis avis={avis} />
+          <MurAvis avis={avis} egales />
         </div>
       </section>
     )

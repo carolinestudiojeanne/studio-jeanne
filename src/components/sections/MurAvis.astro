@@ -10,8 +10,10 @@ interface Props {
   avis: Array<Pick<Avis, 'texte' | 'prenom'> & Partial<Pick<Avis, '_id' | 'note' | 'date'>>>
   /** Nombre de colonnes au maximum (1 pour un avis seul). */
   colonnes?: 1 | 2 | 3
+  /** Cartes toutes de la même taille, texte coupé au-delà de quelques lignes (accueil). */
+  egales?: boolean
 }
-const {avis, colonnes = 3} = Astro.props
+const {avis, colonnes = 3, egales = false} = Astro.props
 
 const moisAnnee = (date?: string) =>
   date ? new Date(date).toLocaleDateString('fr-FR', {month: 'long', year: 'numeric'}) : ''
@@ -19,7 +21,7 @@ const moisAnnee = (date?: string) =>
 
 {
   avis.length > 0 && (
-    <ul class:list={['mur', `mur--${colonnes}`]}>
+    <ul class:list={['mur', `mur--${colonnes}`, {'mur--egales': egales}]}>
       {avis.map((a) => (
         <li class="mur__carte">
           <figure>
@@ -61,6 +63,39 @@ const moisAnnee = (date?: string) =>
       columns: 3;
     }
   }
+  /* Cartes de même taille (accueil) : grille, même hauteur, texte limité à 8 lignes. */
+  .mur--egales {
+    columns: auto;
+    display: grid;
+    gap: clamp(1rem, 2vw, 1.5rem);
+  }
+  @media (min-width: 52rem) {
+    .mur--egales {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .mur--egales .mur__carte {
+    margin: 0;
+    display: flex;
+  }
+  .mur--egales figure {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+  .mur--egales blockquote {
+    flex: 1;
+  }
+  .mur--egales blockquote p {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 8;
+    line-clamp: 8;
+    overflow: hidden;
+    /* Hauteur fixe de 8 lignes : toutes les cartes ont exactement la même taille. */
+    height: calc(8 * 1.65em);
+  }
+
   /* Avis seul : carte centrée, de largeur de lecture. */
   .mur--1 {
     max-width: 40rem;
