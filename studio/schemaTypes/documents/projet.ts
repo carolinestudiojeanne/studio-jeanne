@@ -189,15 +189,6 @@ export const projet = defineType({
 
     // 4. En plus
     defineField({name: 'retourClient', title: 'Le retour du client', type: 'retourClient', group: 'plus'}),
-    defineField({
-      name: 'projetsLies',
-      title: 'Autres projets à montrer en bas de page',
-      type: 'array',
-      group: 'plus',
-      description: 'Trois au maximum. Laissez vide : le site en choisit automatiquement (même commune ou même type de bien).',
-      of: [defineArrayMember({type: 'reference', to: [{type: 'projet'}], options: {disableNew: true}})],
-      validation: (rule) => rule.max(3).unique(),
-    }),
 
     // 5. Google
     defineField({
