@@ -1,17 +1,23 @@
 ---
 import Base from '../../layouts/Base.astro'
-import SectionTexte from '../../components/sections/SectionTexte.astro'
 import GrilleProjets from '../../components/sections/GrilleProjets.astro'
 import Image from '../../components/Image.astro'
 import {getPageProjets, getProjets, getReglages} from '../../lib/contenu'
+import {texteEnHtml} from '../../lib/texte'
 
 const [page, projets, reglages] = await Promise.all([getPageProjets(), getProjets(), getReglages()])
 const titre = page.seo?.metaTitle || `Projets${reglages.suffixeTitre}`
+const introHtml = texteEnHtml(page.intro?.texte)
 ---
 
 <Base titre={titre} description={page.seo?.metaDescription} imagePartage={page.seo?.imagePartage}>
   <!-- 1. Introduction -->
-  <SectionTexte titre={page.intro?.titre || 'Projets'} niveau="h1" texte={page.intro?.texte} serree />
+  <section class="section section--serree intro-projets">
+    <div class="conteneur">
+      <h1>{page.intro?.titre || 'Projets'}</h1>
+      {introHtml && <div class="texte intro-projets__texte" set:html={introHtml} />}
+    </div>
+  </section>
 
   <!-- 2. Grille de tous les projets (particuliers et professionnels), dans l'ordre choisi par Caroline -->
   <section class="conteneur grille-projets">
@@ -40,6 +46,18 @@ const titre = page.seo?.metaTitle || `Projets${reglages.suffixeTitre}`
 </Base>
 
 <style>
+  /* Introduction centrée ; sur grand écran, la phrase tient sur une seule ligne. */
+  .intro-projets {
+    text-align: center;
+  }
+  .intro-projets h1 {
+    text-wrap: balance;
+  }
+  @media (min-width: 72rem) {
+    .intro-projets__texte :global(p) {
+      white-space: nowrap;
+    }
+  }
   .grille-projets {
     padding-bottom: var(--section);
   }
