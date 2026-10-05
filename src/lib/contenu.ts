@@ -26,8 +26,10 @@ async function lire<T>(requete: string, params: Record<string, unknown>, secours
 }
 
 // Mise en cache pendant la construction : chaque requête n'est faite qu'une fois.
+// En local (npm run dev), pas de cache : une modification publiée dans le Studio s'affiche en actualisant la page.
 const cache = new Map<string, Promise<unknown>>()
 function memo<T>(cle: string, f: () => Promise<T>): Promise<T> {
+  if (import.meta.env.DEV) return f()
   if (!cache.has(cle)) cache.set(cle, f())
   return cache.get(cle) as Promise<T>
 }
