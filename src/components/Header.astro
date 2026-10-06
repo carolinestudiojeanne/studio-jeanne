@@ -76,6 +76,7 @@ const tel = reglages.telephone?.replace(/\s/g, '')
     align-items: center;
     justify-content: space-between;
     gap: 2rem;
+    position: relative;
     min-height: 4.5rem;
     padding-inline: clamp(1rem, 2.5vw, 2rem);
   }
@@ -90,6 +91,18 @@ const tel = reglages.telephone?.replace(/\s/g, '')
 
   .entete__logo :global(.logo) {
     width: 100%;
+  }
+  /* Ordinateur : les pages du menu centrées au milieu de la barre, le logo reste à gauche. */
+  @media (min-width: 64rem) {
+    .menu {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: max-content;
+    }
+    .menu__lien {
+      white-space: nowrap;
+    }
   }
   .menu__liste {
     display: flex;
