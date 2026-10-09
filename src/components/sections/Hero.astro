@@ -153,6 +153,17 @@ const SurtitreTag = surtitreEstH1 ? 'h1' : 'p'
       0 1px 1px color-mix(in srgb, var(--ocre) 55%, transparent),
       0 0 8px color-mix(in srgb, var(--ocre) 25%, transparent);
   }
+  /* Accueil : bouton ocre. */
+  .hero--centre .bouton {
+    background: var(--ocre);
+    border-color: var(--ocre);
+    color: var(--blanc);
+  }
+  .hero--centre .bouton:hover {
+    background: transparent;
+    border-color: var(--ocre);
+    color: var(--blanc);
+  }
   .hero--centre .hero__titre {
     max-width: none;
     font-size: clamp(2rem, 4.2vw, 4.75rem);
