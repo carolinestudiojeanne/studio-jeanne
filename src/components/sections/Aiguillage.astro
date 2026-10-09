@@ -1,6 +1,6 @@
 ---
 /**
- * Les deux portes d'entrée, côte à côte, en arche : « Vous avez déjà votre maison » et
+ * Les deux portes d'entrée, côte à côte : « Vous avez déjà votre maison » et
  * « Vous ne l'avez pas encore trouvée ». Même bloc sur l'accueil et sur la page Contact.
  * Le bouton mène au formulaire Tally de la porte ; le lien dessous, à la page qui la présente.
  */
@@ -46,10 +46,9 @@ const colonnes = [
       grid-template-columns: 1fr 1fr;
     }
   }
+  /* Deux colonnes simples, sans cadre. */
   .aiguillage__colonne {
-    border: 1px solid color-mix(in srgb, var(--ardoise) 22%, transparent);
-    border-radius: 999px 999px 0 0;
-    padding: clamp(4rem, 8vw, 6rem) clamp(1.75rem, 5vw, 4rem) clamp(2.5rem, 5vw, 3.5rem);
+    padding: clamp(1rem, 3vw, 2rem) clamp(1rem, 4vw, 3rem);
     text-align: center;
   }
   /* Un retour à la ligne saisi dans le titre est respecté. */
