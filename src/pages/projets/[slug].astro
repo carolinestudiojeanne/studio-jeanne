@@ -13,7 +13,8 @@ export async function getStaticPaths() {
   return projets.map((projet) => ({params: {slug: projet.slug}, props: {projet}}))
 }
 
-let projet = (Astro.props as {projet?: Projet}).projet
+// En local, toujours relire le projet dans Sanity (sinon une modification du Studio n'apparaît qu'au redémarrage).
+let projet = import.meta.env.DEV ? undefined : (Astro.props as {projet?: Projet}).projet
 if (!projet) projet = (await getProjetsComplets()).find((p) => p.slug === Astro.params.slug)
 if (!projet) return Astro.rewrite('/404')
 const tous = await getProjets()
