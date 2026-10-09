@@ -51,10 +51,10 @@ const {hero, projetsRecents, aiguillage} = page
 
   <!-- 4. Deux points de départ -->
   {
-    aiguillage?.titre && (
-      <section class="section">
+    aiguillage && (
+      <section class="section section-portes">
         <div class="conteneur">
-          <h2 class="aiguillage__titre">{aiguillage.titre}</h2>
+          <h2 class="visuellement-cache">{aiguillage.titre || 'Deux points de départ'}</h2>
           <Aiguillage aiguillage={aiguillage} />
         </div>
       </section>
@@ -133,8 +133,8 @@ const {hero, projetsRecents, aiguillage} = page
   .voir-projets .lien-fleche::after {
     content: none;
   }
-  .aiguillage__titre {
-    text-align: center;
-    margin-bottom: clamp(2.5rem, 5vw, 4rem);
+  /* Les deux portes d'entrée, sur fond blanc, sans titre visible. */
+  .section-portes {
+    background: var(--blanc);
   }
 </style>
