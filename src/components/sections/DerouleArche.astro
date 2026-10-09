@@ -23,18 +23,18 @@ const travaux = {
     'Suivi de chantier par un maître d’œuvre partenaire. Si vous préférez piloter vous-même, je présente le projet aux artisans et je passe en cours de chantier pour les choix décoratifs.',
 }
 
-// Arche du logo dans un repère 800 × 500 : trait vertical à gauche, angle arrondi (centre 230, 230 ; rayon 190),
-// trait horizontal jusqu'à l'ouverture (620, 40). Les points sont placés en % de ce repère.
-const L = 800
-const H = 500
+// Arche du logo dans un repère 920 × 440 : trait vertical à gauche, angle arrondi (centre 230, 230 ; rayon 190),
+// trait horizontal jusqu'à l'ouverture (720, 40). Les points sont placés en % de ce repère.
+const L = 920
+const H = 440
 const sommet = 230 - 190 * Math.SQRT1_2
 const points = [
-  {x: 40, y: 440, place: 'droite'},
-  {x: 40, y: 290, place: 'droite'},
+  {x: 40, y: 390, place: 'droite'},
+  {x: 40, y: 280, place: 'droite'},
   {x: sommet, y: sommet, place: 'diagonale'},
-  {x: 340, y: 40, place: 'dessous'},
-  {x: 520, y: 40, place: 'dessous'},
-  {x: 700, y: 40, place: 'dessous'},
+  {x: 380, y: 40, place: 'dessous'},
+  {x: 580, y: 40, place: 'dessous'},
+  {x: 810, y: 40, place: 'dessous'},
 ]
 // Photo de chaque étape (fichiers dans public/accompagnement/), affichée en bas à droite de l'arche.
 // Tant qu'une étape n'a pas de photo, l'emplacement reste une forme crème.
@@ -49,9 +49,9 @@ const toutes = [...etapes.map((e, i) => ({...e, numero: String(i + 1).padStart(2
     <!-- Ordinateur : arche interactive -->
     <div class="parcours" data-arche>
       <svg class="parcours__trait" viewBox={`0 0 ${L} ${H}`} aria-hidden="true" preserveAspectRatio="none">
-        <path d="M40 480 V230 A190 190 0 0 1 230 40 H620" vector-effect="non-scaling-stroke" />
+        <path d="M40 420 V230 A190 190 0 0 1 230 40 H720" vector-effect="non-scaling-stroke" />
         <!-- Pointillés de l'ouverture jusqu'aux travaux -->
-        <path class="parcours__pointilles" d="M620 40 H689" />
+        <path class="parcours__pointilles" d="M720 40 H800" />
       </svg>
 
       <div class="parcours__etapes" role="tablist" aria-label="Étapes du projet">
@@ -161,8 +161,8 @@ const toutes = [...etapes.map((e, i) => ({...e, numero: String(i + 1).padStart(2
   /* L'arche interactive (ordinateur), grande et centrée */
   .parcours {
     position: relative;
-    width: min(100%, 60rem);
-    aspect-ratio: 800 / 500;
+    width: min(100%, 69rem);
+    aspect-ratio: 920 / 440;
     margin-inline: auto;
   }
   .parcours__trait {
@@ -292,22 +292,22 @@ const toutes = [...etapes.map((e, i) => ({...e, numero: String(i + 1).padStart(2
   .parcours__panneaux {
     position: absolute;
     left: 24%;
-    /* Bord gauche de la photo (95 % − 22 %) moins un petit écart. */
-    right: calc(100% - 95% + 22% + 2.5%);
+    /* Bord gauche de la photo moins un petit écart. */
+    right: calc(100% - 870 / 920 * 100% + 20% + 2.5%);
     top: 20%;
-    bottom: calc(100% - 480 / 500 * 100%);
+    bottom: calc(100% - 420 / 440 * 100%);
     display: flex;
     align-items: flex-end;
     justify-content: flex-end;
     text-align: right;
   }
-  /* Photo (rectangle vertical) : coin bas droit au niveau du bas de l'arche (y = 480)
-     et un peu à droite des travaux (x = 760), dans le repère 800 × 500. Coins arrondis comme les photos des projets. */
+  /* Photo (rectangle vertical) : coin bas droit au niveau du bas de l'arche (y = 420)
+     et un peu à droite des travaux (x = 870), dans le repère 920 × 440. Coins arrondis comme les photos des projets. */
   .parcours__photo {
     position: absolute;
-    right: calc(100% - 760 / 800 * 100%);
-    bottom: calc(100% - 480 / 500 * 100%);
-    width: 22%;
+    right: calc(100% - 870 / 920 * 100%);
+    bottom: calc(100% - 420 / 440 * 100%);
+    width: 20%;
     aspect-ratio: 3 / 4;
     border-radius: var(--arrondi);
     overflow: hidden;
