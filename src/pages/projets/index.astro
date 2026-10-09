@@ -68,11 +68,18 @@ const introHtml = texteEnHtml(page.intro?.texte)
   }
 
   /* Filtres : deux boutons arrondis ocre au-dessus des projets, à gauche. */
+  /* Même écart entre les filtres et la 1re ligne de projets qu'entre deux lignes de projets. */
+  .grille-projets {
+    --ecart-lignes: clamp(1.75rem, 3vw, 2.5rem);
+  }
   .filtres {
     display: flex;
     justify-content: flex-start;
     gap: 0.75rem;
-    margin-bottom: clamp(1.5rem, 3vw, 2rem);
+    margin-bottom: var(--ecart-lignes);
+  }
+  .grille-projets :global(.grille) {
+    row-gap: var(--ecart-lignes);
   }
   .filtre {
     padding: 0.7em 1.6em;
@@ -97,8 +104,11 @@ const introHtml = texteEnHtml(page.intro?.texte)
     display: none;
   }
   /* Introduction centrée ; sur grand écran, la phrase tient sur une seule ligne. */
+  /* Titre bien aéré : plus d'espace en haut et avant les projets. */
   .intro-projets {
     text-align: center;
+    padding-top: clamp(4rem, 9vw, 7rem);
+    padding-bottom: clamp(3rem, 6vw, 5rem);
   }
   /* Titre sur une seule ligne, centré. */
   .intro-projets h1 {
