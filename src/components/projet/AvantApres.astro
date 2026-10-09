@@ -1,29 +1,46 @@
 ---
 /**
  * Avant / après : un curseur à faire glisser, utilisable au clavier.
- * Sans JavaScript, les deux images restent visibles côte à côte.
+ * Le format suit la photo « après » (paysage 3:2, carré, ou vertical 4:5), à une taille modérée
+ * pour rester net, alignées à gauche les unes à côté des autres.
  */
 import {rendreImage} from '../../lib/image'
-import type {Projet} from '../../lib/types'
+import type {ImageData, Projet} from '../../lib/types'
 
 interface Props {
   paires: NonNullable<Projet['avantApres']>
 }
 const {paires} = Astro.props
-const RATIO = 3 / 2
+
+/** Largeur / hauteur d'origine, lue dans la référence Sanity (image-<id>-3000x2000-jpg). */
+const proportion = (image?: ImageData) => {
+  const m = image?.asset?._ref.match(/-(\d+)x(\d+)-/)
+  return m ? Number(m[1]) / Number(m[2]) : 3 / 2
+}
+const FORMATS = {
+  paysage: {ratio: 3 / 2, sizes: '(min-width: 52rem) 30rem, 92vw'},
+  carre: {ratio: 1, sizes: '(min-width: 52rem) 23rem, 92vw'},
+  portrait: {ratio: 4 / 5, sizes: '(min-width: 52rem) 19rem, 80vw'},
+}
 const items = paires
-  .map((p) => ({avant: rendreImage(p.avant, {ratio: RATIO}), apres: rendreImage(p.apres, {ratio: RATIO}), legende: p.legende}))
+  .map((p) => {
+    const r = proportion(p.apres)
+    const format = r > 1.15 ? 'paysage' : r < 0.87 ? 'portrait' : 'carre'
+    const {ratio} = FORMATS[format]
+    const opts = {ratio, maxWidth: 1400}
+    return {format, ratio, sizes: FORMATS[format].sizes, avant: rendreImage(p.avant, opts), apres: rendreImage(p.apres, opts), legende: p.legende}
+  })
   .filter((p) => p.avant && p.apres)
 ---
 
-<div class="aa-liste">
+<div class:list={['aa-liste', {'aa-liste--nombreux': items.length > 3}]}>
   {
     items.map((p) => (
-      <figure class="aa">
-        <div class="aa__cadre" style={`aspect-ratio: ${RATIO}`}>
-          <img class="aa__img" src={p.apres!.src} srcset={p.apres!.srcset} sizes="(min-width: 82rem) 82rem, 100vw" width={p.apres!.width} height={p.apres!.height} alt={`Après : ${p.apres!.alt}`} loading="lazy" />
+      <figure class:list={['aa', `aa--${p.format}`]}>
+        <div class="aa__cadre" style={`aspect-ratio: ${p.ratio}`}>
+          <img class="aa__img" src={p.apres!.src} srcset={p.apres!.srcset} sizes={p.sizes} width={p.apres!.width} height={p.apres!.height} alt={`Après : ${p.apres!.alt}`} loading="lazy" />
           <div class="aa__avant">
-            <img class="aa__img" src={p.avant!.src} srcset={p.avant!.srcset} sizes="(min-width: 82rem) 82rem, 100vw" width={p.avant!.width} height={p.avant!.height} alt={`Avant : ${p.avant!.alt}`} loading="lazy" />
+            <img class="aa__img" src={p.avant!.src} srcset={p.avant!.srcset} sizes={p.sizes} width={p.avant!.width} height={p.avant!.height} alt={`Avant : ${p.avant!.alt}`} loading="lazy" />
           </div>
           <span class="aa__etiquette aa__etiquette--avant" aria-hidden="true">Avant</span>
           <span class="aa__etiquette aa__etiquette--apres" aria-hidden="true">Après</span>
@@ -47,8 +64,41 @@ const items = paires
 
 <style>
   .aa-liste {
-    display: grid;
-    gap: clamp(3rem, 6vw, 5rem);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: clamp(1rem, 2vw, 1.5rem);
+  }
+  .aa {
+    margin: 0;
+    width: 100%;
+  }
+  /* Sur ordinateur, les avant / après se rangent côte à côte et rétrécissent un peu pour tenir sur une ligne. */
+  @media (min-width: 52rem) {
+    .aa-liste:not(.aa-liste--nombreux) {
+      flex-wrap: nowrap;
+    }
+    .aa {
+      flex: 0 1 30rem;
+      min-width: 0;
+    }
+    .aa--carre {
+      flex-basis: 23rem;
+    }
+    .aa--portrait {
+      flex-basis: 19rem;
+    }
+  }
+  @media (max-width: 51.99rem) {
+    .aa--portrait {
+      width: 80%;
+    }
+  }
+  .aa figcaption {
+    margin-top: 0.5rem;
+    font-size: var(--t-xs);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
   }
   .aa__cadre {
     --pos: 50%;
@@ -85,14 +135,14 @@ const items = paires
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 3rem;
-    height: 3rem;
+    width: 2.25rem;
+    height: 2.25rem;
     display: grid;
     place-items: center;
     border-radius: 50%;
     background: var(--creme);
     color: var(--ardoise);
-    font-size: 1.1rem;
+    font-size: 0.9rem;
     letter-spacing: 0.1em;
   }
   .aa__curseur {
@@ -111,8 +161,8 @@ const items = paires
   }
   .aa__etiquette {
     position: absolute;
-    top: 1rem;
-    padding: 0.35rem 0.8rem;
+    top: 0.75rem;
+    padding: 0.3rem 0.7rem;
     background: var(--creme);
     color: var(--ardoise);
     font-size: var(--t-xs);
@@ -121,9 +171,9 @@ const items = paires
     border-radius: 999px;
   }
   .aa__etiquette--avant {
-    left: 1rem;
+    left: 0.75rem;
   }
   .aa__etiquette--apres {
-    right: 1rem;
+    right: 0.75rem;
   }
 </style>

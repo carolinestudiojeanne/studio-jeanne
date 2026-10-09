@@ -2,7 +2,8 @@
 /**
  * Haut des pages projet : grand visuel avec titre centré, une photo verticale à cheval
  * sur le bas du visuel, les caractéristiques du projet, les textes du projet (passés en slot),
- * une bande de photos sur toute la largeur, puis le bouton « Parlons de votre projet ».
+ * une bande de photos sur toute la largeur, puis le bouton « Parlons de votre projet »
+ * (à droite des avant / après quand il y en a, passés dans le slot « avant-apres »).
  */
 import Image from '../Image.astro'
 import type {ImageData, Projet} from '../../lib/types'
@@ -15,8 +16,10 @@ interface Props {
   bande: ImageData[]
   /** Caractéristiques du projet (type, bien, surface, année, lieu…). */
   caracteristiques: Array<{libelle: string; valeur: string}>
+  /** Des avant / après sont passés dans le slot « avant-apres ». */
+  avantApres?: boolean
 }
-const {projet, portrait, bande, caracteristiques} = Astro.props
+const {projet, portrait, bande, caracteristiques, avantApres = false} = Astro.props
 ---
 
 <section class="ep">
@@ -83,9 +86,21 @@ const {projet, portrait, bande, caracteristiques} = Astro.props
     )
   }
 
-  <div class="ep__appel">
-    <a class="bouton bouton--contour" href="/contact">Parlons de votre projet</a>
-  </div>
+  {
+    avantApres ? (
+      <div class="ep__appel ep__appel--aa">
+        <div class="ep__aa">
+          <h2 class="surtitre">Avant, après</h2>
+          <slot name="avant-apres" />
+        </div>
+        <a class="bouton bouton--contour" href="/contact">Parlons de votre projet</a>
+      </div>
+    ) : (
+      <div class="ep__appel">
+        <a class="bouton bouton--contour" href="/contact">Parlons de votre projet</a>
+      </div>
+    )
+  }
 </section>
 
 <script>
@@ -244,6 +259,29 @@ const {projet, portrait, bande, caracteristiques} = Astro.props
   /* 5. Bouton sous les photos */
   .ep__appel {
     padding: clamp(2.5rem, 5vw, 4rem) var(--gouttiere) clamp(3.5rem, 7vw, 6rem);
+  }
+
+  /* Avant / après à gauche, bouton à droite (l'un sous l'autre sur mobile). */
+  .ep__appel--aa {
+    display: grid;
+    gap: clamp(2rem, 4vw, 3rem);
+    justify-items: center;
+    max-width: calc(90rem + 2 * var(--gouttiere));
+    margin: 0 auto;
+    padding-inline: var(--gouttiere);
+  }
+  .ep__aa {
+    text-align: left;
+    width: 100%;
+  }
+  .ep__aa .surtitre {
+    margin-bottom: 1.25rem;
+  }
+  @media (min-width: 64rem) {
+    .ep__appel--aa {
+      grid-template-columns: 1fr auto;
+      align-items: center;
+    }
   }
 
   /* 4. Bande de photos sur toute la largeur : 4 visibles, les autres défilent avec les flèches */
