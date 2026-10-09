@@ -62,6 +62,11 @@ const introHtml = texteEnHtml(page.intro?.texte)
 </script>
 
 <style>
+  /* Lieu des projets en ocre (essai). */
+  .grille-projets :global(.carte__lieu) {
+    color: var(--ocre);
+  }
+
   /* Filtres : deux boutons arrondis ocre au-dessus des projets, à gauche. */
   .filtres {
     display: flex;
