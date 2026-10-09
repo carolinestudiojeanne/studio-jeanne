@@ -92,14 +92,8 @@ const tel = reglages.telephone?.replace(/\s/g, '')
   .entete__logo :global(.logo) {
     width: 100%;
   }
-  /* Ordinateur : les pages du menu centrées au milieu de la barre, le logo reste à gauche. */
+  /* Ordinateur : les pages du menu à droite de la barre, sur une seule ligne. */
   @media (min-width: 64rem) {
-    .menu {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      width: max-content;
-    }
     .menu__lien {
       white-space: nowrap;
     }
