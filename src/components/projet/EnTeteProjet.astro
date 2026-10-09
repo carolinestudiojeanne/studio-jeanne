@@ -268,6 +268,8 @@ const {projet, portrait, bande, caracteristiques, avantApres = false} = Astro.pr
     max-width: calc(90rem + 2 * var(--gouttiere));
     margin: 0 auto;
     padding-inline: var(--gouttiere);
+    /* Un peu plus d'air entre la bande de photos et les avant / après. */
+    padding-top: clamp(3.5rem, 7vw, 6rem);
   }
   .ep__aa {
     text-align: left;
