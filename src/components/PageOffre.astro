@@ -28,17 +28,6 @@ const numeros = ['Premier temps', 'Deuxième temps', 'Troisième temps']
 ---
 
 <Base titre={titre} description={page.seo?.metaDescription} imagePartage={page.seo?.imagePartage} schemas={[schemaFaq(page.faq)]}>
-  <!-- 1. Ligne d'aiguillage -->
-  {
-    page.aiguillage?.texte && (
-      <div class="aiguillage-ligne">
-        <div class="conteneur">
-          {page.aiguillage.texte} <a href={aiguillageHref}>{page.aiguillage.lienLibelle || 'En savoir plus'}</a>
-        </div>
-      </div>
-    )
-  }
-
   <!-- 2. Titre et introduction -->
   <IntroPage titre={page.intro?.titre} texte={page.intro?.texte} />
 
@@ -65,6 +54,17 @@ const numeros = ['Premier temps', 'Deuxième temps', 'Troisième temps']
         <SectionTexte titre={page.texteA?.titre} texte={page.texteA?.texte} />
         <SectionTexte titre={page.texteB?.titre} texte={page.texteB?.texte} serree />
       </>
+    )
+  }
+
+  <!-- Ligne d'aiguillage vers l'autre porte d'entrée, juste avant les questions fréquentes -->
+  {
+    page.aiguillage?.texte && (
+      <div class="aiguillage-ligne">
+        <div class="conteneur">
+          {page.aiguillage.texte} <a href={aiguillageHref}>{page.aiguillage.lienLibelle || 'En savoir plus'}</a>
+        </div>
+      </div>
     )
   }
 
