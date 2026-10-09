@@ -5,16 +5,14 @@ import Aiguillage from '../components/sections/Aiguillage.astro'
 import CarrouselProjets from '../components/sections/CarrouselProjets.astro'
 import MurAvis from '../components/sections/MurAvis.astro'
 import AppelAction from '../components/sections/AppelAction.astro'
-import Image from '../components/Image.astro'
 import {getAvisAccueil, getPageAccueil, getProjets, getReglages} from '../lib/contenu'
-import {texteEnHtml} from '../lib/texte'
 import {FORMULAIRES} from '../lib/formulaires'
 
 const [page, tousProjets, avis, reglages] = await Promise.all([getPageAccueil(), getProjets(), getAvisAccueil(), getReglages()])
 // L'accueil ne montre que les projets de particuliers (diaporama et projets récents).
 const projets = tousProjets.filter((p) => p.categorie === 'residentiel')
 const titre = page.seo?.metaTitle || `Architecte d’intérieur à Bordeaux${reglages.suffixeTitre}`
-const {hero, projetsRecents, deroule, aiguillage, caroline} = page
+const {hero, projetsRecents, aiguillage} = page
 ---
 
 <Base titre={titre} description={page.seo?.metaDescription} imagePartage={page.seo?.imagePartage || hero?.image}>
@@ -51,25 +49,6 @@ const {hero, projetsRecents, deroule, aiguillage, caroline} = page
     )
   }
 
-  <!-- 3. Le déroulé -->
-  {
-    deroule?.titre && (
-      <section class="section fond-soutenu">
-        <div class="colonne">
-          <h2>{deroule.titre}</h2>
-          <div class="texte" set:html={texteEnHtml(deroule.texte)} />
-          {deroule.lienLibelle && (
-            <p class="lien-bas">
-              <a class="lien-fleche" href="/accompagnement">
-                {deroule.lienLibelle}
-              </a>
-            </p>
-          )}
-        </div>
-      </section>
-    )
-  }
-
   <!-- 4. Deux points de départ -->
   {
     aiguillage?.titre && (
@@ -77,27 +56,6 @@ const {hero, projetsRecents, deroule, aiguillage, caroline} = page
         <div class="conteneur">
           <h2 class="aiguillage__titre">{aiguillage.titre}</h2>
           <Aiguillage aiguillage={aiguillage} />
-        </div>
-      </section>
-    )
-  }
-
-  <!-- 5. Caroline -->
-  {
-    caroline?.texte && (
-      <section class="section fond-soutenu">
-        <div class="conteneur caroline">
-          <div class="caroline__image">
-            <Image image={caroline.image} ratio={4 / 5} arche legende={false} sizes="(min-width: 52rem) 30vw, 80vw" />
-          </div>
-          <div class="caroline__texte">
-            <p>{caroline.texte}</p>
-            {caroline.lienLibelle && (
-              <a class="lien-fleche" href="/a-propos">
-                {caroline.lienLibelle}
-              </a>
-            )}
-          </div>
         </div>
       </section>
     )
@@ -175,31 +133,8 @@ const {hero, projetsRecents, deroule, aiguillage, caroline} = page
   .voir-projets .lien-fleche::after {
     content: none;
   }
-  .lien-bas {
-    margin-top: 2.5rem;
-  }
   .aiguillage__titre {
     text-align: center;
     margin-bottom: clamp(2.5rem, 5vw, 4rem);
-  }
-  .caroline {
-    display: grid;
-    gap: 2.5rem;
-    align-items: center;
-  }
-  @media (min-width: 52rem) {
-    .caroline {
-      grid-template-columns: 1fr 1.4fr;
-      gap: clamp(3rem, 8vw, 8rem);
-    }
-  }
-  .caroline__image {
-    max-width: 24rem;
-  }
-  .caroline__texte p {
-    font-size: var(--t-l);
-    line-height: 1.5;
-    color: var(--ardoise);
-    margin-bottom: 2rem;
   }
 </style>
