@@ -116,6 +116,8 @@ const introHtml = texteEnHtml(page.intro?.texte)
   .intro-projets h1 {
     margin-inline: auto;
     margin-bottom: 1.75rem;
+    /* Un peu plus grand que les autres titres. */
+    font-size: clamp(1.3rem, 1rem + 0.8vw, 1.7rem);
   }
   @media (min-width: 52rem) {
     .intro-projets h1 {
