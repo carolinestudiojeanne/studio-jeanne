@@ -21,6 +21,7 @@ const colonnes = [
   <!-- 1. Grand visuel -->
   <Hero
     image={hero?.image}
+    images={projets.map((p) => p.imagePrincipale).filter((i) => i !== undefined)}
     surtitre={hero?.h1}
     surtitreEstH1
     titre={hero?.accroche}

@@ -1,10 +1,15 @@
 ---
-/** S1 : grand visuel plein écran + titre + sous-titre + bouton. */
+/**
+ * S1 : grand visuel plein écran + titre + sous-titre + bouton.
+ * Avec plusieurs images (accueil), elles se succèdent en fondu toutes les 7 secondes.
+ */
 import Image from '../Image.astro'
 import type {ImageData} from '../../lib/types'
 
 interface Props {
   image?: ImageData
+  /** Diaporama : remplace `image` quand il y a au moins deux images. */
+  images?: ImageData[]
   /** Petite ligne au-dessus du titre (sur l'accueil, c'est elle le H1). */
   surtitre?: string
   surtitreEstH1?: boolean
@@ -14,15 +19,28 @@ interface Props {
   /** Texte centré, grand titre sur deux lignes (accueil). */
   centre?: boolean
 }
-const {image, surtitre, surtitreEstH1 = false, titre, sousTitre, bouton, centre = false} = Astro.props
+const {image, images = [], surtitre, surtitreEstH1 = false, titre, sousTitre, bouton, centre = false} = Astro.props
+const diaporama = images.length > 1 ? images : []
 const TitreTag = surtitreEstH1 ? 'p' : 'h1'
 const SurtitreTag = surtitreEstH1 ? 'h1' : 'p'
 ---
 
 <section class:list={['hero', {'hero--centre': centre}]}>
-  <div class="hero__image">
-    <Image image={image} sizes="100vw" prioritaire legende={false} />
-  </div>
+  {
+    diaporama.length ? (
+      <div class="hero__image hero__diaporama" data-diaporama>
+        {diaporama.map((img, i) => (
+          <div class:list={['hero__diapo', {'est-visible': i === 0}]}>
+            <Image image={img} sizes="100vw" prioritaire={i === 0} legende={false} />
+          </div>
+        ))}
+      </div>
+    ) : (
+      <div class="hero__image">
+        <Image image={image} sizes="100vw" prioritaire legende={false} />
+      </div>
+    )
+  }
   <div class="hero__voile"></div>
   <div class="conteneur hero__contenu">
     {surtitre && <SurtitreTag class="surtitre hero__surtitre">{surtitre}</SurtitreTag>}
@@ -32,6 +50,22 @@ const SurtitreTag = surtitreEstH1 ? 'h1' : 'p'
     <slot />
   </div>
 </section>
+
+<script>
+  // Diaporama du grand visuel : une image toutes les 7 secondes, en fondu.
+  // Pas d'animation si la personne a demandé de réduire les mouvements.
+  document.querySelectorAll<HTMLElement>('[data-diaporama]').forEach((zone) => {
+    const diapos = [...zone.querySelectorAll<HTMLElement>('.hero__diapo')]
+    if (diapos.length < 2 || matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    let i = 0
+    setInterval(() => {
+      if (document.hidden) return
+      diapos[i].classList.remove('est-visible')
+      i = (i + 1) % diapos.length
+      diapos[i].classList.add('est-visible')
+    }, 7000)
+  })
+</script>
 
 <style>
   .hero {
@@ -48,6 +82,22 @@ const SurtitreTag = surtitreEstH1 ? 'h1' : 'p'
     position: absolute;
     inset: 0;
     height: 100%;
+  }
+  .hero__diapo {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 1.6s ease;
+  }
+  .hero__diapo.est-visible {
+    opacity: 1;
+  }
+  .hero__diapo :global(figure),
+  .hero__diapo :global(.image__cadre) {
+    position: absolute;
+    inset: 0;
+    height: 100%;
+    margin: 0;
   }
   /* Grand visuel plein écran : bords droits. */
   .hero__image :global(.image__cadre) {
