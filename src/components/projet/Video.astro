@@ -1,5 +1,8 @@
 ---
-/** Vidéo d'un projet : sans le son, avec contrôles, chargée seulement à la lecture. */
+/**
+ * Vidéo d'un projet : sans le son, avec contrôles, dans son format d'origine (verticale ou horizontale).
+ * Seules les premières secondes sont lues à l'ouverture de la page, pour afficher la première image.
+ */
 import {rendreImage} from '../../lib/image'
 import type {Projet} from '../../lib/types'
 
@@ -23,8 +26,8 @@ const iframe = !video.fichierUrl && video.lien ? intégration(video.lien) : null
 
 {
   video.fichierUrl ? (
-    <video class="video" controls muted playsinline preload="none" poster={affiche?.src} width="1920" height="1080">
-      <source src={video.fichierUrl} />
+    <video class="video" controls muted playsinline preload="metadata" poster={affiche?.src}>
+      <source src={`${video.fichierUrl}#t=0.1`} type="video/mp4" />
     </video>
   ) : iframe ? (
     <div class="video video--iframe">
@@ -34,11 +37,17 @@ const iframe = !video.fichierUrl && video.lien ? intégration(video.lien) : null
 }
 
 <style>
-  .video {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 16 / 9;
+  video.video {
+    display: block;
+    max-width: 100%;
+    width: auto;
+    height: min(80svh, 42rem);
+    border-radius: var(--arrondi);
     background: var(--creme-soutenu);
+  }
+  .video--iframe {
+    width: 100%;
+    aspect-ratio: 16 / 9;
   }
   .video--iframe iframe {
     width: 100%;

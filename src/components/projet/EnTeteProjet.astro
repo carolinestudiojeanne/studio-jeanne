@@ -18,8 +18,10 @@ interface Props {
   caracteristiques: Array<{libelle: string; valeur: string}>
   /** Des avant / après sont passés dans le slot « avant-apres ». */
   avantApres?: boolean
+  /** Une vidéo est passée dans le slot « video » (affichée sous les avant / après). */
+  video?: boolean
 }
-const {projet, portrait, bande, caracteristiques, avantApres = false} = Astro.props
+const {projet, portrait, bande, caracteristiques, avantApres = false, video = false} = Astro.props
 ---
 
 <section class="ep">
@@ -97,6 +99,14 @@ const {projet, portrait, bande, caracteristiques, avantApres = false} = Astro.pr
     ) : (
       <div class="ep__appel">
         <a class="bouton bouton--contour" href="/contact">Parlons de votre projet</a>
+      </div>
+    )
+  }
+
+  {
+    video && (
+      <div class="ep__video">
+        <slot name="video" />
       </div>
     )
   }
@@ -258,6 +268,16 @@ const {projet, portrait, bande, caracteristiques, avantApres = false} = Astro.pr
   /* 5. Bouton sous les photos */
   .ep__appel {
     padding: clamp(2.5rem, 5vw, 4rem) var(--gouttiere) clamp(3.5rem, 7vw, 6rem);
+  }
+
+  /* Vidéo sous les avant / après, alignée à gauche comme eux. */
+  .ep__video {
+    max-width: calc(90rem + 2 * var(--gouttiere));
+    margin: 0 auto;
+    padding: 0 var(--gouttiere) clamp(3.5rem, 7vw, 6rem);
+  }
+  .ep__appel:has(+ .ep__video) {
+    padding-bottom: clamp(2rem, 4vw, 3rem);
   }
 
   /* Bouton « Parlons de votre projet » en ocre. */

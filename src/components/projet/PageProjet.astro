@@ -73,6 +73,7 @@ const portrait = galerie[iPortrait]?.image
 const autres = galerie.filter((_, i) => i !== iPortrait)
 const bande = autres.length > 1 ? autres : []
 const resteGalerie = autres.slice(bande.length)
+const aVideo = !!(projet.video && (projet.video.fichierUrl || projet.video.lien))
 const caracteristiques = [projet.typeDeProjet && {libelle: 'Projet', valeur: projet.typeDeProjet}, ...details].filter(Boolean) as Array<{
   libelle: string
   valeur: string
@@ -90,7 +91,7 @@ const caracteristiques = [projet.typeDeProjet && {libelle: 'Projet', valeur: pro
   {apercu && <div class="apercu">Aperçu du brouillon : cette page n’est pas encore publiée.</div>}
 
   <!-- 1. Grand visuel, photo à cheval, caractéristiques, textes, bande de photos, avant / après -->
-  <EnTeteProjet projet={projet} portrait={portrait} bande={bande.map((g) => g.image)} caracteristiques={caracteristiques} avantApres={!!projet.avantApres?.length}>
+  <EnTeteProjet projet={projet} portrait={portrait} bande={bande.map((g) => g.image)} caracteristiques={caracteristiques} avantApres={!!projet.avantApres?.length} video={aVideo}>
     {
       projet.demande?.length ? (
         <div>
@@ -108,22 +109,16 @@ const caracteristiques = [projet.typeDeProjet && {libelle: 'Projet', valeur: pro
       )
     }
     {projet.avantApres?.length && <AvantApres slot="avant-apres" paires={projet.avantApres} />}
+    {aVideo && <Video slot="video" video={projet.video!} titre={projet.titre} />}
   </EnTeteProjet>
 
-  <!-- 2. Photos restantes et vidéo -->
+  <!-- 2. Photos restantes -->
   {
-    (resteGalerie.length > 0 || (projet.video && (projet.video.fichierUrl || projet.video.lien))) && (
+    resteGalerie.length > 0 && (
       <section class="section section--serree">
-        {resteGalerie.length > 0 && (
-          <div class="conteneur galerie-bloc">
-            <Galerie galerie={resteGalerie} />
-          </div>
-        )}
-        {projet.video && (projet.video.fichierUrl || projet.video.lien) && (
-          <div class="conteneur galerie-bloc">
-            <Video video={projet.video} titre={projet.titre} />
-          </div>
-        )}
+        <div class="conteneur galerie-bloc">
+          <Galerie galerie={resteGalerie} />
+        </div>
       </section>
     )
   }
