@@ -10,18 +10,30 @@
  * affiche la description de l'étape à l'intérieur de l'arche ; l'étape 1 est affichée d'emblée.
  * Mobile : déroulé vertical avec toutes les descriptions, l'arche en motif.
  */
-const etapes = [
+import {rendreImage} from '../../lib/image'
+import type {EtapeArche, PageOffre} from '../../lib/types'
+
+interface Props {
+  /** Contenu modifiable dans Sanity (page L'accompagnement, « Le déroulé en arche »). */
+  deroule?: PageOffre['deroule']
+}
+const {deroule} = Astro.props
+
+// Textes de secours, si Sanity est vide.
+const etapesParDefaut: EtapeArche[] = [
   {titre: 'Écoute', texte: 'Comprendre comment vous vivez,\net poser ensemble le cahier des charges.'},
   {titre: 'Aménagement', texte: 'Plans 2D avec plusieurs scénarios\nd’implantation, et planches d’ambiance.'},
   {titre: 'Modélisation 3D', texte: 'Votre futur intérieur en vidéo photoréaliste :\nmatériaux, mobilier, éléments sur mesure.'},
   {titre: 'Plans techniques', texte: 'Plans du mobilier sur mesure et\nimplantations techniques, prêts pour les artisans.'},
   {titre: 'Sélection', texte: 'Les matériaux et, selon votre projet, le mobilier\net les luminaires. Accompagnement en showroom.'},
 ]
-const travaux = {
+const travauxParDefaut: EtapeArche = {
   titre: 'Les travaux',
   texte:
     'Suivi de chantier par un maître d’œuvre partenaire. Si vous préférez piloter vous-même, je présente le projet aux artisans et je passe en cours de chantier pour les choix décoratifs.',
 }
+const etapes = (deroule?.etapes?.length ? deroule.etapes : etapesParDefaut).slice(0, 5).map((e) => ({titre: e.titre || '', texte: e.texte || '', photo: e.photo}))
+const travaux = {titre: deroule?.travaux?.titre || travauxParDefaut.titre!, texte: deroule?.travaux?.texte || travauxParDefaut.texte!, photo: deroule?.travaux?.photo}
 
 // Arche du logo dans un repère 920 × 440 : trait vertical à gauche, angle arrondi (centre 230, 230 ; rayon 190),
 // trait horizontal jusqu'à l'ouverture (720, 40). Les points sont placés en % de ce repère.
@@ -36,10 +48,11 @@ const points = [
   {x: 580, y: 40, place: 'dessous'},
   {x: 810, y: 40, place: 'dessous'},
 ]
-// Photo de chaque étape (fichiers dans public/accompagnement/), affichée en bas à droite de l'arche.
+// Photo de chaque étape (choisie dans Sanity), affichée en bas à droite de l'arche.
 // Tant qu'une étape n'a pas de photo, l'emplacement reste une forme crème.
-const photos: Array<string | undefined> = [undefined, undefined, undefined, undefined, undefined, undefined]
+const photos = [...etapes, travaux].map((e) => rendreImage(e.photo, {ratio: 3 / 4, maxWidth: 900}))
 const toutes = [...etapes.map((e, i) => ({...e, numero: String(i + 1).padStart(2, '0')})), {...travaux, numero: ''}]
+// Le point au sommet de la courbe est la 3e étape (Modélisation 3D).
 ---
 
 <section class="section deroule" aria-labelledby="deroule-titre">
@@ -85,7 +98,9 @@ const toutes = [...etapes.map((e, i) => ({...e, numero: String(i + 1).padStart(2
         {
           toutes.map((e, i) => (
             <div class="parcours__photo-etape" data-photo={i} hidden={i !== 0}>
-              {photos[i] && <img src={photos[i]} alt="" loading="lazy" />}
+              {photos[i] && (
+                <img src={photos[i]!.src} srcset={photos[i]!.srcset} sizes="(min-width: 52rem) 14rem, 50vw" width={photos[i]!.width} height={photos[i]!.height} alt={photos[i]!.alt} loading="lazy" />
+              )}
             </div>
           ))
         }
@@ -112,7 +127,7 @@ const toutes = [...etapes.map((e, i) => ({...e, numero: String(i + 1).padStart(2
             <span class="deroule__num">{String(i + 1).padStart(2, '0')}</span>
             <div>
               <h3>{e.titre}</h3>
-              <p>{e.texte.replace('\n', ' ')}</p>
+              <p>{e.texte.replaceAll('\n', ' ')}</p>
             </div>
           </li>
         ))

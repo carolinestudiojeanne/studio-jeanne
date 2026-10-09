@@ -121,8 +121,17 @@ export interface PageProjets {
   seo?: Seo
 }
 
+export interface EtapeArche {
+  _key?: string
+  titre?: string
+  texte?: string
+  photo?: ImageData
+}
+
 export interface PageOffre {
   aiguillage?: {texte?: string; lienLibelle?: string}
+  /** L'accompagnement : le déroulé en arche. */
+  deroule?: {etapes?: EtapeArche[]; travaux?: EtapeArche}
   intro?: SectionTexte
   etapes?: SectionTexteImage[]
   texteA?: SectionTexte

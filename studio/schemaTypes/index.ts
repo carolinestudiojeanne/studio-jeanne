@@ -8,7 +8,7 @@ import {avis} from './documents/avis'
 import {reglages} from './documents/reglages'
 import {pageLegale} from './documents/pageLegale'
 import {article} from './documents/article'
-import {pagesFixes} from './pages'
+import {etapeArche, pagesFixes} from './pages'
 
 export const schemaTypes = [
   // objets
@@ -24,6 +24,7 @@ export const schemaTypes = [
   avantApres,
   retourClient,
   video,
+  etapeArche,
   // documents
   projet,
   avis,

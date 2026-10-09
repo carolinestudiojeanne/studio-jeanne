@@ -32,6 +32,25 @@ const etapes = (title: string, description: string) =>
     validation: (r) => r.length(3).warning('La mise en page est prévue pour trois blocs.'),
   })
 
+/** Une étape de l'arche (page L'accompagnement) : titre court, texte de deux lignes, photo verticale. */
+export const etapeArche = defineType({
+  name: 'etapeArche',
+  title: 'Étape',
+  type: 'object',
+  fields: [
+    defineField({name: 'titre', title: 'Titre (sur l’arche)', type: 'string', validation: (r) => r.required()}),
+    defineField({
+      name: 'texte',
+      title: 'Texte',
+      type: 'text',
+      rows: 3,
+      description: 'Deux lignes environ. Passez à la ligne là où vous voulez que la phrase se coupe.',
+    }),
+    defineField({name: 'photo', title: 'Photo (verticale)', type: 'imageAlt', description: 'Format portrait de préférence ; recadrée en 3:4.'}),
+  ],
+  preview: {select: {title: 'titre', subtitle: 'texte', media: 'photo'}},
+})
+
 export const pageAccueil = defineType({
   name: 'pageAccueil',
   title: 'Accueil',
@@ -171,9 +190,35 @@ export const pageAccompagnement = defineType({
   fields: [
     defineField({name: 'aiguillage', title: '1. Ligne vers Trouver votre bien', type: 'ligneAiguillage', group: 'contenu'}),
     defineField({name: 'intro', title: '2. Titre et introduction', type: 'sectionTexte', group: 'contenu'}),
-    etapes('3. Le déroulé en trois temps', 'Écoute, conception, plans et artisans : un texte et une image par temps.'),
-    defineField({name: 'horsPerimetre', title: '4. Le chantier', type: 'sectionTexte', group: 'contenu'}),
-    defineField({name: 'commandes', title: '5. Les commandes', type: 'sectionTexte', group: 'contenu'}),
+    defineField({
+      name: 'deroule',
+      title: '3. Le déroulé en arche',
+      type: 'object',
+      group: 'contenu',
+      description:
+        'Les étapes affichées le long de l’arche. Un clic sur une étape montre son texte et sa photo dans l’arche. Dans les textes, un retour à la ligne est repris tel quel sur le site.',
+      options: {collapsible: true, collapsed: false},
+      fields: [
+        defineField({
+          name: 'etapes',
+          title: 'Les cinq étapes',
+          type: 'array',
+          description: 'Dans l’ordre de l’arche : Écoute, Aménagement, Modélisation 3D (au sommet), Plans techniques, Sélection.',
+          of: [defineArrayMember({type: 'etapeArche'})],
+          validation: (r) => r.length(5).warning('L’arche est prévue pour cinq étapes.'),
+        }),
+        defineField({
+          name: 'travaux',
+          title: 'Après l’arche : les travaux',
+          type: 'etapeArche',
+          description: 'Affiché après l’ouverture de l’arche, en pointillés : le moment où Caroline passe la main.',
+        }),
+      ],
+    }),
+    // Anciennes sections (trois temps, chantier, commandes) : plus affichées, gardées en réserve.
+    defineField({...etapes('Ancien déroulé en trois temps', 'Plus affiché sur le site.'), hidden: true}),
+    defineField({name: 'horsPerimetre', title: 'Ancien texte : le chantier', type: 'sectionTexte', group: 'contenu', hidden: true}),
+    defineField({name: 'commandes', title: 'Ancien texte : les commandes', type: 'sectionTexte', group: 'contenu', hidden: true}),
     faq,
     appel,
     seoField,
