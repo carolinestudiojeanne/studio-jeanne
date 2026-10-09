@@ -41,7 +41,7 @@ const toutes = [...etapes.map((e, i) => ({...e, numero: String(i + 1).padStart(2
 
 <section class="section deroule" aria-labelledby="deroule-titre">
   <div class="conteneur">
-    <h2 id="deroule-titre" class="deroule__titre">Le déroulé d’un projet</h2>
+    <h2 id="deroule-titre" class="visuellement-cache">Le déroulé d’un projet</h2>
 
     <!-- Ordinateur : arche interactive -->
     <div class="parcours" data-arche>
@@ -133,10 +133,6 @@ const toutes = [...etapes.map((e, i) => ({...e, numero: String(i + 1).padStart(2
   /* Suit directement l'en-tête de la page, qui a déjà son espace en bas. */
   .deroule {
     padding-top: 0;
-  }
-  .deroule__titre {
-    text-align: center;
-    margin-bottom: clamp(2.5rem, 5vw, 4rem);
   }
 
   /* L'arche interactive (ordinateur), grande et centrée */
