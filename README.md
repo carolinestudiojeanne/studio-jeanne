@@ -82,7 +82,7 @@ Intentions de mise en forme :
 
 - le parcours part du pied de l'arche, en bas à gauche, avec l'Écoute ;
 - la Modélisation 3D est au sommet de la courbe, c'est voulu : c'est ce qui distingue Caroline ;
-- Plans techniques et Sélection redescendent le long de la branche droite, jusqu'à l'ouverture ;
+- l'arche a la forme du filet du logo (trait vertical, angle arrondi, trait horizontal) : Plans techniques et Sélection suivent le trait horizontal, jusqu'à l'ouverture ;
 - « Les travaux » est juste après l'ouverture, en dehors du trait, et se distingue visuellement des cinq étapes : ce n'est pas une phase de la prestation, c'est le moment où Caroline passe la main ;
 - sur ordinateur, seuls les mots-clés sont sur l'arche, avec une légende à côté qui donne les explications ;
 - sur mobile, le déroulé passe à la verticale en gardant l'arche comme motif.

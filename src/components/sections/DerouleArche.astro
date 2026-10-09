@@ -1,9 +1,10 @@
 ---
 /**
  * Page L'accompagnement : le déroulé d'un projet le long de l'arche du logo (consignes de Caroline, 9 octobre 2026).
- * Les étapes reprennent les phases des devis. Le parcours part du pied gauche de l'arche (Écoute),
- * la Modélisation 3D est au sommet, Plans techniques et Sélection redescendent la branche droite
- * jusqu'à l'ouverture ; « Les travaux » est après l'ouverture, hors du trait : c'est le passage de main.
+ * Les étapes reprennent les phases des devis. Le parcours part du pied de l'arche, en bas à gauche (Écoute),
+ * monte le trait vertical, la Modélisation 3D est au sommet de la courbe, puis Plans techniques et Sélection
+ * suivent le trait horizontal jusqu'à l'ouverture ; « Les travaux » est après l'ouverture, hors du trait :
+ * c'est le passage de main.
  * Ordinateur : mots-clés sur l'arche, légende à côté. Mobile : déroulé vertical, l'arche en motif.
  */
 const etapes = [
@@ -19,22 +20,24 @@ const travaux = {
     'Suivi de chantier par un maître d’œuvre partenaire. Si vous préférez piloter vous-même, je présente le projet aux artisans et je passe en cours de chantier pour les choix décoratifs.',
 }
 
-// Arche : pied gauche (60, 470), demi-cercle de centre (200, 210) et de rayon 140, branche droite jusqu'à l'ouverture (340, 400).
-const point = (angle: number) => ({x: 200 + 140 * Math.cos((angle * Math.PI) / 180), y: 210 - 140 * Math.sin((angle * Math.PI) / 180)})
+// Arche du logo : trait vertical à gauche, angle arrondi en haut, puis trait horizontal vers la droite
+// (mêmes proportions que le filet du logo). L'ouverture est au bout du trait horizontal.
+// Centre de l'arrondi (230, 230), rayon 190 : le sommet de la courbe est à 135°.
+const sommet = {x: 230 - 190 * Math.SQRT1_2, y: 230 - 190 * Math.SQRT1_2}
 const reperes = [
-  {x: 60, y: 440, ancre: 'end', dx: -18, dy: 5},
-  {...point(140), ancre: 'end', dx: -18, dy: 0},
-  {...point(90), ancre: 'middle', dx: 0, dy: -22},
-  {...point(32), ancre: 'start', dx: 18, dy: 0},
-  {x: 340, y: 330, ancre: 'start', dx: 18, dy: 5},
+  {x: 40, y: 440, ancre: 'start', dx: 22, dy: 6},
+  {x: 40, y: 300, ancre: 'start', dx: 22, dy: 6},
+  {...sommet, ancre: 'start', dx: 24, dy: 30},
+  {x: 340, y: 40, ancre: 'middle', dx: 0, dy: 44},
+  {x: 540, y: 40, ancre: 'middle', dx: 0, dy: 44},
 ]
 ---
 
 <section class="section deroule" aria-labelledby="deroule-titre">
   <div class="conteneur deroule__grille">
     <div class="deroule__arche" aria-hidden="true">
-      <svg viewBox="-150 0 700 520">
-        <path class="deroule__trait" d="M60 470 V210 A140 140 0 0 1 340 210 V400" />
+      <svg viewBox="0 0 800 500">
+        <path class="deroule__trait" d="M40 480 V230 A190 190 0 0 1 230 40 H620" />
         {
           reperes.map((r, i) => (
             <g class:list={['deroule__repere', {'deroule__repere--sommet': i === 2}]}>
@@ -46,8 +49,8 @@ const reperes = [
           ))
         }
         <g class="deroule__travaux">
-          <circle cx="340" cy="465" r="6" />
-          <text x="358" y="470">{travaux.titre}</text>
+          <circle cx="690" cy="40" r="6" />
+          <text x="690" y="84" text-anchor="middle">{travaux.titre}</text>
         </g>
       </svg>
     </div>
