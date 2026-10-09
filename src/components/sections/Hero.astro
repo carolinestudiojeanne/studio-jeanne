@@ -145,13 +145,13 @@ const SurtitreTag = surtitreEstH1 ? 'h1' : 'p'
   .hero--centre .hero__contenu {
     text-align: center;
   }
-  /* Accueil : fine ombre ocre derrière les trois textes, pour qu'ils se détachent des photos. */
+  /* Accueil : ombre ocre floue derrière les trois textes, pour qu'ils se détachent des photos. */
   .hero--centre .hero__surtitre,
   .hero--centre .hero__titre,
   .hero--centre .hero__sous-titre {
     text-shadow:
-      0 1px 1px color-mix(in srgb, var(--ocre) 55%, transparent),
-      0 0 8px color-mix(in srgb, var(--ocre) 25%, transparent);
+      0 1px 10px color-mix(in srgb, var(--ocre) 45%, transparent),
+      0 0 24px color-mix(in srgb, var(--ocre) 25%, transparent);
   }
   /* Accueil : texte du bouton en ocre. */
   .hero--centre .bouton:not(:hover) {
