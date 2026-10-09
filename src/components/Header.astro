@@ -112,11 +112,12 @@ const tel = reglages.telephone?.replace(/\s/g, '')
     text-decoration: none;
     color: var(--ardoise);
     padding-block: 0.5rem;
-    border-bottom: 1px solid transparent;
+    transition: color 0.25s;
   }
+  /* Page en cours (et survol) : le mot passe en ocre, sans trait dessous. */
   .menu__lien:hover,
   .menu__lien[aria-current='page'] {
-    border-bottom-color: var(--ocre);
+    color: var(--ocre);
   }
   .menu__tel {
     display: none;
