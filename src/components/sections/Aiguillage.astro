@@ -52,6 +52,10 @@ const colonnes = [
     padding: clamp(4rem, 8vw, 6rem) clamp(1.75rem, 5vw, 4rem) clamp(2.5rem, 5vw, 3.5rem);
     text-align: center;
   }
+  /* Un retour à la ligne saisi dans le titre est respecté. */
+  .aiguillage__colonne h3 {
+    white-space: pre-line;
+  }
   .aiguillage__colonne p {
     max-width: 26rem;
     margin-inline: auto;
