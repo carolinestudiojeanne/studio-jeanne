@@ -59,3 +59,30 @@ Copier `.env.example` en `.env` (et `studio/.env.example` en `studio/.env`) et r
 
 - La police Glacial Indifference (licence libre OFL) est servie depuis `public/fonts`. Elle n’a pas les guillemets « » ni le point médian : le navigateur les affiche avec la police de secours, l’écart est minime.
 - Les textes marqués « exemple » ou « à écrire » sont à remplacer dans Sanity.
+
+## Compléments au cahier des charges
+
+### 9 octobre 2026 : page L'accompagnement, le déroulé en arche
+
+Demande de Caroline : présenter le déroulé d'un projet le long de l'arche du logo
+(composant `src/components/sections/DerouleArche.astro`, placé après l'introduction de la page).
+
+Les étapes reprennent les phases des devis, pour que le client retrouve les mêmes mots au moment de signer :
+
+1. **Écoute** : comprendre comment vous vivez, et poser ensemble le cahier des charges.
+2. **Aménagement** : plans 2D avec plusieurs scénarios d'implantation, et planches d'ambiance.
+3. **Modélisation 3D** : votre futur intérieur en vidéo photoréaliste (matériaux, mobilier, éléments sur mesure).
+4. **Plans techniques** : plans du mobilier sur mesure et implantations techniques, prêts pour les artisans.
+5. **Sélection** : les matériaux et, selon le projet, le mobilier et les luminaires. Accompagnement en showroom.
+
+Puis, au-delà de l'ouverture de l'arche : **Les travaux**, avec le suivi de chantier par un maître d'œuvre partenaire.
+Si le client préfère piloter lui-même, Caroline présente le projet aux artisans et passe en cours de chantier pour les choix décoratifs.
+
+Intentions de mise en forme :
+
+- le parcours part du pied de l'arche, en bas à gauche, avec l'Écoute ;
+- la Modélisation 3D est au sommet de la courbe, c'est voulu : c'est ce qui distingue Caroline ;
+- Plans techniques et Sélection redescendent le long de la branche droite, jusqu'à l'ouverture ;
+- « Les travaux » est juste après l'ouverture, en dehors du trait, et se distingue visuellement des cinq étapes : ce n'est pas une phase de la prestation, c'est le moment où Caroline passe la main ;
+- sur ordinateur, seuls les mots-clés sont sur l'arche, avec une légende à côté qui donne les explications ;
+- sur mobile, le déroulé passe à la verticale en gardant l'arche comme motif.

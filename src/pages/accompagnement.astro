@@ -1,8 +1,11 @@
 ---
 import PageOffre from '../components/PageOffre.astro'
+import DerouleArche from '../components/sections/DerouleArche.astro'
 import {getPageAccompagnement, getReglages} from '../lib/contenu'
 
 const [page, reglages] = await Promise.all([getPageAccompagnement(), getReglages()])
 ---
 
-<PageOffre page={page} titre={page.seo?.metaTitle || `L’accompagnement${reglages.suffixeTitre}`} aiguillageHref="/trouver-votre-bien" />
+<PageOffre page={page} titre={page.seo?.metaTitle || `L’accompagnement${reglages.suffixeTitre}`} aiguillageHref="/trouver-votre-bien">
+  <DerouleArche slot="apres-intro" />
+</PageOffre>

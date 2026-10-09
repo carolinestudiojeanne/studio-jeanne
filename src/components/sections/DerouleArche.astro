@@ -1,0 +1,228 @@
+---
+/**
+ * Page L'accompagnement : le déroulé d'un projet le long de l'arche du logo (consignes de Caroline, 9 octobre 2026).
+ * Les étapes reprennent les phases des devis. Le parcours part du pied gauche de l'arche (Écoute),
+ * la Modélisation 3D est au sommet, Plans techniques et Sélection redescendent la branche droite
+ * jusqu'à l'ouverture ; « Les travaux » est après l'ouverture, hors du trait : c'est le passage de main.
+ * Ordinateur : mots-clés sur l'arche, légende à côté. Mobile : déroulé vertical, l'arche en motif.
+ */
+const etapes = [
+  {titre: 'Écoute', texte: 'Comprendre comment vous vivez, et poser ensemble le cahier des charges.'},
+  {titre: 'Aménagement', texte: 'Plans 2D avec plusieurs scénarios d’implantation, et planches d’ambiance.'},
+  {titre: 'Modélisation 3D', texte: 'Votre futur intérieur en vidéo photoréaliste : matériaux, mobilier, éléments sur mesure.'},
+  {titre: 'Plans techniques', texte: 'Plans du mobilier sur mesure et implantations techniques, prêts pour les artisans.'},
+  {titre: 'Sélection', texte: 'Les matériaux et, selon votre projet, le mobilier et les luminaires. Accompagnement en showroom.'},
+]
+const travaux = {
+  titre: 'Les travaux',
+  texte:
+    'Suivi de chantier par un maître d’œuvre partenaire. Si vous préférez piloter vous-même, je présente le projet aux artisans et je passe en cours de chantier pour les choix décoratifs.',
+}
+
+// Arche : pied gauche (60, 470), demi-cercle de centre (200, 210) et de rayon 140, branche droite jusqu'à l'ouverture (340, 400).
+const point = (angle: number) => ({x: 200 + 140 * Math.cos((angle * Math.PI) / 180), y: 210 - 140 * Math.sin((angle * Math.PI) / 180)})
+const reperes = [
+  {x: 60, y: 440, ancre: 'end', dx: -18, dy: 5},
+  {...point(140), ancre: 'end', dx: -18, dy: 0},
+  {...point(90), ancre: 'middle', dx: 0, dy: -22},
+  {...point(32), ancre: 'start', dx: 18, dy: 0},
+  {x: 340, y: 330, ancre: 'start', dx: 18, dy: 5},
+]
+---
+
+<section class="section deroule" aria-labelledby="deroule-titre">
+  <div class="conteneur deroule__grille">
+    <div class="deroule__arche" aria-hidden="true">
+      <svg viewBox="-150 0 700 520">
+        <path class="deroule__trait" d="M60 470 V210 A140 140 0 0 1 340 210 V400" />
+        {
+          reperes.map((r, i) => (
+            <g class:list={['deroule__repere', {'deroule__repere--sommet': i === 2}]}>
+              <circle cx={r.x} cy={r.y} r={i === 2 ? 8 : 6} />
+              <text x={r.x + r.dx} y={r.y + r.dy} text-anchor={r.ancre}>
+                {etapes[i].titre}
+              </text>
+            </g>
+          ))
+        }
+        <g class="deroule__travaux">
+          <circle cx="340" cy="465" r="6" />
+          <text x="358" y="470">{travaux.titre}</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="deroule__legende">
+      <h2 id="deroule-titre">Le déroulé d’un projet</h2>
+      <ol class="deroule__etapes">
+        {
+          etapes.map((e, i) => (
+            <li class:list={{'est-sommet': i === 2}}>
+              <span class="deroule__num">{String(i + 1).padStart(2, '0')}</span>
+              <div>
+                <h3>{e.titre}</h3>
+                <p>{e.texte}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+      <div class="deroule__relais">
+        <p class="deroule__relais-surtitre">Ensuite, je passe la main</p>
+        <h3>{travaux.titre}</h3>
+        <p>{travaux.texte}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .deroule__grille {
+    display: grid;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: center;
+  }
+  @media (min-width: 64rem) {
+    .deroule__grille {
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    }
+  }
+
+  /* L'arche (ordinateur) */
+  .deroule__arche svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+    font-family: var(--police);
+  }
+  .deroule__trait {
+    fill: none;
+    stroke: var(--ocre);
+    stroke-width: 2;
+    stroke-linecap: round;
+  }
+  .deroule__repere circle {
+    fill: var(--creme);
+    stroke: var(--ocre);
+    stroke-width: 2;
+  }
+  .deroule__repere--sommet circle {
+    fill: var(--ocre);
+  }
+  .deroule__repere text,
+  .deroule__travaux text {
+    font-size: 19px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    fill: var(--ardoise);
+  }
+  .deroule__repere--sommet text {
+    fill: var(--ocre);
+  }
+  /* Les travaux : hors du trait, en retrait (ce n'est plus une phase de la prestation). */
+  .deroule__travaux circle {
+    fill: none;
+    stroke: var(--ardoise);
+    stroke-width: 1.5;
+    stroke-dasharray: 3 3;
+    opacity: 0.7;
+  }
+  .deroule__travaux text {
+    font-style: italic;
+    opacity: 0.7;
+  }
+
+  /* La légende */
+  .deroule__legende h2 {
+    margin-bottom: clamp(1.5rem, 3vw, 2.25rem);
+  }
+  .deroule__etapes {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 1.25rem;
+  }
+  .deroule__etapes li {
+    display: grid;
+    grid-template-columns: 2.25rem 1fr;
+    gap: 0.75rem;
+    align-items: baseline;
+  }
+  .deroule__num {
+    font-size: var(--t-xs);
+    letter-spacing: 0.14em;
+    color: var(--ocre);
+  }
+  .deroule__etapes h3,
+  .deroule__relais h3 {
+    margin: 0 0 0.3rem;
+    font-size: var(--t-s);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 400;
+  }
+  .est-sommet h3 {
+    color: var(--ocre);
+  }
+  .deroule__etapes p,
+  .deroule__relais p {
+    margin: 0;
+    font-size: var(--t-s);
+    line-height: 1.6;
+  }
+  .deroule__relais {
+    margin-top: 2rem;
+    padding: 1.25rem 1.5rem;
+    border: 1px dashed color-mix(in srgb, var(--ardoise) 35%, transparent);
+    border-radius: var(--arrondi);
+  }
+  .deroule__relais-surtitre {
+    font-size: var(--t-xs) !important;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ocre);
+    margin-bottom: 0.5rem !important;
+  }
+
+  /* Mobile et tablette : déroulé vertical, l'arche devient un motif (trait vertical arrondi en haut). */
+  @media (max-width: 63.99rem) {
+    .deroule__arche {
+      display: none;
+    }
+    .deroule__etapes {
+      position: relative;
+      padding: 2.5rem 0 0 2.25rem;
+    }
+    .deroule__etapes::before {
+      content: '';
+      position: absolute;
+      left: 0.45rem;
+      top: 0;
+      bottom: 0.5rem;
+      width: 3rem;
+      border: 2px solid var(--ocre);
+      border-right: 0;
+      border-bottom: 0;
+      border-radius: 3rem 0 0 0;
+    }
+    .deroule__etapes li {
+      position: relative;
+    }
+    .deroule__etapes li::before {
+      content: '';
+      position: absolute;
+      left: calc(-2.25rem + 0.45rem - 5px);
+      top: 0.35rem;
+      width: 8px;
+      height: 8px;
+      border: 2px solid var(--ocre);
+      border-radius: 50%;
+      background: var(--creme);
+    }
+    .deroule__etapes li.est-sommet::before {
+      background: var(--ocre);
+    }
+  }
+</style>

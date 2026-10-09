@@ -37,6 +37,9 @@ const numeros = ['Premier temps', 'Deuxième temps', 'Troisième temps']
   <!-- 2. Titre et introduction -->
   <SectionTexte titre={page.intro?.titre} niveau="h1" texte={page.intro?.texte} />
 
+  <!-- 2 bis. Contenu propre à la page (déroulé en arche sur L'accompagnement) -->
+  <slot name="apres-intro" />
+
   <!-- 3. Trois temps, texte et image en alternance -->
   {
     page.etapes?.length ? (
