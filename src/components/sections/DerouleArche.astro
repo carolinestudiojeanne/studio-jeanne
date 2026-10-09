@@ -11,11 +11,11 @@
  * Mobile : déroulé vertical avec toutes les descriptions, l'arche en motif.
  */
 const etapes = [
-  {titre: 'Écoute', texte: 'Comprendre comment vous vivez, et poser ensemble le cahier des charges.'},
-  {titre: 'Aménagement', texte: 'Plans 2D avec plusieurs scénarios d’implantation, et planches d’ambiance.'},
-  {titre: 'Modélisation 3D', texte: 'Votre futur intérieur en vidéo photoréaliste : matériaux, mobilier, éléments sur mesure.'},
-  {titre: 'Plans techniques', texte: 'Plans du mobilier sur mesure et implantations techniques, prêts pour les artisans.'},
-  {titre: 'Sélection', texte: 'Les matériaux et, selon votre projet, le mobilier et les luminaires. Accompagnement en showroom.'},
+  {titre: 'Écoute', texte: 'Comprendre comment vous vivez,\net poser ensemble le cahier des charges.'},
+  {titre: 'Aménagement', texte: 'Plans 2D avec plusieurs scénarios\nd’implantation, et planches d’ambiance.'},
+  {titre: 'Modélisation 3D', texte: 'Votre futur intérieur en vidéo photoréaliste :\nmatériaux, mobilier, éléments sur mesure.'},
+  {titre: 'Plans techniques', texte: 'Plans du mobilier sur mesure et\nimplantations techniques, prêts pour les artisans.'},
+  {titre: 'Sélection', texte: 'Les matériaux et, selon votre projet, le mobilier\net les luminaires. Accompagnement en showroom.'},
 ]
 const travaux = {
   titre: 'Les travaux',
@@ -75,7 +75,7 @@ const toutes = [...etapes.map((e, i) => ({...e, numero: String(i + 1).padStart(2
             <div class="parcours__panneau" role="tabpanel" id={`arche-panneau-${i}`} aria-labelledby={`arche-onglet-${i}`} hidden={i !== 0}>
               <p class="parcours__num">{e.numero ? `Étape ${e.numero}` : 'Ensuite, je passe la main'}</p>
               <h3>{e.titre}</h3>
-              <p>{e.texte}</p>
+              <p class="parcours__texte">{e.texte}</p>
             </div>
           ))
         }
@@ -90,7 +90,7 @@ const toutes = [...etapes.map((e, i) => ({...e, numero: String(i + 1).padStart(2
             <span class="deroule__num">{String(i + 1).padStart(2, '0')}</span>
             <div>
               <h3>{e.titre}</h3>
-              <p>{e.texte}</p>
+              <p>{e.texte.replace('\n', ' ')}</p>
             </div>
           </li>
         ))
@@ -247,7 +247,7 @@ const toutes = [...etapes.map((e, i) => ({...e, numero: String(i + 1).padStart(2
     align-items: center;
   }
   .parcours__panneau {
-    max-width: 30rem;
+    max-width: 36rem;
     animation: apparition 0.4s ease;
   }
   .parcours__num {
@@ -263,6 +263,10 @@ const toutes = [...etapes.map((e, i) => ({...e, numero: String(i + 1).padStart(2
     text-transform: uppercase;
     font-weight: 400;
     margin: 0 0 1rem;
+  }
+  /* Retours à la ligne choisis par Caroline. */
+  .parcours__texte {
+    white-space: pre-line;
   }
   .parcours__panneau p:last-child {
     font-size: var(--t-m);
