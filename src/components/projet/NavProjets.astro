@@ -1,0 +1,98 @@
+---
+/**
+ * Bas des pages projet : une bande fine avec le projet précédent à gauche et le projet
+ * suivant à droite (dans l'ordre de la page Projets, en boucle), chacun avec une petite flèche.
+ */
+import type {ProjetCarte} from '../../lib/types'
+
+interface Props {
+  precedent?: ProjetCarte
+  suivant?: ProjetCarte
+}
+const {precedent, suivant} = Astro.props
+---
+
+{
+  (precedent || suivant) && (
+    <nav class="nav-projets" aria-label="Autres projets">
+      {precedent ? (
+        <a class="nav-projets__lien" href={`/projets/${precedent.slug}`} rel="prev">
+          <svg viewBox="0 0 10 18" aria-hidden="true"><path d="M9 1 1 9l8 8" /></svg>
+          <span>
+            <span class="nav-projets__libelle">Projet précédent</span>
+            <span class="nav-projets__titre">{precedent.titre}</span>
+          </span>
+        </a>
+      ) : (
+        <span />
+      )}
+      {suivant ? (
+        <a class="nav-projets__lien nav-projets__lien--suivant" href={`/projets/${suivant.slug}`} rel="next">
+          <span>
+            <span class="nav-projets__libelle">Projet suivant</span>
+            <span class="nav-projets__titre">{suivant.titre}</span>
+          </span>
+          <svg viewBox="0 0 10 18" aria-hidden="true"><path d="m1 1 8 8-8 8" /></svg>
+        </a>
+      ) : (
+        <span />
+      )}
+    </nav>
+  )
+}
+
+<style>
+  .nav-projets {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+    padding: clamp(1.75rem, 3.5vw, 2.5rem) var(--gouttiere);
+    background: var(--creme-soutenu);
+  }
+  .nav-projets__lien {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    text-decoration: none;
+    color: var(--ardoise);
+  }
+  .nav-projets__lien--suivant {
+    text-align: right;
+  }
+  .nav-projets__libelle,
+  .nav-projets__titre {
+    display: block;
+  }
+  .nav-projets__libelle {
+    font-size: var(--t-xs);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ocre);
+    margin-bottom: 0.35rem;
+  }
+  .nav-projets__titre {
+    font-size: var(--t-s);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .nav-projets svg {
+    flex: none;
+    width: 0.7rem;
+    height: auto;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.2;
+    overflow: visible;
+    transition: transform 0.25s;
+  }
+  .nav-projets__lien:hover {
+    color: var(--ocre);
+  }
+  .nav-projets__lien:hover svg {
+    transform: translateX(-4px);
+  }
+  .nav-projets__lien--suivant:hover svg {
+    transform: translateX(4px);
+  }
+</style>
