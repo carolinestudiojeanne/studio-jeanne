@@ -107,8 +107,10 @@ const introHtml = texteEnHtml(page.intro?.texte)
   /* Titre bien aéré : plus d'espace en haut et avant les projets. */
   .intro-projets {
     text-align: center;
-    padding-top: clamp(6rem, 14vw, 11rem);
-    padding-bottom: clamp(5rem, 10vw, 8rem);
+    /* Même espace au-dessus du titre qu'entre la phrase et les boutons de filtre. */
+    --air: clamp(6rem, 14vw, 11rem);
+    padding-top: var(--air);
+    padding-bottom: var(--air);
   }
   /* Titre sur une seule ligne, centré. */
   .intro-projets h1 {
