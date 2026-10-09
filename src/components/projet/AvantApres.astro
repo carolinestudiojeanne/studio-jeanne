@@ -1,8 +1,8 @@
 ---
 /**
  * Avant / après : un curseur à faire glisser, utilisable au clavier.
- * Le format suit la photo « après » (paysage 3:2, carré, ou vertical 4:5), à une taille modérée
- * pour rester net, alignées à gauche les unes à côté des autres.
+ * Le format suit la plus étroite des deux photos (si l'une est verticale, le cadre est vertical),
+ * et tous les avant / après ont la même hauteur, côte à côte, alignés à gauche.
  */
 import {rendreImage} from '../../lib/image'
 import type {ImageData, Projet} from '../../lib/types'
@@ -12,43 +12,52 @@ interface Props {
 }
 const {paires} = Astro.props
 
-/** Largeur / hauteur d'origine, lue dans la référence Sanity (image-<id>-3000x2000-jpg). */
+/** Largeur / hauteur d'origine (recadrage Sanity compris), lue dans la référence (image-<id>-3000x2000-jpg). */
 const proportion = (image?: ImageData) => {
   const m = image?.asset?._ref.match(/-(\d+)x(\d+)-/)
-  return m ? Number(m[1]) / Number(m[2]) : 3 / 2
+  if (!m) return 3 / 2
+  const c = (image as {crop?: {left: number; right: number; top: number; bottom: number}}).crop
+  const w = Number(m[1]) * (c ? 1 - c.left - c.right : 1)
+  const h = Number(m[2]) * (c ? 1 - c.top - c.bottom : 1)
+  return w / h
 }
-const FORMATS = {
-  paysage: {ratio: 3 / 2, sizes: '(min-width: 52rem) 30rem, 92vw'},
-  carre: {ratio: 1, sizes: '(min-width: 52rem) 23rem, 92vw'},
-  portrait: {ratio: 4 / 5, sizes: '(min-width: 52rem) 19rem, 80vw'},
-}
+const RATIOS = {paysage: 3 / 2, carre: 1, portrait: 4 / 5}
 const items = paires
   .map((p) => {
-    const r = proportion(p.apres)
-    const format = r > 1.15 ? 'paysage' : r < 0.87 ? 'portrait' : 'carre'
-    const {ratio} = FORMATS[format]
+    const r = Math.min(proportion(p.avant), proportion(p.apres))
+    const format = r < 0.87 ? 'portrait' : r > 1.15 ? 'paysage' : 'carre'
+    const ratio = RATIOS[format]
     const opts = {ratio, maxWidth: 1400}
-    return {format, ratio, sizes: FORMATS[format].sizes, avant: rendreImage(p.avant, opts), apres: rendreImage(p.apres, opts), legende: p.legende}
+    const sizes = `(min-width: 52rem) ${Math.round(20 * ratio)}rem, ${Math.round(14 * ratio)}rem`
+    return {format, ratio, sizes, avant: rendreImage(p.avant, opts), apres: rendreImage(p.apres, opts), legende: p.legende}
   })
   .filter((p) => p.avant && p.apres)
+// Rangées de 3 au plus : dans une rangée, la largeur de chaque cadre est proportionnelle à son format,
+// ce qui leur donne exactement la même hauteur.
+const rangees: (typeof items)[] = []
+for (let i = 0; i < items.length; i += 3) rangees.push(items.slice(i, i + 3))
 ---
 
-<div class:list={['aa-liste', {'aa-liste--nombreux': items.length > 3}]}>
+<div class="aa-liste">
   {
-    items.map((p) => (
-      <figure class:list={['aa', `aa--${p.format}`]}>
-        <div class="aa__cadre" style={`aspect-ratio: ${p.ratio}`}>
-          <img class="aa__img" src={p.apres!.src} srcset={p.apres!.srcset} sizes={p.sizes} width={p.apres!.width} height={p.apres!.height} alt={`Après : ${p.apres!.alt}`} loading="lazy" />
-          <div class="aa__avant">
-            <img class="aa__img" src={p.avant!.src} srcset={p.avant!.srcset} sizes={p.sizes} width={p.avant!.width} height={p.avant!.height} alt={`Avant : ${p.avant!.alt}`} loading="lazy" />
-          </div>
-          <span class="aa__etiquette aa__etiquette--avant" aria-hidden="true">Avant</span>
-          <span class="aa__etiquette aa__etiquette--apres" aria-hidden="true">Après</span>
-          <div class="aa__poignee" aria-hidden="true" />
-          <input class="aa__curseur" type="range" min="0" max="100" value="50" aria-label="Comparer avant et après" />
-        </div>
-        {p.legende && <figcaption>{p.legende}</figcaption>}
-      </figure>
+    rangees.map((rangee) => (
+      <div class="aa-rangee" style={`--somme: ${rangee.reduce((t, p) => t + p.ratio, 0)}; --n: ${rangee.length}`}>
+        {rangee.map((p) => (
+          <figure class:list={['aa', `aa--${p.format}`]} style={`--r: ${p.ratio}`}>
+            <div class="aa__cadre" style={`aspect-ratio: ${p.ratio}`}>
+              <img class="aa__img" src={p.apres!.src} srcset={p.apres!.srcset} sizes={p.sizes} width={p.apres!.width} height={p.apres!.height} alt={`Après : ${p.apres!.alt}`} loading="lazy" />
+              <div class="aa__avant">
+                <img class="aa__img" src={p.avant!.src} srcset={p.avant!.srcset} sizes={p.sizes} width={p.avant!.width} height={p.avant!.height} alt={`Avant : ${p.avant!.alt}`} loading="lazy" />
+              </div>
+              <span class="aa__etiquette aa__etiquette--avant" aria-hidden="true">Avant</span>
+              <span class="aa__etiquette aa__etiquette--apres" aria-hidden="true">Après</span>
+              <div class="aa__poignee" aria-hidden="true" />
+              <input class="aa__curseur" type="range" min="0" max="100" value="50" aria-label="Comparer avant et après" />
+            </div>
+            {p.legende && <figcaption>{p.legende}</figcaption>}
+          </figure>
+        ))}
+      </div>
     ))
   }
 </div>
@@ -64,34 +73,38 @@ const items = paires
 
 <style>
   .aa-liste {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-start;
-    gap: clamp(1rem, 2vw, 1.5rem);
+    --ecart: clamp(1rem, 2vw, 1.5rem);
+    /* Hauteur commune des avant / après. */
+    --hauteur: 14rem;
+    display: grid;
+    gap: var(--ecart);
   }
   .aa {
     margin: 0;
-    width: 100%;
   }
-  /* Sur ordinateur, les avant / après se rangent côte à côte et rétrécissent un peu pour tenir sur une ligne. */
+  /* Mobile : l'un sous l'autre, tous à la même hauteur. */
+  .aa-rangee {
+    display: grid;
+    gap: var(--ecart);
+    justify-items: start;
+  }
+  .aa-rangee .aa {
+    width: min(100%, calc(var(--hauteur) * var(--r)));
+  }
+  /* Ordinateur : côte à côte, largeur proportionnelle au format, donc même hauteur ;
+     la rangée ne dépasse pas la hauteur commune. */
   @media (min-width: 52rem) {
-    .aa-liste:not(.aa-liste--nombreux) {
-      flex-wrap: nowrap;
+    .aa-liste {
+      --hauteur: 20rem;
     }
-    .aa {
-      flex: 0 1 30rem;
+    .aa-rangee {
+      display: flex;
+      max-width: calc(var(--hauteur) * var(--somme) + (var(--n) - 1) * var(--ecart));
+    }
+    .aa-rangee .aa {
+      flex: var(--r) 1 0%;
+      width: auto;
       min-width: 0;
-    }
-    .aa--carre {
-      flex-basis: 23rem;
-    }
-    .aa--portrait {
-      flex-basis: 19rem;
-    }
-  }
-  @media (max-width: 51.99rem) {
-    .aa--portrait {
-      width: 80%;
     }
   }
   .aa figcaption {
