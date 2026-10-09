@@ -19,9 +19,13 @@ const introHtml = texteEnHtml(page.intro?.texte)
     </div>
   </section>
 
-  <!-- 2. Grille de tous les projets (particuliers et professionnels), dans l'ordre choisi par Caroline -->
-  <section class="conteneur grille-projets">
+  <!-- 2. Filtres (particuliers par défaut) puis grille des projets, dans l'ordre choisi par Caroline -->
+  <section class="conteneur grille-projets" data-filtre="residentiel">
     <h2 class="visuellement-cache">Tous les projets</h2>
+    <div class="filtres" role="group" aria-label="Type de projets">
+      <button type="button" class="filtre" data-categorie="residentiel" aria-pressed="true">Particuliers</button>
+      <button type="button" class="filtre" data-categorie="professionnel" aria-pressed="false">Professionnels</button>
+    </div>
     <GrilleProjets projets={projets} colonnes={4} />
   </section>
 
@@ -45,7 +49,48 @@ const introHtml = texteEnHtml(page.intro?.texte)
   }
 </Base>
 
+<script>
+  // Filtres Particuliers / Professionnels : on arrive sur « Particuliers ».
+  document.querySelectorAll<HTMLElement>('[data-filtre]').forEach((zone) => {
+    zone.querySelectorAll<HTMLButtonElement>('.filtre').forEach((bouton) => {
+      bouton.addEventListener('click', () => {
+        zone.dataset.filtre = bouton.dataset.categorie
+        zone.querySelectorAll('.filtre').forEach((b) => b.setAttribute('aria-pressed', String(b === bouton)))
+      })
+    })
+  })
+</script>
+
 <style>
+  /* Filtres : deux boutons arrondis au-dessus des projets, à droite. */
+  .filtres {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-bottom: clamp(1.5rem, 3vw, 2rem);
+  }
+  .filtre {
+    padding: 0.7em 1.6em;
+    border-radius: 999px;
+    border: 1px solid var(--ardoise);
+    background: transparent;
+    color: var(--ardoise);
+    font: inherit;
+    font-size: var(--t-xs);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.25s, color 0.25s;
+  }
+  .filtre:hover,
+  .filtre[aria-pressed='true'] {
+    background: var(--ardoise);
+    color: var(--blanc);
+  }
+  [data-filtre='residentiel'] :global(.grille > li[data-categorie='professionnel']),
+  [data-filtre='professionnel'] :global(.grille > li:not([data-categorie='professionnel'])) {
+    display: none;
+  }
   /* Introduction centrée ; sur grand écran, la phrase tient sur une seule ligne. */
   .intro-projets {
     text-align: center;

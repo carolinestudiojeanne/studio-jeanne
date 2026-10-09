@@ -15,7 +15,7 @@ const {projets, colonnes = 3, titreCartes = 'h3'} = Astro.props
   projets.length > 0 && (
     <ul class:list={['grille', `grille--${colonnes}`]}>
       {projets.map((p) => (
-        <li>
+        <li data-categorie={p.categorie}>
           <CarteProjet projet={p} titre={titreCartes} />
         </li>
       ))}
