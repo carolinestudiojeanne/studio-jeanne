@@ -350,7 +350,7 @@ const appelStandard = {
 
 export const pageProjets: PageProjets = {
   intro: {
-    titre: 'Projets d’architecture intérieure à Bordeaux',
+    titre: 'Projets de rénovation intérieure à Bordeaux',
     texte: paragraphes('Maisons, appartements, bars et restaurants, à Bordeaux, en Gironde et sur la côte atlantique.'),
   },
   blocPro: {

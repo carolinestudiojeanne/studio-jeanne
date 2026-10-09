@@ -50,11 +50,14 @@ const introHtml = texteEnHtml(page.intro?.texte)
   .intro-projets {
     text-align: center;
   }
-  /* Titre sur deux lignes, centré au milieu de la page. */
+  /* Titre sur une seule ligne, centré. */
   .intro-projets h1 {
-    max-width: 24ch;
     margin-inline: auto;
-    text-wrap: balance;
+  }
+  @media (min-width: 52rem) {
+    .intro-projets h1 {
+      white-space: nowrap;
+    }
   }
   @media (min-width: 72rem) {
     .intro-projets__texte :global(p) {
