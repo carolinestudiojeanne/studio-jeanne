@@ -84,7 +84,7 @@ Intentions de mise en forme :
 - la Modélisation 3D est au sommet de la courbe, c'est voulu : c'est ce qui distingue Caroline ;
 - l'arche a la forme du filet du logo (trait vertical, angle arrondi, trait horizontal) : Plans techniques et Sélection suivent le trait horizontal, jusqu'à l'ouverture ;
 - « Les travaux » est juste après l'ouverture, en dehors du trait, et se distingue visuellement des cinq étapes : ce n'est pas une phase de la prestation, c'est le moment où Caroline passe la main ;
-- sur ordinateur, seuls les mots-clés sont sur l'arche, avec une légende à côté qui donne les explications ;
+- sur ordinateur, grande arche centrée avec seulement les titres des étapes sur les points ; un clic sur un point affiche la description de l'étape à l'intérieur de l'arche (l'étape 1 est affichée d'emblée, l'étape choisie passe en ocre) ;
 - sur mobile, le déroulé passe à la verticale en gardant l'arche comme motif.
 
 ### 9 octobre 2026 : prise de contact (remplace entièrement le point 10)
