@@ -32,7 +32,7 @@ const colonnes = [
   <!-- 2. Projets récents -->
   {
     projets.length > 0 && (
-      <section class="section">
+      <section class="section section-projets-recents">
         <CarrouselProjets projets={projets}>
           <div class="projets-recents">
             <h2>{projetsRecents?.titre}</h2>
@@ -153,10 +153,13 @@ const colonnes = [
     max-width: 36rem;
   }
   /* Titre et phrase alignés sur la photo la plus à gauche ; phrase sur une seule ligne sur grand écran. */
-  /* Titre et phrase remontés un peu ; les photos restent à leur place. */
+  /* Titre et phrase bien aérés : même espace au-dessus (depuis le grand visuel) et en dessous (jusqu'aux photos). */
+  .section-projets-recents {
+    --air: clamp(6rem, 14vw, 11rem);
+    padding-top: var(--air);
+  }
   .projets-recents {
-    margin-top: -3rem;
-    margin-bottom: 3rem;
+    margin-bottom: var(--air);
   }
   .projets-recents h2 {
     margin-bottom: 0.5rem;
