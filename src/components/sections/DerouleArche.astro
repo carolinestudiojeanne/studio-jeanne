@@ -72,7 +72,7 @@ const toutes = [...etapes.map((e, i) => ({...e, numero: String(i + 1).padStart(2
         }
       </div>
 
-      <!-- Photo : son coin bas droit (arrondi) se pose là où se rencontreraient le bas de l'arche et son côté droit -->
+      <!-- Photo : son coin bas droit se pose là où se rencontreraient le bas de l'arche et la verticale des travaux -->
       <div class="parcours__photo" aria-hidden="true">
         {
           toutes.map((e, i) => (
@@ -262,14 +262,15 @@ const toutes = [...etapes.map((e, i) => ({...e, numero: String(i + 1).padStart(2
     align-items: center;
   }
   /* Photo : coin bas droit au croisement du prolongement du bas de l'arche (y = 480)
-     et de son côté droit (x = 620), dans le repère 800 × 500. */
+     et de la verticale des travaux (x = 700), dans le repère 800 × 500.
+     Coins arrondis comme les photos des projets. */
   .parcours__photo {
     position: absolute;
-    right: calc(100% - 620 / 800 * 100%);
+    right: calc(100% - 700 / 800 * 100%);
     bottom: calc(100% - 480 / 500 * 100%);
     width: 30%;
     aspect-ratio: 4 / 3;
-    border-radius: 0 0 clamp(2rem, 5vw, 4.5rem) 0;
+    border-radius: var(--arrondi);
     overflow: hidden;
     background: var(--creme-soutenu);
   }
