@@ -8,7 +8,9 @@ import Image from '../components/Image.astro'
 import {getAvisAccueil, getPageAccueil, getProjets, getReglages} from '../lib/contenu'
 import {texteEnHtml} from '../lib/texte'
 
-const [page, projets, avis, reglages] = await Promise.all([getPageAccueil(), getProjets(), getAvisAccueil(), getReglages()])
+const [page, tousProjets, avis, reglages] = await Promise.all([getPageAccueil(), getProjets(), getAvisAccueil(), getReglages()])
+// L'accueil ne montre que les projets de particuliers (diaporama et projets récents).
+const projets = tousProjets.filter((p) => p.categorie === 'residentiel')
 const titre = page.seo?.metaTitle || `Architecte d’intérieur à Bordeaux${reglages.suffixeTitre}`
 const {hero, projetsRecents, deroule, aiguillage, caroline} = page
 const colonnes = [
@@ -21,7 +23,7 @@ const colonnes = [
   <!-- 1. Grand visuel -->
   <Hero
     image={hero?.image}
-    images={projets.filter((p) => p.categorie === 'residentiel').map((p) => p.imagePrincipale).filter((i) => i !== undefined)}
+    images={projets.map((p) => p.imagePrincipale).filter((i) => i !== undefined)}
     surtitre={hero?.h1}
     surtitreEstH1
     titre={hero?.accroche}
