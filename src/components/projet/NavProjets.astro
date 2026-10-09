@@ -16,23 +16,17 @@ const {precedent, suivant} = Astro.props
   (precedent || suivant) && (
     <nav class="nav-projets" aria-label="Autres projets">
       {precedent ? (
-        <a class="nav-projets__lien" href={`/projets/${precedent.slug}`} rel="prev">
-          <svg viewBox="0 0 10 18" aria-hidden="true"><path d="M9 1 1 9l8 8" /></svg>
-          <span>
-            <span class="nav-projets__libelle">Projet précédent</span>
-            <span class="nav-projets__titre">{precedent.titre}</span>
-          </span>
+        <a class="nav-projets__lien" href={`/projets/${precedent.slug}`} rel="prev" aria-label={`Projet précédent : ${precedent.titre}`}>
+          <svg viewBox="0 0 10 18" aria-hidden="true"><path d="M9 1 1 9l8 8" vector-effect="non-scaling-stroke" /></svg>
+          <span class="nav-projets__titre">{precedent.titre}</span>
         </a>
       ) : (
         <span />
       )}
       {suivant ? (
-        <a class="nav-projets__lien nav-projets__lien--suivant" href={`/projets/${suivant.slug}`} rel="next">
-          <span>
-            <span class="nav-projets__libelle">Projet suivant</span>
-            <span class="nav-projets__titre">{suivant.titre}</span>
-          </span>
-          <svg viewBox="0 0 10 18" aria-hidden="true"><path d="m1 1 8 8-8 8" /></svg>
+        <a class="nav-projets__lien nav-projets__lien--suivant" href={`/projets/${suivant.slug}`} rel="next" aria-label={`Projet suivant : ${suivant.titre}`}>
+          <span class="nav-projets__titre">{suivant.titre}</span>
+          <svg viewBox="0 0 10 18" aria-hidden="true"><path d="m1 1 8 8-8 8" vector-effect="non-scaling-stroke" /></svg>
         </a>
       ) : (
         <span />
@@ -53,23 +47,12 @@ const {precedent, suivant} = Astro.props
   .nav-projets__lien {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.75rem;
     text-decoration: none;
     color: var(--ardoise);
   }
   .nav-projets__lien--suivant {
     text-align: right;
-  }
-  .nav-projets__libelle,
-  .nav-projets__titre {
-    display: block;
-  }
-  .nav-projets__libelle {
-    font-size: var(--t-xs);
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--ocre);
-    margin-bottom: 0.35rem;
   }
   .nav-projets__titre {
     font-size: var(--t-s);
@@ -78,11 +61,12 @@ const {precedent, suivant} = Astro.props
   }
   .nav-projets svg {
     flex: none;
-    width: 0.7rem;
+    width: 0.4rem;
     height: auto;
     fill: none;
     stroke: currentColor;
-    stroke-width: 1.2;
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
     overflow: visible;
     transition: transform 0.25s;
   }
