@@ -4,6 +4,7 @@ import SectionTexte from '../components/sections/SectionTexte.astro'
 import GrilleProjets from '../components/sections/GrilleProjets.astro'
 import AppelAction from '../components/sections/AppelAction.astro'
 import {getPageProfessionnels, getProjets, getReglages} from '../lib/contenu'
+import {FORMULAIRES} from '../lib/formulaires'
 
 const [page, projets, reglages] = await Promise.all([getPageProfessionnels(), getProjets(), getReglages()])
 const pros = projets.filter((p) => p.categorie === 'professionnel')
@@ -16,7 +17,7 @@ const titre = page.seo?.metaTitle || `Professionnels${reglages.suffixeTitre}`
     <h2 class="visuellement-cache">Projets professionnels</h2>
     <GrilleProjets projets={pros} />
   </section>
-  <AppelAction appel={page.appel} />
+  <AppelAction appel={page.appel} href={FORMULAIRES.professionnel} />
 </Base>
 
 <style>

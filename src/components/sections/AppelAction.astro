@@ -1,13 +1,15 @@
 ---
-/** S5 : bloc d'appel à l'action, en fin de chaque page. Le bouton mène toujours à /contact. */
+/** S5 : bloc d'appel à l'action, en fin de chaque page. Le bouton mène au formulaire de la page, sinon à /contact. */
 import type {AppelAction} from '../../lib/types'
 
 interface Props {
   appel?: AppelAction
   /** Lien secondaire facultatif (ex. vers L'accompagnement sur les pages projet). */
   lien?: {libelle: string; href: string}
+  /** Adresse du bouton : le formulaire Tally de la page (par défaut, la page Contact). */
+  href?: string
 }
-const {appel, lien} = Astro.props
+const {appel, lien, href = '/contact'} = Astro.props
 ---
 
 {
@@ -18,7 +20,7 @@ const {appel, lien} = Astro.props
         {appel.texte && <p>{appel.texte}</p>}
         <div class="appel__actions">
           {appel.boutonLibelle && (
-            <a class="bouton" href="/contact">
+            <a class="bouton" href={href}>
               {appel.boutonLibelle}
             </a>
           )}

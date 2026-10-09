@@ -1,22 +1,20 @@
 ---
 import Base from '../layouts/Base.astro'
 import Hero from '../components/sections/Hero.astro'
+import Aiguillage from '../components/sections/Aiguillage.astro'
 import CarrouselProjets from '../components/sections/CarrouselProjets.astro'
 import MurAvis from '../components/sections/MurAvis.astro'
 import AppelAction from '../components/sections/AppelAction.astro'
 import Image from '../components/Image.astro'
 import {getAvisAccueil, getPageAccueil, getProjets, getReglages} from '../lib/contenu'
 import {texteEnHtml} from '../lib/texte'
+import {FORMULAIRES} from '../lib/formulaires'
 
 const [page, tousProjets, avis, reglages] = await Promise.all([getPageAccueil(), getProjets(), getAvisAccueil(), getReglages()])
 // L'accueil ne montre que les projets de particuliers (diaporama et projets récents).
 const projets = tousProjets.filter((p) => p.categorie === 'residentiel')
 const titre = page.seo?.metaTitle || `Architecte d’intérieur à Bordeaux${reglages.suffixeTitre}`
 const {hero, projetsRecents, deroule, aiguillage, caroline} = page
-const colonnes = [
-  {...aiguillage?.colonne1, href: '/accompagnement'},
-  {...aiguillage?.colonne2, href: '/trouver-votre-bien'},
-]
 ---
 
 <Base titre={titre} description={page.seo?.metaDescription} imagePartage={page.seo?.imagePartage || hero?.image}>
@@ -78,19 +76,7 @@ const colonnes = [
       <section class="section">
         <div class="conteneur">
           <h2 class="aiguillage__titre">{aiguillage.titre}</h2>
-          <div class="aiguillage">
-            {colonnes.map((c) => (
-              <div class="aiguillage__colonne">
-                <h3>{c.titre}</h3>
-                {c.texte && <p>{c.texte}</p>}
-                {c.boutonLibelle && (
-                  <a class="bouton bouton--contour" href={c.href}>
-                    {c.boutonLibelle}
-                  </a>
-                )}
-              </div>
-            ))}
-          </div>
+          <Aiguillage aiguillage={aiguillage} />
         </div>
       </section>
     )
@@ -137,7 +123,7 @@ const colonnes = [
   }
 
   <!-- 7. La première étape -->
-  <AppelAction appel={page.appel} />
+  <AppelAction appel={page.appel} href={FORMULAIRES.projet} />
 </Base>
 
 <style>
@@ -195,26 +181,6 @@ const colonnes = [
   .aiguillage__titre {
     text-align: center;
     margin-bottom: clamp(2.5rem, 5vw, 4rem);
-  }
-  .aiguillage {
-    display: grid;
-    gap: 1.5rem;
-  }
-  @media (min-width: 52rem) {
-    .aiguillage {
-      grid-template-columns: 1fr 1fr;
-    }
-  }
-  .aiguillage__colonne {
-    border: 1px solid color-mix(in srgb, var(--ardoise) 22%, transparent);
-    border-radius: 999px 999px 0 0;
-    padding: clamp(4rem, 8vw, 6rem) clamp(1.75rem, 5vw, 4rem) clamp(2.5rem, 5vw, 3.5rem);
-    text-align: center;
-  }
-  .aiguillage__colonne p {
-    max-width: 26rem;
-    margin-inline: auto;
-    margin-bottom: 2rem;
   }
   .caroline {
     display: grid;

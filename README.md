@@ -86,3 +86,20 @@ Intentions de mise en forme :
 - « Les travaux » est juste après l'ouverture, en dehors du trait, et se distingue visuellement des cinq étapes : ce n'est pas une phase de la prestation, c'est le moment où Caroline passe la main ;
 - sur ordinateur, seuls les mots-clés sont sur l'arche, avec une légende à côté qui donne les explications ;
 - sur mobile, le déroulé passe à la verticale en gardant l'arche comme motif.
+
+### 9 octobre 2026 : prise de contact (remplace entièrement le point 10)
+
+Plus de formulaire unique avec bifurcation, mais trois formulaires Tally, un par porte d'entrée
+(adresses centralisées dans `src/lib/formulaires.ts` ; si l'une change, prévenir Caroline, car les formulaires se renvoient entre eux) :
+
+| Formulaire | Adresse | Où |
+| --- | --- | --- |
+| Parlons de votre projet (bien trouvé ou achat en cours) | https://tally.so/r/rjxXYv | page L'accompagnement, bouton « Vous avez déjà votre maison » de l'accueil, fin de page d'accueil, pages projet de particuliers |
+| Trouver votre bien | https://tally.so/r/5ByR1M | page Trouver votre bien, bouton « Vous ne l'avez pas encore trouvée » de l'accueil |
+| Aménager vos locaux (professionnels) | https://tally.so/r/LZA9Xl | page Professionnels, pages projet professionnels |
+
+- Page Contact : deux grandes entrées pour les deux premiers formulaires (mêmes formulations que le bloc d'aiguillage de l'accueil), puis une entrée professionnels, visible mais un cran en dessous : « Vous êtes un professionnel ? Parlons de vos locaux ».
+- Chaque formulaire redirige, une fois envoyé, vers la page de réservation Google Agenda de Caroline. Plus de Calendly.
+- Le premier rendez-vous est un appel téléphonique de trente minutes (et non plus une visio d'une heure).
+- Aucun bouton ne mène directement à l'agenda : on passe toujours par un formulaire.
+- Le champ « Lien Tally » des réglages du site n'est plus utilisé.

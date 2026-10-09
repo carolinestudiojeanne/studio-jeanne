@@ -1,48 +1,28 @@
 ---
 import Base from '../layouts/Base.astro'
 import SectionTexte from '../components/sections/SectionTexte.astro'
-import {getPageContact, getReglages} from '../lib/contenu'
+import Aiguillage from '../components/sections/Aiguillage.astro'
+import {getPageAccueil, getPageContact, getReglages} from '../lib/contenu'
+import {FORMULAIRES} from '../lib/formulaires'
 
-const [page, r] = await Promise.all([getPageContact(), getReglages()])
+const [page, accueil, r] = await Promise.all([getPageContact(), getPageAccueil(), getReglages()])
 const titre = page.seo?.metaTitle || `Contact${r.suffixeTitre}`
 const tel = r.telephone?.replace(/\s/g, '')
-
-/** https://tally.so/r/abc123 → https://tally.so/embed/abc123 */
-const idTally = r.lienTally?.match(/tally\.so\/(?:r|embed)\/([\w-]+)/)?.[1]
-const embedTally = idTally
-  ? `https://tally.so/embed/${idTally}?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1`
-  : null
 ---
 
 <Base titre={titre} description={page.seo?.metaDescription} imagePartage={page.seo?.imagePartage}>
   <!-- 1. Texte -->
   <SectionTexte titre={page.intro?.titre} niveau="h1" texte={page.intro?.texte} />
 
-  <!-- 2. Formulaire Tally (bifurcation, budget, origine ; redirection Calendly gérée dans Tally) -->
-  <section class="section section--serree fond-soutenu" id="formulaire">
-    <div class="colonne">
-      {
-        embedTally ? (
-          <>
-            <iframe
-              data-tally-src={embedTally}
-              loading="lazy"
-              width="100%"
-              height="800"
-              title="Formulaire de premier contact"
-              class="tally"
-            />
-            <noscript>
-              <a class="bouton" href={r.lienTally}>
-                {page.boutonLibelle || 'Remplir le formulaire'}
-              </a>
-            </noscript>
-            <script is:inline async src="https://tally.so/widgets/embed.js" />
-          </>
-        ) : (
-          <p class="tally-manquant">Le formulaire s’affichera ici dès que son lien sera renseigné dans les réglages du site.</p>
-        )
-      }
+  <!-- 2. Trois portes d'entrée, chacune vers son formulaire Tally (qui redirige ensuite vers l'agenda) :
+       les deux grandes, mêmes formulations que sur l'accueil, puis les professionnels, un cran en dessous. -->
+  <section class="section section--serree" id="formulaire">
+    <div class="conteneur">
+      {accueil.aiguillage && <Aiguillage aiguillage={accueil.aiguillage} />}
+      <div class="contact-pro">
+        <p>Vous êtes un professionnel ?</p>
+        <a class="bouton bouton--contour" href={FORMULAIRES.professionnel}>Parlons de vos locaux</a>
+      </div>
     </div>
   </section>
 
@@ -65,13 +45,21 @@ const embedTally = idTally
 </Base>
 
 <style>
-  .tally {
-    border: 0;
-    min-height: 30rem;
-  }
-  .tally-manquant {
+  .contact-pro {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem 1.75rem;
+    margin-top: clamp(2rem, 4vw, 3rem);
+    padding: clamp(1.5rem, 3vw, 2rem);
+    border: 1px solid color-mix(in srgb, var(--ardoise) 22%, transparent);
+    border-radius: var(--arrondi);
     text-align: center;
-    font-style: italic;
+  }
+  .contact-pro p {
+    margin: 0;
+    font-size: var(--t-m);
   }
   .coordonnees {
     font-size: var(--t-l);

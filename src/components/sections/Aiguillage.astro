@@ -1,0 +1,65 @@
+---
+/**
+ * Les deux portes d'entrée, côte à côte, en arche : « Vous avez déjà votre maison » et
+ * « Vous ne l'avez pas encore trouvée ». Même bloc sur l'accueil et sur la page Contact.
+ * Le bouton mène au formulaire Tally de la porte ; le lien dessous, à la page qui la présente.
+ */
+import {FORMULAIRES} from '../../lib/formulaires'
+import type {PageAccueil} from '../../lib/types'
+
+interface Props {
+  aiguillage: NonNullable<PageAccueil['aiguillage']>
+}
+const {aiguillage} = Astro.props
+const colonnes = [
+  {...aiguillage.colonne1, href: FORMULAIRES.projet, page: {href: '/accompagnement', libelle: 'Découvrir l’accompagnement'}},
+  {...aiguillage.colonne2, href: FORMULAIRES.trouver, page: {href: '/trouver-votre-bien', libelle: 'Découvrir la recherche de bien'}},
+]
+---
+
+<div class="aiguillage">
+  {
+    colonnes.map((c) => (
+      <div class="aiguillage__colonne">
+        <h3>{c.titre}</h3>
+        {c.texte && <p>{c.texte}</p>}
+        {c.boutonLibelle && (
+          <a class="bouton bouton--contour" href={c.href}>
+            {c.boutonLibelle}
+          </a>
+        )}
+        <a class="lien-fleche aiguillage__page" href={c.page.href}>
+          {c.page.libelle}
+        </a>
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  .aiguillage {
+    display: grid;
+    gap: 1.5rem;
+  }
+  @media (min-width: 52rem) {
+    .aiguillage {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .aiguillage__colonne {
+    border: 1px solid color-mix(in srgb, var(--ardoise) 22%, transparent);
+    border-radius: 999px 999px 0 0;
+    padding: clamp(4rem, 8vw, 6rem) clamp(1.75rem, 5vw, 4rem) clamp(2.5rem, 5vw, 3.5rem);
+    text-align: center;
+  }
+  .aiguillage__colonne p {
+    max-width: 26rem;
+    margin-inline: auto;
+    margin-bottom: 2rem;
+  }
+  .aiguillage__page {
+    display: table;
+    margin: 1.5rem auto 0;
+    font-size: var(--t-xs);
+  }
+</style>

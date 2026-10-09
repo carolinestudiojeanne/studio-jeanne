@@ -13,6 +13,7 @@ import Galerie from './Galerie.astro'
 import AvantApres from './AvantApres.astro'
 import Video from './Video.astro'
 import {getReglages} from '../../lib/contenu'
+import {FORMULAIRES} from '../../lib/formulaires'
 import {texteBrut, texteEnHtml} from '../../lib/texte'
 import {canonique, ligneLieu, schemaFilAriane, titreProjet, SITE} from '../../lib/seo'
 import {imagePartageUrl} from '../../lib/image'
@@ -31,6 +32,7 @@ const position = tous.findIndex((p) => p.slug === projet.slug)
 const precedent = tous.length > 1 && position >= 0 ? tous[(position - 1 + tous.length) % tous.length] : undefined
 const suivant = tous.length > 1 && position >= 0 ? tous[(position + 1) % tous.length] : undefined
 const pro = projet.categorie === 'professionnel'
+const formulaire = pro ? FORMULAIRES.professionnel : FORMULAIRES.projet
 const chemin = `/projets/${projet.slug}`
 const description = projet.seo?.metaDescription || projet.resume || ''
 
@@ -91,7 +93,7 @@ const caracteristiques = [projet.typeDeProjet && {libelle: 'Projet', valeur: pro
   {apercu && <div class="apercu">Aperçu du brouillon : cette page n’est pas encore publiée.</div>}
 
   <!-- 1. Grand visuel, photo à cheval, caractéristiques, textes, bande de photos, avant / après -->
-  <EnTeteProjet projet={projet} portrait={portrait} bande={bande.map((g) => g.image)} caracteristiques={caracteristiques} avantApres={!!projet.avantApres?.length} video={aVideo}>
+  <EnTeteProjet projet={projet} portrait={portrait} bande={bande.map((g) => g.image)} caracteristiques={caracteristiques} avantApres={!!projet.avantApres?.length} video={aVideo} formulaire={formulaire}>
     {
       projet.demande?.length ? (
         <div>
@@ -139,10 +141,11 @@ const caracteristiques = [projet.typeDeProjet && {libelle: 'Projet', valeur: pro
   <AppelAction
     appel={{
       titre: 'Un projet comme celui-ci ?',
-      texte: 'Un formulaire d’une dizaine de minutes, puis un échange d’une heure en visio.',
+      texte: 'Un formulaire d’une dizaine de minutes, puis un premier appel téléphonique de trente minutes.',
       boutonLibelle: 'Parler de votre projet',
     }}
     lien={{libelle: 'Le détail de l’accompagnement', href: '/accompagnement'}}
+    href={formulaire}
   />
 </Base>
 

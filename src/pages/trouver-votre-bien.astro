@@ -1,6 +1,7 @@
 ---
 import PageOffre from '../components/PageOffre.astro'
 import {getPageTrouverVotreBien, getReglages} from '../lib/contenu'
+import {FORMULAIRES} from '../lib/formulaires'
 
 const [page, reglages] = await Promise.all([getPageTrouverVotreBien(), getReglages()])
 ---
@@ -9,5 +10,6 @@ const [page, reglages] = await Promise.all([getPageTrouverVotreBien(), getReglag
   page={page}
   titre={page.seo?.metaTitle || `Trouver votre bien${reglages.suffixeTitre}`}
   aiguillageHref="/accompagnement"
+  formulaire={FORMULAIRES.trouver}
   lienSortant={{libelle: page.lienHomelikeLibelle, href: reglages.homelikehome}}
 />

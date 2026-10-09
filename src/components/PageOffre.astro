@@ -17,8 +17,10 @@ interface Props {
   /** Page vers laquelle mène la ligne d'aiguillage du haut. */
   aiguillageHref: string
   lienSortant?: {libelle?: string; href?: string}
+  /** Formulaire Tally de la page (bouton de fin de page). */
+  formulaire: string
 }
-const {page, titre, aiguillageHref, lienSortant} = Astro.props
+const {page, titre, aiguillageHref, lienSortant, formulaire} = Astro.props
 const numeros = ['Premier temps', 'Deuxième temps', 'Troisième temps']
 ---
 
@@ -61,7 +63,7 @@ const numeros = ['Premier temps', 'Deuxième temps', 'Troisième temps']
   <Faq faq={page.faq} />
 
   <!-- 7. Appel à l'action -->
-  <AppelAction appel={page.appel} />
+  <AppelAction appel={page.appel} href={formulaire} />
 
   {
     lienSortant?.href && lienSortant.libelle && (
