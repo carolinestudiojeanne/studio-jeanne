@@ -260,6 +260,16 @@ const {projet, portrait, bande, caracteristiques, avantApres = false} = Astro.pr
     padding: clamp(2.5rem, 5vw, 4rem) var(--gouttiere) clamp(3.5rem, 7vw, 6rem);
   }
 
+  /* Bouton « Parlons de votre projet » en ocre. */
+  .ep__appel .bouton {
+    color: var(--ocre);
+    border-color: var(--ocre);
+  }
+  .ep__appel .bouton:hover {
+    background: var(--ocre);
+    color: var(--blanc);
+  }
+
   /* Avant / après à gauche, bouton à droite (l'un sous l'autre sur mobile). */
   .ep__appel--aa {
     display: grid;
