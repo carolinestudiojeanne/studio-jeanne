@@ -51,7 +51,7 @@ const toutes = [...etapes.map((e, i) => ({...e, numero: String(i + 1).padStart(2
       <svg class="parcours__trait" viewBox={`0 0 ${L} ${H}`} aria-hidden="true" preserveAspectRatio="none">
         <path d="M40 480 V230 A190 190 0 0 1 230 40 H620" vector-effect="non-scaling-stroke" />
         <!-- Pointillés de l'ouverture jusqu'aux travaux -->
-        <path class="parcours__pointilles" d="M632 40 H688" vector-effect="non-scaling-stroke" />
+        <path class="parcours__pointilles" d="M620 40 H689" />
       </svg>
 
       <div class="parcours__etapes" role="tablist" aria-label="Étapes du projet">
@@ -67,7 +67,13 @@ const toutes = [...etapes.map((e, i) => ({...e, numero: String(i + 1).padStart(2
               class:list={['parcours__point', `parcours__point--${points[i].place}`, {'parcours__point--sommet': i === 2, 'parcours__point--travaux': i === 5}]}
               style={`left: ${(points[i].x / L) * 100}%; top: ${(points[i].y / H) * 100}%`}
             >
-              <span class="parcours__rond" aria-hidden="true" />
+              {i === 5 ? (
+                <svg class="parcours__rond parcours__rond--pointille" viewBox="0 0 20 20" aria-hidden="true">
+                  <circle cx="10" cy="10" r="9" pathLength="56" />
+                </svg>
+              ) : (
+                <span class="parcours__rond" aria-hidden="true" />
+              )}
               <span class="parcours__libelle">{e.titre}</span>
             </button>
           ))
@@ -192,6 +198,9 @@ const toutes = [...etapes.map((e, i) => ({...e, numero: String(i + 1).padStart(2
     gap: 0.9rem;
     transform: translate(-50%, -0.5rem);
   }
+  .parcours__point--travaux {
+    transform: translate(-50%, -0.625rem);
+  }
   .parcours__point--diagonale {
     transform: translate(-0.6rem, -0.6rem);
     align-items: flex-start;
@@ -241,20 +250,41 @@ const toutes = [...etapes.map((e, i) => ({...e, numero: String(i + 1).padStart(2
     border-radius: 4px;
   }
   /* Les travaux : hors du trait, en retrait (ce n'est plus une phase de la prestation). */
-  .parcours__trait .parcours__pointilles {
-    stroke-width: 1.25;
+  /* Pointillés des travaux : mêmes tirets, bouts arrondis, sur la ligne et sur le rond.
+     La ligne part directement du bout de l'arche. */
+  .parcours__trait .parcours__pointilles,
+  .parcours__rond--pointille circle {
+    fill: none;
+    stroke: var(--ocre);
+    stroke-width: 1.5;
+    stroke-linecap: round;
     stroke-dasharray: 3 5;
   }
-  /* Point des travaux : fin pointillé ocre. */
-  .parcours__point--travaux .parcours__rond {
-    border: 1px dashed var(--ocre);
+  /* L'arche est dessinée à environ 1,2 fois son repère : mêmes tirets à l'écran que sur le rond. */
+  .parcours__trait .parcours__pointilles {
+    stroke-width: 1.25;
+    stroke-dasharray: 2.5 4.17;
+  }
+  .parcours__rond--pointille {
+    width: 1.25rem;
+    height: 1.25rem;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    overflow: visible;
+  }
+  .parcours__rond--pointille circle {
+    transition: fill 0.25s;
   }
   .parcours__point--travaux .parcours__libelle {
     font-style: italic;
     opacity: 0.75;
   }
   .parcours__point--travaux[aria-selected='true'] .parcours__rond {
-    background: color-mix(in srgb, var(--ocre) 35%, transparent);
+    background: none;
+  }
+  .parcours__point--travaux[aria-selected='true'] .parcours__rond--pointille circle {
+    fill: color-mix(in srgb, var(--ocre) 35%, transparent);
   }
 
   /* Description de l'étape, à l'intérieur de l'arche : à gauche de la photo, alignée à droite,
