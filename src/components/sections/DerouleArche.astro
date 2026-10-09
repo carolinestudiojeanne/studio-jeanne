@@ -251,19 +251,22 @@ const toutes = [...etapes.map((e, i) => ({...e, numero: String(i + 1).padStart(2
     background: color-mix(in srgb, var(--ardoise) 55%, transparent);
   }
 
-  /* Description de l'étape, à l'intérieur de l'arche */
+  /* Description de l'étape, à l'intérieur de l'arche : à gauche de la photo, alignée à droite,
+     la dernière ligne au niveau du bas de la photo. */
   .parcours__panneaux {
     position: absolute;
-    left: 38%;
-    right: 2%;
+    left: 24%;
+    /* Bord gauche de la photo (95 % − 22 %) moins un petit écart. */
+    right: calc(100% - 95% + 22% + 2.5%);
     top: 20%;
-    bottom: 50%;
+    bottom: calc(100% - 480 / 500 * 100%);
     display: flex;
-    align-items: flex-start;
+    align-items: flex-end;
+    justify-content: flex-end;
+    text-align: right;
   }
-  /* Photo : coin bas droit au croisement du prolongement du bas de l'arche (y = 480)
-     et un peu à droite des travaux (x = 760), dans le repère 800 × 500.
-     Coins arrondis comme les photos des projets. */
+  /* Photo (rectangle vertical) : coin bas droit au niveau du bas de l'arche (y = 480)
+     et un peu à droite des travaux (x = 760), dans le repère 800 × 500. Coins arrondis comme les photos des projets. */
   .parcours__photo {
     position: absolute;
     right: calc(100% - 760 / 800 * 100%);
@@ -306,6 +309,8 @@ const toutes = [...etapes.map((e, i) => ({...e, numero: String(i + 1).padStart(2
   /* Retours à la ligne choisis par Caroline. */
   .parcours__texte {
     white-space: pre-line;
+    /* Le bas des lettres (et non l'interligne) tombe au niveau du bas de la photo. */
+    margin-bottom: -0.35em !important;
   }
   .parcours__panneau p:last-child {
     font-size: var(--t-m);
