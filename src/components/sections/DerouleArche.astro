@@ -36,6 +36,9 @@ const points = [
   {x: 520, y: 40, place: 'dessous'},
   {x: 700, y: 40, place: 'dessous'},
 ]
+// Photo de chaque étape (fichiers dans public/accompagnement/), affichée en bas à droite de l'arche.
+// Tant qu'une étape n'a pas de photo, l'emplacement reste une forme crème.
+const photos: Array<string | undefined> = [undefined, undefined, undefined, undefined, undefined, undefined]
 const toutes = [...etapes.map((e, i) => ({...e, numero: String(i + 1).padStart(2, '0')})), {...travaux, numero: ''}]
 ---
 
@@ -65,6 +68,17 @@ const toutes = [...etapes.map((e, i) => ({...e, numero: String(i + 1).padStart(2
               <span class="parcours__rond" aria-hidden="true" />
               <span class="parcours__libelle">{e.titre}</span>
             </button>
+          ))
+        }
+      </div>
+
+      <!-- Photo : son coin bas droit (arrondi) se pose là où se rencontreraient le bas de l'arche et son côté droit -->
+      <div class="parcours__photo" aria-hidden="true">
+        {
+          toutes.map((e, i) => (
+            <div class="parcours__photo-etape" data-photo={i} hidden={i !== 0}>
+              {photos[i] && <img src={photos[i]} alt="" loading="lazy" />}
+            </div>
           ))
         }
       </div>
@@ -115,6 +129,7 @@ const toutes = [...etapes.map((e, i) => ({...e, numero: String(i + 1).padStart(2
         o.tabIndex = i === n ? 0 : -1
       })
       panneaux.forEach((p, i) => (p.hidden = i !== n))
+      arche.querySelectorAll<HTMLElement>('[data-photo]').forEach((p, i) => (p.hidden = i !== n))
       if (focus) onglets[n].focus()
     }
     onglets.forEach((o, i) => {
@@ -241,10 +256,33 @@ const toutes = [...etapes.map((e, i) => ({...e, numero: String(i + 1).padStart(2
     position: absolute;
     left: 38%;
     right: 2%;
-    top: 30%;
-    bottom: 6%;
+    top: 21%;
+    bottom: 46%;
     display: flex;
     align-items: center;
+  }
+  /* Photo : coin bas droit au croisement du prolongement du bas de l'arche (y = 480)
+     et de son côté droit (x = 620), dans le repère 800 × 500. */
+  .parcours__photo {
+    position: absolute;
+    right: calc(100% - 620 / 800 * 100%);
+    bottom: calc(100% - 480 / 500 * 100%);
+    width: 30%;
+    aspect-ratio: 4 / 3;
+    border-radius: 0 0 clamp(2rem, 5vw, 4.5rem) 0;
+    overflow: hidden;
+    background: var(--creme-soutenu);
+  }
+  .parcours__photo-etape,
+  .parcours__photo-etape img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .parcours__photo-etape:not([hidden]) {
+    animation: apparition 0.4s ease;
   }
   .parcours__panneau {
     max-width: 36rem;
