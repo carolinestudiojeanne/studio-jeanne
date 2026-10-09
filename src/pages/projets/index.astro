@@ -62,19 +62,19 @@ const introHtml = texteEnHtml(page.intro?.texte)
 </script>
 
 <style>
-  /* Filtres : deux boutons arrondis au-dessus des projets, à droite. */
+  /* Filtres : deux boutons arrondis ocre au-dessus des projets, à gauche. */
   .filtres {
     display: flex;
-    justify-content: flex-end;
+    justify-content: flex-start;
     gap: 0.75rem;
     margin-bottom: clamp(1.5rem, 3vw, 2rem);
   }
   .filtre {
     padding: 0.7em 1.6em;
     border-radius: 999px;
-    border: 1px solid var(--ardoise);
+    border: 1px solid var(--ocre);
     background: transparent;
-    color: var(--ardoise);
+    color: var(--ocre);
     font: inherit;
     font-size: var(--t-xs);
     letter-spacing: 0.18em;
@@ -84,7 +84,7 @@ const introHtml = texteEnHtml(page.intro?.texte)
   }
   .filtre:hover,
   .filtre[aria-pressed='true'] {
-    background: var(--ardoise);
+    background: var(--ocre);
     color: var(--blanc);
   }
   [data-filtre='residentiel'] :global(.grille > li[data-categorie='professionnel']),
