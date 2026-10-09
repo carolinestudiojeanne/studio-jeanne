@@ -35,6 +35,13 @@ Copier `.env.example` en `.env` (et `studio/.env.example` en `studio/.env`) et r
    - `PUBLIC_NOINDEX=true` jusqu’au jour de la mise en ligne
 5. **Publication automatique** : dans Netlify, *Build hooks* > créer un hook ; dans Sanity, *API > Webhooks* > coller l’adresse du hook (déclencheur : création, mise à jour, suppression). Chaque publication de Caroline reconstruit le site en une à deux minutes.
 6. **Bouton « Voir la page »** : dans `studio/.env`, `SANITY_STUDIO_SITE_URL` = l’adresse Netlify et `SANITY_STUDIO_PREVIEW_SECRET` = la même valeur que `SANITY_PREVIEW_SECRET`, puis redéployer le Studio.
+7. **Avis Google automatiques** (`netlify/functions/avis-google.mts`, une fois par jour) : ajoute dans Sanity les nouveaux avis Google 5 étoiles avec texte, sans doublon. Inactif tant que les variables ci-dessous manquent.
+   - Caroline ajoute la personne qui s’en occupe comme **gestionnaire** de sa fiche (business.google.com > Paramètres > Personnes et accès).
+   - Dans Google Cloud (même compte) : créer un projet, demander l’accès à l’API Google Business Profile (formulaire « GBP API access », réponse en quelques jours à quelques semaines), puis activer *My Business Account Management API* et *Google My Business API*.
+   - Créer un identifiant OAuth (type « Application Web », adresse de redirection `https://developers.google.com/oauthplayground`), puis obtenir un *refresh token* dans OAuth Playground avec le droit `https://www.googleapis.com/auth/business.manage` (cocher « Use your own OAuth credentials »).
+   - Retrouver les identifiants : `GET https://mybusinessaccountmanagement.googleapis.com/v1/accounts` (→ `accounts/123…`), puis `GET https://mybusinessbusinessinformation.googleapis.com/v1/accounts/123…/locations?readMask=name,title` (→ `locations/456…`).
+   - Variables Netlify : `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_REFRESH_TOKEN`, `GOOGLE_ACCOUNT_ID` (chiffres seuls), `GOOGLE_LOCATION_ID` (chiffres seuls), `SANITY_API_WRITE_TOKEN` (jeton **Editor**, à garder cette fois) et `NETLIFY_BUILD_HOOK` (l’adresse du hook de l’étape 5).
+   - Les avis ajoutés n’apparaissent pas sur l’accueil : cocher « Afficher sur l’accueil » dans Sanity pour cela.
 
 ## Où changer quoi
 
