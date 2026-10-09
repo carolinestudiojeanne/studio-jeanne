@@ -53,13 +53,11 @@ const SurtitreTag = surtitreEstH1 ? 'h1' : 'p'
 
 <script>
   // Diaporama du grand visuel : une image toutes les 7 secondes, en fondu.
-  // Pas d'animation si la personne a demandé de réduire les mouvements.
   document.querySelectorAll<HTMLElement>('[data-diaporama]').forEach((zone) => {
     const diapos = [...zone.querySelectorAll<HTMLElement>('.hero__diapo')]
-    if (diapos.length < 2 || matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    if (diapos.length < 2) return
     let i = 0
     setInterval(() => {
-      if (document.hidden) return
       diapos[i].classList.remove('est-visible')
       i = (i + 1) % diapos.length
       diapos[i].classList.add('est-visible')
@@ -91,6 +89,12 @@ const SurtitreTag = surtitreEstH1 ? 'h1' : 'p'
   }
   .hero__diapo.est-visible {
     opacity: 1;
+  }
+  /* Mouvements réduits demandés : les images changent quand même, mais sans fondu. */
+  @media (prefers-reduced-motion: reduce) {
+    .hero__diapo {
+      transition: none;
+    }
   }
   .hero__diapo :global(figure),
   .hero__diapo :global(.image__cadre) {
