@@ -76,6 +76,10 @@ const personne = {
   .apropos__texte {
     max-width: var(--etroit);
   }
+  /* Même taille de titre que l'en-tête des autres pages. */
+  .apropos__texte h1 {
+    font-size: clamp(1.3rem, 1rem + 0.8vw, 1.7rem);
+  }
   .apropos__avis {
     margin-top: 2.5rem;
   }

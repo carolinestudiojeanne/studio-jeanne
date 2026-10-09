@@ -1,27 +1,22 @@
 ---
 import Base from '../layouts/Base.astro'
 import MurAvis from '../components/sections/MurAvis.astro'
+import IntroPage from '../components/sections/IntroPage.astro'
 import AppelAction from '../components/sections/AppelAction.astro'
 import {getAvis, getPageAvisClients, getReglages} from '../lib/contenu'
-import {texteEnHtml} from '../lib/texte'
 
 const [page, avis, r] = await Promise.all([getPageAvisClients(), getAvis(), getReglages()])
 const titre = page.seo?.metaTitle || `Avis clients${r.suffixeTitre}`
-const introHtml = texteEnHtml(page.intro?.texte)
 ---
 
 <Base titre={titre} description={page.seo?.metaDescription} imagePartage={page.seo?.imagePartage}>
-  <!-- En-tête aligné sur le bord gauche du mur d'avis -->
-  <section class="section section--serree entete-avis">
-    <div class="conteneur">
-      <h1>{page.intro?.titre || 'Avis clients'}</h1>
-      {introHtml && <div class="texte" set:html={introHtml} />}
-      <p class="liens">
+  <!-- En-tête, même format que les autres pages -->
+  <IntroPage titre={page.intro?.titre || 'Avis clients'} texte={page.intro?.texte} espaceBas={false}>
+    <p class="liens">
         {r.ficheGoogle && <a class="lien-fleche" href={r.ficheGoogle} target="_blank" rel="noopener">Tous les avis sur Google</a>}
         {r.lienLaisserAvis && <a class="lien-fleche" href={r.lienLaisserAvis} target="_blank" rel="noopener">Laisser un avis</a>}
-      </p>
-    </div>
-  </section>
+    </p>
+  </IntroPage>
 
   <section class="section section--serree mur-section">
     <div class="conteneur">
@@ -33,12 +28,9 @@ const introHtml = texteEnHtml(page.intro?.texte)
 </Base>
 
 <style>
-  .entete-avis {
-    padding-bottom: 0;
-  }
   /* Le mur d'avis suit de près le lien « Tous les avis sur Google ». */
   .mur-section {
-    padding-top: 1.75rem;
+    padding-top: clamp(2.5rem, 5vw, 3.5rem);
   }
   /* Liens sans soulignement */
   .liens .lien-fleche {
@@ -47,6 +39,7 @@ const introHtml = texteEnHtml(page.intro?.texte)
   .liens {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     gap: 1rem 2rem;
     margin: 1rem 0 0;
   }

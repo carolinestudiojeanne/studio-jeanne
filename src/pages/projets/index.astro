@@ -2,22 +2,16 @@
 import Base from '../../layouts/Base.astro'
 import GrilleProjets from '../../components/sections/GrilleProjets.astro'
 import Image from '../../components/Image.astro'
+import IntroPage from '../../components/sections/IntroPage.astro'
 import {getPageProjets, getProjets, getReglages} from '../../lib/contenu'
-import {texteEnHtml} from '../../lib/texte'
 
 const [page, projets, reglages] = await Promise.all([getPageProjets(), getProjets(), getReglages()])
 const titre = page.seo?.metaTitle || `Projets${reglages.suffixeTitre}`
-const introHtml = texteEnHtml(page.intro?.texte)
 ---
 
 <Base titre={titre} description={page.seo?.metaDescription} imagePartage={page.seo?.imagePartage}>
   <!-- 1. Introduction -->
-  <section class="section section--serree intro-projets">
-    <div class="conteneur">
-      <h1>{page.intro?.titre || 'Projets'}</h1>
-      {introHtml && <div class="texte intro-projets__texte" set:html={introHtml} />}
-    </div>
-  </section>
+  <IntroPage titre={page.intro?.titre || 'Projets'} texte={page.intro?.texte} />
 
   <!-- 2. Filtres (particuliers par défaut) puis grille des projets, dans l'ordre choisi par Caroline -->
   <section class="conteneur grille-projets" data-filtre="residentiel">
@@ -102,32 +96,6 @@ const introHtml = texteEnHtml(page.intro?.texte)
   [data-filtre='residentiel'] :global(.grille > li[data-categorie='professionnel']),
   [data-filtre='professionnel'] :global(.grille > li:not([data-categorie='professionnel'])) {
     display: none;
-  }
-  /* Introduction centrée ; sur grand écran, la phrase tient sur une seule ligne. */
-  /* Titre bien aéré : plus d'espace en haut et avant les projets. */
-  .intro-projets {
-    text-align: center;
-    /* Même espace au-dessus du titre qu'entre la phrase et les boutons de filtre. */
-    --air: clamp(4.5rem, 10vw, 8rem);
-    padding-top: var(--air);
-    padding-bottom: var(--air);
-  }
-  /* Titre sur une seule ligne, centré. */
-  .intro-projets h1 {
-    margin-inline: auto;
-    margin-bottom: 1.75rem;
-    /* Un peu plus grand que les autres titres. */
-    font-size: clamp(1.3rem, 1rem + 0.8vw, 1.7rem);
-  }
-  @media (min-width: 52rem) {
-    .intro-projets h1 {
-      white-space: nowrap;
-    }
-  }
-  @media (min-width: 72rem) {
-    .intro-projets__texte :global(p) {
-      white-space: nowrap;
-    }
   }
   .grille-projets {
     padding-bottom: var(--section);

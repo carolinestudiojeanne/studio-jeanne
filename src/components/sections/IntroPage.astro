@@ -1,0 +1,68 @@
+---
+/**
+ * En-tête des pages (même format partout, sur le modèle de la page Projets) : titre centré,
+ * un peu plus grand que les autres titres et sur une seule ligne sur ordinateur, puis la phrase
+ * d'introduction centrée (sur une seule ligne sur grand écran quand elle est courte), le tout bien aéré.
+ */
+import {texteBrut, texteEnHtml} from '../../lib/texte'
+import type {PortableText} from '../../lib/types'
+
+interface Props {
+  titre?: string
+  texte?: PortableText
+  /** Espace sous l'introduction (par défaut le même qu'au-dessus du titre). */
+  espaceBas?: boolean
+  class?: string
+}
+const {titre, texte, espaceBas = true, class: classe} = Astro.props
+const html = texteEnHtml(texte)
+// Une phrase courte tient sur une ligne ; un texte plus long reste en paragraphe centré.
+const courte = texteBrut(texte).length <= 140 && (texte?.length ?? 0) <= 1
+---
+
+<section class:list={['intro-page', {'intro-page--sans-bas': !espaceBas}, classe]}>
+  <div class="conteneur">
+    {titre && <h1>{titre}</h1>}
+    {html && <div class:list={['texte', 'intro-page__texte', {'intro-page__texte--courte': courte}]} set:html={html} />}
+    <slot />
+  </div>
+</section>
+
+<style>
+  .intro-page {
+    text-align: center;
+    /* Même espace au-dessus du titre que sous l'introduction. */
+    --air: clamp(4.5rem, 10vw, 8rem);
+    padding-top: var(--air);
+    padding-bottom: var(--air);
+  }
+  .intro-page--sans-bas {
+    padding-bottom: 0;
+  }
+  .intro-page h1 {
+    margin-inline: auto;
+    margin-bottom: 1.75rem;
+    font-size: clamp(1.3rem, 1rem + 0.8vw, 1.7rem);
+    text-wrap: balance;
+  }
+  .intro-page__texte {
+    max-width: 46rem;
+    margin-inline: auto;
+  }
+  .intro-page__texte :global(p) {
+    text-wrap: balance;
+  }
+  @media (min-width: 64rem) {
+    .intro-page h1 {
+      white-space: nowrap;
+    }
+  }
+  @media (min-width: 72rem) {
+    .intro-page__texte--courte {
+      max-width: none;
+    }
+    .intro-page__texte--courte :global(p) {
+      white-space: nowrap;
+    }
+  }
+</style>

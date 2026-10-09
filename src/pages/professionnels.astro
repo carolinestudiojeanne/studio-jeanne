@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro'
-import SectionTexte from '../components/sections/SectionTexte.astro'
+import IntroPage from '../components/sections/IntroPage.astro'
 import GrilleProjets from '../components/sections/GrilleProjets.astro'
 import AppelAction from '../components/sections/AppelAction.astro'
 import {getPageProfessionnels, getProjets, getReglages} from '../lib/contenu'
@@ -12,7 +12,7 @@ const titre = page.seo?.metaTitle || `Professionnels${reglages.suffixeTitre}`
 ---
 
 <Base titre={titre} description={page.seo?.metaDescription} imagePartage={page.seo?.imagePartage}>
-  <SectionTexte titre={page.intro?.titre || 'Professionnels'} niveau="h1" texte={page.intro?.texte} serree />
+  <IntroPage titre={page.intro?.titre || 'Professionnels'} texte={page.intro?.texte} />
   <section class="conteneur grille-projets">
     <h2 class="visuellement-cache">Projets professionnels</h2>
     <GrilleProjets projets={pros} />

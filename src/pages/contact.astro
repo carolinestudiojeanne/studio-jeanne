@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro'
 import SectionTexte from '../components/sections/SectionTexte.astro'
+import IntroPage from '../components/sections/IntroPage.astro'
 import Aiguillage from '../components/sections/Aiguillage.astro'
 import {getPageAccueil, getPageContact, getReglages} from '../lib/contenu'
 import {FORMULAIRES} from '../lib/formulaires'
@@ -12,7 +13,7 @@ const tel = r.telephone?.replace(/\s/g, '')
 
 <Base titre={titre} description={page.seo?.metaDescription} imagePartage={page.seo?.imagePartage}>
   <!-- 1. Texte -->
-  <SectionTexte titre={page.intro?.titre} niveau="h1" texte={page.intro?.texte} />
+  <IntroPage titre={page.intro?.titre} texte={page.intro?.texte} espaceBas={false} />
 
   <!-- 2. Trois portes d'entrée, chacune vers son formulaire Tally (qui redirige ensuite vers l'agenda) :
        les deux grandes, mêmes formulations que sur l'accueil, puis les professionnels, un cran en dessous. -->
