@@ -20,8 +20,10 @@ interface Props {
   lienSortant?: {libelle?: string; href?: string}
   /** Formulaire Tally de la page (bouton de fin de page). */
   formulaire: string
+  /** Masque les trois temps et les deux textes courts (L'accompagnement : remplacés par le déroulé en arche). */
+  sansTemps?: boolean
 }
-const {page, titre, aiguillageHref, lienSortant, formulaire} = Astro.props
+const {page, titre, aiguillageHref, lienSortant, formulaire, sansTemps = false} = Astro.props
 const numeros = ['Premier temps', 'Deuxième temps', 'Troisième temps']
 ---
 
@@ -45,7 +47,7 @@ const numeros = ['Premier temps', 'Deuxième temps', 'Troisième temps']
 
   <!-- 3. Trois temps, texte et image en alternance -->
   {
-    page.etapes?.length ? (
+    !sansTemps && page.etapes?.length ? (
       <section class="section fond-soutenu">
         <div class="conteneur">
           {page.etapes.map((bloc, i) => (
@@ -57,8 +59,14 @@ const numeros = ['Premier temps', 'Deuxième temps', 'Troisième temps']
   }
 
   <!-- 4 et 5. Deux textes courts -->
-  <SectionTexte titre={page.texteA?.titre} texte={page.texteA?.texte} />
-  <SectionTexte titre={page.texteB?.titre} texte={page.texteB?.texte} serree />
+  {
+    !sansTemps && (
+      <>
+        <SectionTexte titre={page.texteA?.titre} texte={page.texteA?.texte} />
+        <SectionTexte titre={page.texteB?.titre} texte={page.texteB?.texte} serree />
+      </>
+    )
+  }
 
   <!-- 6. Questions fréquentes -->
   <Faq faq={page.faq} />
