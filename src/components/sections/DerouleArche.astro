@@ -262,11 +262,11 @@ const toutes = [...etapes.map((e, i) => ({...e, numero: String(i + 1).padStart(2
     align-items: center;
   }
   /* Photo : coin bas droit au croisement du prolongement du bas de l'arche (y = 480)
-     et de la verticale des travaux (x = 700), dans le repère 800 × 500.
+     et un peu à droite des travaux (x = 760), dans le repère 800 × 500.
      Coins arrondis comme les photos des projets. */
   .parcours__photo {
     position: absolute;
-    right: calc(100% - 700 / 800 * 100%);
+    right: calc(100% - 760 / 800 * 100%);
     bottom: calc(100% - 480 / 500 * 100%);
     width: 30%;
     aspect-ratio: 4 / 3;
