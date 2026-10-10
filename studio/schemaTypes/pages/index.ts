@@ -128,6 +128,106 @@ export const pageAccueil = defineType({
         defineField({name: 'lienLibelle', title: 'Texte du lien', type: 'string'}),
       ],
     }),
+    defineField({
+      name: 'deroule',
+      title: '3. Le déroulé',
+      type: 'object',
+      group: 'contenu',
+      options: {collapsible: true, collapsed: false},
+      fields: [
+        defineField({name: 'titre', title: 'Titre', type: 'string'}),
+        defineField({name: 'texte', title: 'Texte', type: 'texteRiche'}),
+        defineField({name: 'lienLibelle', title: 'Texte du lien', type: 'string'}),
+      ],
+    }),
+    defineField({
+      name: 'aiguillage',
+      title: '4. Deux points de départ',
+      type: 'object',
+      group: 'contenu',
+      options: {collapsible: true, collapsed: false},
+      fields: [
+        defineField({name: 'titre', title: 'Titre', type: 'string'}),
+        ...(['colonne1', 'colonne2'] as const).map((name, i) =>
+          defineField({
+            name,
+            title: i === 0 ? 'Colonne « déjà votre maison » (vers L’accompagnement)' : 'Colonne « pas encore trouvée » (vers Trouver votre bien)',
+            type: 'object',
+            fields: [
+              defineField({name: 'titre', title: 'Titre', type: 'string'}),
+              defineField({name: 'texte', title: 'Texte', type: 'text', rows: 3}),
+              defineField({name: 'boutonLibelle', title: 'Texte du bouton', type: 'string'}),
+            ],
+          }),
+        ),
+      ],
+    }),
+    defineField({
+      name: 'caroline',
+      title: '5. Caroline',
+      type: 'object',
+      group: 'contenu',
+      options: {collapsible: true, collapsed: false},
+      fields: [
+        defineField({name: 'image', title: 'Photo', type: 'imageAlt'}),
+        defineField({name: 'texte', title: 'Texte', type: 'text', rows: 4}),
+        defineField({name: 'lienLibelle', title: 'Texte du lien', type: 'string'}),
+      ],
+    }),
+    defineField({
+      name: 'avis',
+      title: '6. Avis',
+      type: 'object',
+      group: 'contenu',
+      description: 'Les avis affichés sont ceux cochés « Afficher sur l’accueil ». Le nombre d’avis se règle dans Réglages.',
+      options: {collapsible: true, collapsed: false},
+      fields: [
+        defineField({name: 'titre', title: 'Titre', type: 'string'}),
+        defineField({name: 'lienLibelle', title: 'Texte du lien', type: 'string'}),
+      ],
+    }),
+    {...appel, title: '7. Appel à l’action'},
+    seoField,
+  ],
+  preview: {prepare: () => ({title: 'Accueil'})},
+})
+
+export const pageProjets = defineType({
+  name: 'pageProjets',
+  title: 'Projets',
+  type: 'document',
+  icon: DocumentIcon,
+  groups,
+  fields: [
+    defineField({name: 'intro', title: '1. Introduction', type: 'sectionTexte', group: 'contenu'}),
+    defineField({
+      name: 'blocPro',
+      title: '3. Bloc Professionnels',
+      type: 'object',
+      group: 'contenu',
+      description: 'En bas de la page, après la grille des projets. Mène à la page Professionnels.',
+      options: {collapsible: true, collapsed: false},
+      fields: [
+        defineField({name: 'image', title: 'Image', type: 'imageAlt'}),
+        defineField({name: 'titre', title: 'Titre', type: 'string'}),
+        defineField({name: 'texte', title: 'Phrase', type: 'text', rows: 2}),
+        defineField({name: 'lienLibelle', title: 'Texte du lien', type: 'string'}),
+      ],
+    }),
+    seoField,
+  ],
+  preview: {prepare: () => ({title: 'Projets'})},
+})
+
+export const pageAccompagnement = defineType({
+  name: 'pageAccompagnement',
+  title: 'L’accompagnement',
+  type: 'document',
+  icon: DocumentIcon,
+  groups,
+  fields: [
+    defineField({name: 'aiguillage', title: '1. Ligne vers Trouver votre bien', type: 'ligneAiguillage', group: 'contenu'}),
+    defineField({name: 'intro', title: '2. Titre et introduction', type: 'sectionTexte', group: 'contenu'}),
     derouleAccompagnement,
     // Anciennes sections (trois temps, chantier, commandes) : plus affichées, gardées en réserve.
     defineField({...etapes('Ancien déroulé en trois temps', 'Plus affiché sur le site.'), hidden: true}),
