@@ -14,7 +14,7 @@ const {appel, lien, href = '/contact'} = Astro.props
 
 {
   appel?.titre && (
-    <section class="section appel fond-ardoise">
+    <section class="section appel">
       <div class="colonne appel__contenu">
         <h2>{appel.titre}</h2>
         {appel.texte && <p>{appel.texte}</p>}
@@ -37,9 +37,19 @@ const {appel, lien, href = '/contact'} = Astro.props
 
 <style>
   /* Bloc plus compact, pour ne pas former une énorme bande bleue avec le pied de page. */
+  /* Version discrète : pas de fond, un filet fin au-dessus, bouton ocre au trait. */
   .appel {
-    padding-block: clamp(1.75rem, 3vw, 2.5rem);
-    border-bottom: 1px solid color-mix(in srgb, var(--creme) 18%, transparent);
+    padding-block: clamp(2.5rem, 5vw, 4rem);
+    border-top: 1px solid color-mix(in srgb, var(--ardoise) 15%, transparent);
+  }
+  .appel__contenu :global(.bouton) {
+    background: transparent;
+    color: var(--ocre);
+    border-color: var(--ocre);
+  }
+  .appel__contenu :global(.bouton:hover) {
+    background: var(--ocre);
+    color: var(--blanc);
   }
   .appel__contenu {
     text-align: center;
@@ -48,8 +58,7 @@ const {appel, lien, href = '/contact'} = Astro.props
     margin-bottom: 0.75rem;
   }
   .appel__contenu p {
-    font-size: var(--t-m);
-    opacity: 0.92;
+    font-size: var(--t-s);
   }
   .appel__actions {
     margin-top: 1rem;

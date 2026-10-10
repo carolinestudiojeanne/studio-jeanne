@@ -332,7 +332,7 @@ export const pageAccueil: PageAccueil = {
   appel: {
     titre: 'La première étape',
     texte:
-      'Un formulaire d’une dizaine de minutes, puis un échange d’une heure en visio. Vous recevez ensuite une proposition écrite, et vous prenez le temps qu’il vous faut.',
+      'Un formulaire d’une dizaine de minutes, puis un premier appel téléphonique de trente minutes. Vous recevez ensuite une proposition écrite, et vous prenez le temps qu’il vous faut.',
     boutonLibelle: 'Remplir le formulaire',
   },
   seo: {
@@ -344,7 +344,7 @@ export const pageAccueil: PageAccueil = {
 
 const appelStandard = {
   titre: 'Parlons de votre projet',
-  texte: 'Un formulaire d’une dizaine de minutes, puis un échange d’une heure en visio.',
+  texte: 'Un formulaire d’une dizaine de minutes, puis un premier appel téléphonique de trente minutes.',
   boutonLibelle: 'Remplir le formulaire',
 }
 
@@ -515,7 +515,7 @@ export const pageContact: PageContact = {
   },
   seo: {
     metaTitle: 'Contact · Architecte d’intérieur à Bordeaux et en Gironde',
-    metaDescription: 'Parlons de votre projet : un formulaire d’une dizaine de minutes, puis un échange d’une heure en visio. Studio Jeanne, Bordeaux et Gironde.',
+    metaDescription: 'Parlons de votre projet : un formulaire d’une dizaine de minutes, puis un premier appel téléphonique de trente minutes. Studio Jeanne, Bordeaux et Gironde.',
   },
 }
 

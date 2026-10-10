@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro'
 import GrilleProjets from '../../components/sections/GrilleProjets.astro'
+import Image from '../../components/Image.astro'
 import IntroPage from '../../components/sections/IntroPage.astro'
 import {getPageProjets, getProjets, getReglages} from '../../lib/contenu'
 
@@ -22,6 +23,24 @@ const titre = page.seo?.metaTitle || `Projets${reglages.suffixeTitre}`
     <GrilleProjets projets={projets} colonnes={4} />
   </section>
 
+  <!-- 3. Bloc Professionnels, avec image (version discrète, sans fond) -->
+  {
+    page.blocPro?.titre && (
+      <section class="bloc-pro__section">
+        <div class="conteneur">
+          <a class="bloc-pro" href="/professionnels">
+            <Image image={page.blocPro.image} ratio={3 / 2} legende={false} sizes="(min-width: 52rem) 50vw, 100vw" />
+            <div class="bloc-pro__texte">
+              <span class="surtitre">Professionnels</span>
+              <h2>{page.blocPro.titre}</h2>
+              {page.blocPro.texte && <p>{page.blocPro.texte}</p>}
+              {page.blocPro.lienLibelle && <span class="lien-fleche">{page.blocPro.lienLibelle}</span>}
+            </div>
+          </a>
+        </div>
+      </section>
+    )
+  }
 </Base>
 
 <script>
@@ -80,5 +99,46 @@ const titre = page.seo?.metaTitle || `Projets${reglages.suffixeTitre}`
   }
   .grille-projets {
     padding-bottom: var(--section);
+  }
+  .bloc-pro__section {
+    padding-bottom: var(--section);
+  }
+  .bloc-pro {
+    display: grid;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+    padding-top: clamp(2.5rem, 5vw, 4rem);
+    border-top: 1px solid color-mix(in srgb, var(--ardoise) 15%, transparent);
+  }
+  @media (min-width: 52rem) {
+    .bloc-pro {
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+    }
+  }
+  @media (min-width: 52rem) {
+    .bloc-pro {
+      grid-template-columns: 2fr 3fr;
+      gap: clamp(2rem, 5vw, 4.5rem);
+    }
+  }
+  .bloc-pro__texte {
+    padding-block: 1.5rem;
+  }
+  .bloc-pro__texte h2 {
+    font-size: var(--t-l);
+  }
+  .bloc-pro__texte p {
+    margin-bottom: 1.5rem;
+  }
+  .bloc-pro .lien-fleche {
+    color: var(--ardoise);
+  }
+  .bloc-pro :global(img) {
+    transition: transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .bloc-pro:hover :global(img) {
+    transform: scale(1.03);
   }
 </style>
