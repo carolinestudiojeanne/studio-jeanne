@@ -12,12 +12,12 @@ const {gaId} = Astro.props
 
 <div class="cookies" role="dialog" aria-live="polite" aria-label="Cookies" hidden data-ga={gaId}>
   <p>
-    J’utilise des cookies de mesure d’audience pour savoir quelles pages vous sont utiles. Rien n’est déposé sans votre accord.
+    Des cookies de mesure d’audience, uniquement avec votre accord.{' '}
     <a href="/politique-de-confidentialite">En savoir plus</a>
   </p>
   <div class="cookies__boutons">
-    <button type="button" class="bouton bouton--contour" data-choix="refuse">Refuser</button>
-    <button type="button" class="bouton bouton--contour" data-choix="accepte">Accepter</button>
+    <button type="button" data-choix="refuse">Refuser</button>
+    <button type="button" data-choix="accepte">Accepter</button>
   </div>
 </div>
 
@@ -78,29 +78,48 @@ const {gaId} = Astro.props
 </script>
 
 <style>
+  /* Bandeau minimaliste : petite carte crème, filet fin, deux choix en capitales espacées
+     de même poids (exigence CNIL : refuser aussi simple qu’accepter). */
   .cookies {
     position: fixed;
-    inset: auto 1rem 1rem;
+    left: 1rem;
+    bottom: 1rem;
     z-index: 60;
-    max-width: 34rem;
-    margin-left: auto;
+    max-width: min(22rem, calc(100vw - 2rem));
     background: var(--creme);
-    border: 1px solid color-mix(in srgb, var(--ardoise) 20%, transparent);
-    padding: 1.5rem;
-    font-size: var(--t-s);
-    box-shadow: 0 10px 40px rgb(0 0 0 / 0.08);
+    border: 1px solid color-mix(in srgb, var(--ardoise) 18%, transparent);
+    padding: 1rem 1.25rem;
+    font-size: var(--t-xs);
+    letter-spacing: 0.04em;
+    line-height: 1.6;
   }
   .cookies[hidden] {
     display: none;
   }
+  .cookies p {
+    margin: 0;
+  }
+  .cookies p a {
+    white-space: nowrap;
+  }
   .cookies__boutons {
     display: flex;
-    gap: 0.75rem;
-    margin-top: 1rem;
+    gap: 1.75rem;
+    margin-top: 0.75rem;
   }
-  .cookies__boutons .bouton {
-    flex: 1;
-    justify-content: center;
-    padding-inline: 1rem;
+  .cookies__boutons button {
+    background: none;
+    border: 0;
+    padding: 0.2rem 0;
+    color: var(--ardoise);
+    font: inherit;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    border-bottom: 1px solid transparent;
+    cursor: pointer;
+    transition: border-color 0.25s;
+  }
+  .cookies__boutons button:hover {
+    border-bottom-color: var(--ocre);
   }
 </style>
