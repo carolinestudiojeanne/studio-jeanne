@@ -46,7 +46,7 @@ const {faq = [], titre = 'Questions fréquentes', soutenu = true} = Astro.props
 </script>
 
 <style>
-  /* Pleine largeur du site, questions serrées, en capitales espacées comme le menu du haut. */
+  /* Pleine largeur du site, questions serrées, en ocre, au format des titres du site (en plus petit). */
   .faq {
     border-top: 1px solid color-mix(in srgb, var(--ardoise) 25%, transparent);
   }
@@ -61,9 +61,10 @@ const {faq = [], titre = 'Questions fréquentes', soutenu = true} = Astro.props
     align-items: center;
     gap: 1.5rem;
     padding: 0.85rem 0;
-    color: var(--ardoise);
-    font-size: var(--t-xs);
-    letter-spacing: 0.18em;
+    color: var(--ocre);
+    font-size: 1rem;
+    line-height: 1.4;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
   }
   .faq__item summary::-webkit-details-marker {
