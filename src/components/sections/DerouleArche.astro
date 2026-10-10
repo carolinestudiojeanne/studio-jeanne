@@ -59,7 +59,7 @@ const points = [
 // Photo de chaque étape (choisie dans Sanity), affichée en bas à droite de l'arche.
 // Tant qu'une étape n'a pas de photo, l'emplacement reste une forme crème.
 const photos = [...etapes, travaux].map((e) => rendreImage(e.photo, {ratio: 3 / 4, maxWidth: 900}))
-const toutes = [...etapes.map((e, i) => ({...e, numero: String(i + 1).padStart(2, '0')})), {...travaux, numero: ''}]
+const toutes = [...etapes.map((e, i) => ({...e, numero: String(i + 1)})), {...travaux, numero: ''}]
 // Le point au sommet de la courbe est la 3e étape (Modélisation 3D).
 ---
 
@@ -132,7 +132,7 @@ const toutes = [...etapes.map((e, i) => ({...e, numero: String(i + 1).padStart(2
       {
         etapes.map((e, i) => (
           <li class:list={{'est-sommet': i === 2}}>
-            <span class="deroule__num">{String(i + 1).padStart(2, '0')}</span>
+            <span class="deroule__num">{i + 1}</span>
             <div>
               <h3>{e.titre}</h3>
               <p>{e.texte.replaceAll('\n', ' ')}</p>
