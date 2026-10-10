@@ -24,7 +24,7 @@ const courte = texteBrut(texte).length <= 140 && unParagraphe
 <section class:list={['intro-page', {'intro-page--sans-bas': !espaceBas}, classe]}>
   <div class="conteneur">
     {titre && <h1>{titre}</h1>}
-    {html && <div class:list={['texte', 'intro-page__texte', {'intro-page__texte--courte': courte, 'intro-page__texte--large': !courte}]} set:html={html} />}
+    {html && <div class:list={['texte', 'intro-page__texte', {'intro-page__texte--courte': courte, 'intro-page__texte--large': !courte, 'intro-page__texte--paragraphes': !unParagraphe}]} set:html={html} />}
     <slot />
   </div>
 </section>
@@ -57,10 +57,9 @@ const courte = texteBrut(texte).length <= 140 && unParagraphe
   .intro-page__texte--large {
     max-width: 68rem;
   }
-  /* Plusieurs paragraphes : lignes pleines sur toute la largeur plutôt qu'équilibrées (sinon le texte se resserre au centre). */
-  .intro-page__texte--large :global(p + p),
-  .intro-page__texte--large :global(p:has(+ p)) {
-    text-wrap: pretty;
+  /* Plusieurs paragraphes (page Contact) : toute la largeur du site, pour que chaque paragraphe tienne en peu de lignes. */
+  .intro-page__texte--paragraphes {
+    max-width: none;
   }
   @media (min-width: 64rem) {
     .intro-page h1 {
