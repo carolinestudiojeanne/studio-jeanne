@@ -8,7 +8,6 @@ interface Props {
 }
 const {reglages: r, analytics} = Astro.props
 const tel = r.telephone?.replace(/\s/g, '')
-const annee = new Date().getFullYear()
 ---
 
 <footer class="pied fond-ardoise">
@@ -47,9 +46,6 @@ const annee = new Date().getFullYear()
   </div>
 
   <div class="conteneur pied__bas">
-    <span>
-      © {annee} Studio Jeanne{r.afficherAdresse && r.adresse ? ` · ${r.adresse}, ${r.codePostal} ${r.ville}` : ''}{r.zone ? ` · ${r.zone}` : ''}
-    </span>
     <ul>
       <li><a href="/professionnels">Professionnels</a></li>
       <li><a href="/mentions-legales">Mentions légales</a></li>
