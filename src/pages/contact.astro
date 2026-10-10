@@ -3,6 +3,8 @@ import Base from '../layouts/Base.astro'
 import SectionTexte from '../components/sections/SectionTexte.astro'
 import IntroPage from '../components/sections/IntroPage.astro'
 import Aiguillage from '../components/sections/Aiguillage.astro'
+import Faq from '../components/sections/Faq.astro'
+import {schemaFaq} from '../lib/seo'
 import {getPageAccueil, getPageContact, getReglages} from '../lib/contenu'
 import {FORMULAIRES} from '../lib/formulaires'
 
@@ -11,7 +13,7 @@ const titre = page.seo?.metaTitle || `Contact${r.suffixeTitre}`
 const tel = r.telephone?.replace(/\s/g, '')
 ---
 
-<Base titre={titre} description={page.seo?.metaDescription} imagePartage={page.seo?.imagePartage}>
+<Base titre={titre} description={page.seo?.metaDescription} imagePartage={page.seo?.imagePartage} schemas={[schemaFaq(page.faq)]}>
   <!-- 1. Texte -->
   <IntroPage titre={page.intro?.titre} texte={page.intro?.texte} espaceBas={false} />
 
@@ -43,6 +45,9 @@ const tel = r.telephone?.replace(/\s/g, '')
 
   <!-- 4. Zone d'intervention -->
   <SectionTexte titre={page.zone?.titre} texte={page.zone?.texte} fond="soutenu" />
+
+  <!-- 5. Questions fréquentes (uniquement sur cette page) -->
+  <Faq faq={page.faq} soutenu={false} />
 </Base>
 
 <style>

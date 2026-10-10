@@ -5,13 +5,15 @@ import type {QuestionReponse} from '../../lib/types'
 interface Props {
   faq?: QuestionReponse[]
   titre?: string
+  /** Fond crème soutenu (par défaut) ou fond de page. */
+  soutenu?: boolean
 }
-const {faq = [], titre = 'Questions fréquentes'} = Astro.props
+const {faq = [], titre = 'Questions fréquentes', soutenu = true} = Astro.props
 ---
 
 {
   faq.length > 0 && (
-    <section class="section fond-soutenu">
+    <section class:list={['section', {'fond-soutenu': soutenu}]}>
       <div class="colonne">
         <h2>{titre}</h2>
         <div class="faq">

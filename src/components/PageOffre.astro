@@ -7,9 +7,7 @@ import Base from '../layouts/Base.astro'
 import SectionTexte from './sections/SectionTexte.astro'
 import IntroPage from './sections/IntroPage.astro'
 import TexteImage from './sections/TexteImage.astro'
-import Faq from './sections/Faq.astro'
 import AppelAction from './sections/AppelAction.astro'
-import {schemaFaq} from '../lib/seo'
 import type {PageOffre} from '../lib/types'
 
 interface Props {
@@ -27,7 +25,7 @@ const {page, titre, aiguillageHref, lienSortant, formulaire, sansTemps = false} 
 const numeros = ['Premier temps', 'Deuxième temps', 'Troisième temps']
 ---
 
-<Base titre={titre} description={page.seo?.metaDescription} imagePartage={page.seo?.imagePartage} schemas={[schemaFaq(page.faq)]}>
+<Base titre={titre} description={page.seo?.metaDescription} imagePartage={page.seo?.imagePartage}>
   <!-- 2. Titre et introduction -->
   <IntroPage titre={page.intro?.titre} texte={page.intro?.texte} />
 
@@ -57,7 +55,7 @@ const numeros = ['Premier temps', 'Deuxième temps', 'Troisième temps']
     )
   }
 
-  <!-- Ligne d'aiguillage vers l'autre porte d'entrée, juste avant les questions fréquentes -->
+  <!-- Ligne d'aiguillage vers l'autre porte d'entrée, en fin de page -->
   {
     page.aiguillage?.texte && (
       <div class="aiguillage-ligne">
@@ -68,8 +66,6 @@ const numeros = ['Premier temps', 'Deuxième temps', 'Troisième temps']
     )
   }
 
-  <!-- 6. Questions fréquentes -->
-  <Faq faq={page.faq} />
 
   <!-- 7. Appel à l'action -->
   <AppelAction appel={page.appel} href={formulaire} />

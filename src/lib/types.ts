@@ -157,6 +157,7 @@ export interface PageContact {
   boutonLibelle?: string
   coordonnees?: string
   zone?: SectionTexte
+  faq?: QuestionReponse[]
   seo?: Seo
 }
 

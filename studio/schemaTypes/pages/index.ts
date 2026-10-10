@@ -21,6 +21,7 @@ const faq = defineField({
   of: [defineArrayMember({type: 'questionReponse'})],
   validation: (r) => r.min(3).max(8),
 })
+const ancienneFaq = defineField({...faq, title: 'Anciennes questions fréquentes', hidden: true, validation: undefined})
 const etapes = (title: string, description: string) =>
   defineField({
     name: 'etapes',
@@ -219,7 +220,8 @@ export const pageAccompagnement = defineType({
     defineField({...etapes('Ancien déroulé en trois temps', 'Plus affiché sur le site.'), hidden: true}),
     defineField({name: 'horsPerimetre', title: 'Ancien texte : le chantier', type: 'sectionTexte', group: 'contenu', hidden: true}),
     defineField({name: 'commandes', title: 'Ancien texte : les commandes', type: 'sectionTexte', group: 'contenu', hidden: true}),
-    faq,
+    // Questions fréquentes : déplacées sur la page Contact (octobre 2026), gardées en réserve.
+    ancienneFaq,
     appel,
     seoField,
   ],
@@ -238,7 +240,7 @@ export const pageTrouverVotreBien = defineType({
     etapes('3. Trois blocs', 'Le regard sur les biens, la double compétence, ce qu’on voit avant de signer.'),
     defineField({name: 'apresAchat', title: '4. Après l’achat', type: 'sectionTexte', group: 'contenu'}),
     defineField({name: 'deuxStructures', title: '5. Deux structures', type: 'sectionTexte', group: 'contenu'}),
-    faq,
+    ancienneFaq,
     appel,
     defineField({
       name: 'lienHomelikeLibelle',
@@ -293,6 +295,7 @@ export const pageContact = defineType({
       description: 'Le téléphone et l’e-mail (pris dans les Réglages) sont ajoutés automatiquement, cliquables.',
     }),
     defineField({name: 'zone', title: '4. Zone d’intervention', type: 'sectionTexte', group: 'contenu'}),
+    defineField({...faq, title: '5. Questions fréquentes'}),
     seoField,
   ],
   preview: {prepare: () => ({title: 'Contact'})},
