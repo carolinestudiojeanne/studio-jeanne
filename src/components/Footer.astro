@@ -1,6 +1,5 @@
 ---
 import Logo from './Logo.astro'
-import {MENU} from '../lib/navigation'
 import type {Reglages} from '../lib/types'
 
 interface Props {
@@ -16,19 +15,34 @@ const annee = new Date().getFullYear()
   <div class="conteneur pied__haut">
     <a href="/" class="pied__marque" aria-label="Studio Jeanne, retour à l’accueil"><Logo clair class="pied__logo" /></a>
 
-    <nav class="pied__nav" aria-label="Pages du site">
-      <ul>
-        {MENU.map((i) => <li><a href={i.href}>{i.libelle}</a></li>)}
-        <li><a href="/professionnels">Professionnels</a></li>
-        <li><a href="/avis-clients">Avis clients</a></li>
-      </ul>
-    </nav>
-
     <ul class="pied__contact">
       {tel && <li><a href={`tel:${tel}`}>{r.telephone}</a></li>}
       {r.email && <li><a href={`mailto:${r.email}`}>{r.email}</a></li>}
-      {r.instagram && <li><a href={r.instagram} target="_blank" rel="noopener">Instagram</a></li>}
-      {r.linkedin && <li><a href={r.linkedin} target="_blank" rel="noopener">LinkedIn</a></li>}
+      {
+        r.instagram && (
+          <li>
+            <a class="pied__reseau" href={r.instagram} target="_blank" rel="noopener" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="3.5" y="3.5" width="17" height="17" rx="5" />
+                <circle cx="12" cy="12" r="4" />
+                <circle cx="17.2" cy="6.8" r="0.6" class="plein" />
+              </svg>
+            </a>
+          </li>
+        )
+      }
+      {
+        r.linkedin && (
+          <li>
+            <a class="pied__reseau" href={r.linkedin} target="_blank" rel="noopener" aria-label="LinkedIn">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="3.5" y="3.5" width="17" height="17" rx="3" />
+                <path d="M8.25 10.5v6M8.25 7.6v.1M11.75 16.5v-6M11.75 13.25c0-1.6 1-2.75 2.4-2.75s2.1 1 2.1 2.6v3.4" />
+              </svg>
+            </a>
+          </li>
+        )
+      }
     </ul>
   </div>
 
@@ -37,6 +51,7 @@ const annee = new Date().getFullYear()
       © {annee} Studio Jeanne{r.afficherAdresse && r.adresse ? ` · ${r.adresse}, ${r.codePostal} ${r.ville}` : ''}{r.zone ? ` · ${r.zone}` : ''}
     </span>
     <ul>
+      <li><a href="/professionnels">Professionnels</a></li>
       <li><a href="/mentions-legales">Mentions légales</a></li>
       <li><a href="/politique-de-confidentialite">Politique de confidentialité</a></li>
       <li><a href="/cgv">CGV</a></li>
@@ -77,9 +92,32 @@ const annee = new Date().getFullYear()
   .pied__marque :global(.pied__logo) {
     width: 3.5rem;
   }
-  .pied__nav ul {
+  /* Contacts : même typo que le menu du haut (capitales espacées). */
+  .pied__contact {
+    align-items: center;
     text-transform: uppercase;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.18em;
+  }
+  /* Instagram et LinkedIn : pictos au trait fin. */
+  .pied__reseau {
+    display: inline-flex;
+  }
+  .pied__reseau svg {
+    width: 1.15rem;
+    height: 1.15rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: stroke 0.25s;
+  }
+  .pied__reseau .plein {
+    fill: currentColor;
+    stroke: none;
+  }
+  .pied__reseau:hover {
+    color: var(--ocre);
   }
   .pied__bas {
     display: flex;
