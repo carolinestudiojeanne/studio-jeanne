@@ -499,10 +499,8 @@ export const pageContact: PageContact = {
   intro: {
     titre: 'Parlons de votre projet',
     texte: paragraphes(
-      'Avant de nous rencontrer, j’ai besoin de comprendre où vous en êtes. Le formulaire ci-dessous prend une dizaine de minutes : votre lieu, quelques photos, ce que vous avez en tête. Si vous n’avez pas encore trouvé votre bien, dites-le moi dès la première question, le point de départ n’est alors pas le même.',
-      'Ce n’est pas une formalité. C’est ce qui me permet d’arriver à notre échange en ayant déjà regardé vos pièces, repéré les contraintes et réfléchi aux possibilités. Vous ne passerez pas votre premier rendez-vous à tout m’expliquer.',
-      'Une fois le formulaire envoyé, vous choisissez directement un créneau dans mon agenda. Nous échangeons en visio, une heure environ. Vous me racontez comment vous vivez, ce qui fonctionne mal, ce dont vous rêvez. Je vous dis ce qui me semble possible, comment je travaillerais, et dans quel ordre de budget nous nous situons.',
-      'Vous recevez ensuite une proposition écrite reprenant tout ce que nous avons évoqué. Vous prenez le temps qu’il vous faut pour décider.',
+      'Avant de nous rencontrer, j’ai besoin de comprendre où vous en êtes. Le formulaire prend une dizaine de minutes : votre lieu, quelques photos, ce que vous avez en tête. C’est ce qui me permet d’arriver à notre premier échange en ayant déjà regardé vos pièces, repéré les contraintes et réfléchi aux possibilités.',
+      'Une fois le formulaire envoyé, vous choisissez un créneau dans mon agenda pour un premier appel de trente minutes. Vous me racontez comment vous vivez et ce dont vous rêvez, je vous dis ce qui me semble possible et dans quel ordre de budget nous nous situons. Vous recevez ensuite une proposition écrite, et vous prenez le temps qu’il vous faut pour décider.',
     ),
   },
   boutonLibelle: 'Remplir le formulaire',

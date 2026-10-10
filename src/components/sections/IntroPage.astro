@@ -16,7 +16,7 @@ interface Props {
 }
 const {titre, texte, espaceBas = true, class: classe} = Astro.props
 const html = texteEnHtml(texte)
-// Une phrase courte tient sur une ligne ; un texte plus long reste en paragraphe centré.
+// Une phrase courte tient sur une ligne ; un texte plus long reste centré, sur la même largeur que les autres pages.
 const unParagraphe = (texte?.length ?? 0) <= 1
 const courte = texteBrut(texte).length <= 140 && unParagraphe
 ---
@@ -24,7 +24,7 @@ const courte = texteBrut(texte).length <= 140 && unParagraphe
 <section class:list={['intro-page', {'intro-page--sans-bas': !espaceBas}, classe]}>
   <div class="conteneur">
     {titre && <h1>{titre}</h1>}
-    {html && <div class:list={['texte', 'intro-page__texte', {'intro-page__texte--courte': courte, 'intro-page__texte--large': unParagraphe && !courte}]} set:html={html} />}
+    {html && <div class:list={['texte', 'intro-page__texte', {'intro-page__texte--courte': courte, 'intro-page__texte--large': !courte}]} set:html={html} />}
     <slot />
   </div>
 </section>
@@ -53,9 +53,14 @@ const courte = texteBrut(texte).length <= 140 && unParagraphe
   .intro-page__texte :global(p) {
     text-wrap: balance;
   }
-  /* Un seul paragraphe plus long : plus large, pour tenir sur deux lignes équilibrées sur ordinateur. */
+  /* Texte plus long (un ou plusieurs paragraphes) : même largeur sur toutes les pages, lignes équilibrées sur ordinateur. */
   .intro-page__texte--large {
     max-width: 68rem;
+  }
+  /* Plusieurs paragraphes : lignes pleines sur toute la largeur plutôt qu'équilibrées (sinon le texte se resserre au centre). */
+  .intro-page__texte--large :global(p + p),
+  .intro-page__texte--large :global(p:has(+ p)) {
+    text-wrap: pretty;
   }
   @media (min-width: 64rem) {
     .intro-page h1 {
