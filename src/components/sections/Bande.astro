@@ -1,0 +1,42 @@
+---
+/**
+ * Bande beige minimaliste en bas de page, au format de la bande « projet précédent / suivant » des pages projet :
+ * une phrase en capitales espacées, puis à droite le lien en ocre, sans soulignement. Toute la bande est cliquable.
+ */
+interface Props {
+  texte: string
+  lien: string
+  href: string
+  /** Ouvre le lien dans un nouvel onglet (formulaire externe). */
+  externe?: boolean
+}
+const {texte, lien, href, externe = false} = Astro.props
+---
+
+<a class="bande" href={href} {...(externe ? {target: '_blank', rel: 'noopener'} : {})}>
+  <span class="bande__texte">{texte}</span>
+  <span class="bande__lien">{lien}</span>
+</a>
+
+<style>
+  .bande {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: baseline;
+    gap: 0.4rem 1.25rem;
+    padding: clamp(1.75rem, 3.5vw, 2.5rem) var(--gouttiere);
+    background: var(--creme-soutenu);
+    text-align: center;
+    text-decoration: none;
+    font-size: var(--t-s);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .bande__texte {
+    color: var(--ardoise);
+  }
+  .bande__lien {
+    color: var(--ocre);
+  }
+</style>

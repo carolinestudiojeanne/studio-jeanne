@@ -8,6 +8,7 @@ import SectionTexte from './sections/SectionTexte.astro'
 import IntroPage from './sections/IntroPage.astro'
 import TexteImage from './sections/TexteImage.astro'
 import AppelAction from './sections/AppelAction.astro'
+import Bande from './sections/Bande.astro'
 import type {PageOffre} from '../lib/types'
 
 interface Props {
@@ -73,12 +74,7 @@ const numeros = ['Premier temps', 'Deuxième temps', 'Troisième temps']
             </p>
           )}
         </div>
-        {page.aiguillage?.texte && (
-          <a class="fin-bande" href={aiguillageHref}>
-            <span class="fin-bande__question">{page.aiguillage.texte}</span>
-            <span class="fin-bande__lien">{page.aiguillage.lienLibelle || 'En savoir plus'}</span>
-          </a>
-        )}
+        {page.aiguillage?.texte && <Bande texte={page.aiguillage.texte} lien={page.aiguillage.lienLibelle || 'En savoir plus'} href={aiguillageHref} />}
       </>
     )
   }
@@ -139,28 +135,6 @@ const numeros = ['Premier temps', 'Deuxième temps', 'Troisième temps']
     margin: 1.25rem 0 0;
     font-style: italic;
     white-space: pre-line;
-  }
-  /* Même bande que « projet précédent / suivant » en bas des pages projet. */
-  .fin-bande {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: baseline;
-    gap: 0.4rem 1.25rem;
-    padding: clamp(1.75rem, 3.5vw, 2.5rem) var(--gouttiere);
-    background: var(--creme-soutenu);
-    text-align: center;
-    text-decoration: none;
-    font-size: var(--t-s);
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-  }
-  .fin-bande__question {
-    color: var(--ardoise);
-  }
-  /* Lien en ocre, sans soulignement. */
-  .fin-bande__lien {
-    color: var(--ocre);
   }
   .lien-sortant {
     padding-block: 2.5rem;

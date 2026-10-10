@@ -4,7 +4,7 @@ import Hero from '../components/sections/Hero.astro'
 import Aiguillage from '../components/sections/Aiguillage.astro'
 import CarrouselProjets from '../components/sections/CarrouselProjets.astro'
 import MurAvis from '../components/sections/MurAvis.astro'
-import AppelAction from '../components/sections/AppelAction.astro'
+import Bande from '../components/sections/Bande.astro'
 import {getAvisAccueil, getPageAccueil, getProjets, getReglages} from '../lib/contenu'
 import {FORMULAIRES} from '../lib/formulaires'
 
@@ -80,8 +80,8 @@ const {hero, projetsRecents, aiguillage} = page
     )
   }
 
-  <!-- 7. La première étape -->
-  <AppelAction appel={page.appel} href={FORMULAIRES.projet} />
+  <!-- 7. La première étape : bande beige minimaliste, comme en bas de L'accompagnement -->
+  {page.appel?.titre && <Bande texte={page.appel.titre} lien={page.appel.boutonLibelle || 'Remplir le formulaire'} href={FORMULAIRES.projet} />}
 </Base>
 
 <style>
