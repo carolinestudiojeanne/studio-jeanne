@@ -114,15 +114,15 @@ const numeros = ['Premier temps', 'Deuxième temps', 'Troisième temps']
     text-align: center;
     padding-bottom: var(--section);
   }
-  /* Bouton ocre au trait, comme dans les appels à l'action. */
+  /* Bouton plein ocre ; au survol, il devient sans fond, au trait ocre. */
   .fin-bouton .bouton {
-    background: transparent;
-    color: var(--ocre);
+    background: var(--ocre);
+    color: var(--blanc);
     border-color: var(--ocre);
   }
   .fin-bouton .bouton:hover {
-    background: var(--ocre);
-    color: var(--blanc);
+    background: transparent;
+    color: var(--ocre);
   }
   /* Même taille que le texte de la page ; les retours à la ligne saisis dans le Studio sont respectés. */
   .fin-bouton__info {
