@@ -19,7 +19,10 @@ const {faq = [], titre = 'Questions fréquentes', soutenu = true} = Astro.props
         <div class="faq">
           {faq.map((q) => (
             <details class="faq__item" name="faq">
-              <summary>{q.question}</summary>
+              <summary>
+                {q.question}
+                <svg class="faq__fleche" viewBox="0 0 16 9" aria-hidden="true"><path d="M1 1l7 7 7-7" /></svg>
+              </summary>
               <p>{q.reponse}</p>
             </details>
           ))}
@@ -66,16 +69,19 @@ const {faq = [], titre = 'Questions fréquentes', soutenu = true} = Astro.props
   .faq__item summary::-webkit-details-marker {
     display: none;
   }
-  .faq__item summary::after {
-    content: '+';
-    font-size: 1.25rem;
-    line-height: 1;
-    letter-spacing: 0;
-    color: var(--ocre);
+  /* Tête de flèche fine (même trait que les flèches du carrousel), pointe vers le bas, se retourne à l'ouverture. */
+  .faq__fleche {
+    flex: none;
+    width: 0.9rem;
+    height: auto;
+    fill: none;
+    stroke: var(--ocre);
+    stroke-width: 1;
+    overflow: visible;
     transition: transform 0.3s;
   }
-  .faq__item[open] summary::after {
-    transform: rotate(45deg);
+  .faq__item[open] .faq__fleche {
+    transform: rotate(180deg);
   }
   .faq__item p {
     max-width: none;
