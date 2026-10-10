@@ -65,11 +65,16 @@ const numeros = ['Premier temps', 'Deuxième temps', 'Troisième temps']
         <div class="fin-bouton">
           <a class="bouton" href={formulaire}>Parlons de votre projet</a>
           {page.appel?.texte && <p class="fin-bouton__info">{page.appel.texte}</p>}
+          {lienSortant?.href && lienSortant.libelle && (
+            <p class="fin-bouton__sortant">
+              <a href={lienSortant.href} target="_blank" rel="noopener" class="lien-fleche">{lienSortant.libelle}</a>
+            </p>
+          )}
         </div>
         {page.aiguillage?.texte && (
           <a class="fin-bande" href={aiguillageHref}>
             <span class="fin-bande__question">{page.aiguillage.texte}</span>
-            <span class="fin-bande__lien">{page.aiguillage.lienLibelle || 'Trouver votre bien'}</span>
+            <span class="fin-bande__lien">{page.aiguillage.lienLibelle || 'En savoir plus'}</span>
           </a>
         )}
       </>
@@ -92,7 +97,7 @@ const numeros = ['Premier temps', 'Deuxième temps', 'Troisième temps']
   {!finBande && <AppelAction appel={page.appel} href={formulaire} />}
 
   {
-    lienSortant?.href && lienSortant.libelle && (
+    !finBande && lienSortant?.href && lienSortant.libelle && (
       <div class="conteneur lien-sortant">
         <a href={lienSortant.href} target="_blank" rel="noopener" class="lien-fleche">
           {lienSortant.libelle}
@@ -125,6 +130,9 @@ const numeros = ['Premier temps', 'Deuxième temps', 'Troisième temps']
     color: var(--ocre);
   }
   /* Même taille que le texte de la page ; les retours à la ligne saisis dans le Studio sont respectés. */
+  .fin-bouton__sortant {
+    margin: 1.5rem 0 0;
+  }
   .fin-bouton__info {
     margin: 1.25rem 0 0;
     font-style: italic;

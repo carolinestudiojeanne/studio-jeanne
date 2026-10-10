@@ -1,9 +1,27 @@
 ---
 import PageOffre from '../components/PageOffre.astro'
+import DerouleArche from '../components/sections/DerouleArche.astro'
 import {getPageTrouverVotreBien, getReglages} from '../lib/contenu'
 import {FORMULAIRES} from '../lib/formulaires'
+import type {EtapeArche} from '../lib/types'
 
 const [page, reglages] = await Promise.all([getPageTrouverVotreBien(), getReglages()])
+
+// Étapes de secours, si Sanity est vide (même arche que L'accompagnement, étapes de la recherche).
+const parDefaut: {etapes: EtapeArche[]; travaux: EtapeArche} = {
+  etapes: [
+    {titre: 'Écoute', texte: 'Comprendre votre projet de vie,\net ce que le futur bien devra permettre.'},
+    {titre: 'Recherche', texte: 'Je cherche votre bien au sein de l’agence\nHomelike Home, en sachant ce que vous voulez en faire.'},
+    {titre: 'Visites', texte: 'Je visite en voyant ce que chaque bien\npeut devenir : volumes, lumière, distribution.'},
+    {titre: 'Points de vigilance', texte: 'Humidité, copropriété, contraintes techniques :\nce qu’il faut savoir avant de signer.'},
+    {titre: 'Achat', texte: 'Vous n’achetez pas en espérant que le bien conviendra.\nVous l’achetez en sachant ce qu’il deviendra.'},
+  ],
+  travaux: {
+    titre: 'Votre projet',
+    texte:
+      'Le projet se poursuit comme les autres : conception, plans, modélisation 3D, sélection. Sans reprendre à zéro. La recherche est facturée par Homelike Home, la conception par Studio Jeanne : un seul interlocuteur du début à la fin.',
+  },
+}
 ---
 
 <PageOffre
@@ -12,4 +30,8 @@ const [page, reglages] = await Promise.all([getPageTrouverVotreBien(), getReglag
   aiguillageHref="/accompagnement"
   formulaire={FORMULAIRES.trouver}
   lienSortant={{libelle: page.lienHomelikeLibelle, href: reglages.homelikehome}}
-/>
+  sansTemps
+  finBande
+>
+  <DerouleArche slot="apres-intro" deroule={page.deroule} parDefaut={parDefaut} surtitreApres="Une fois le bien acheté" titreSection="Le déroulé de la recherche" />
+</PageOffre>

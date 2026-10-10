@@ -1,6 +1,7 @@
 ---
 /**
- * Page L'accompagnement : le déroulé d'un projet le long de l'arche du logo (consignes de Caroline, 9 octobre 2026).
+ * Pages L'accompagnement et Trouver votre bien (même arche, étapes propres à chaque page).
+ * L'accompagnement : le déroulé d'un projet le long de l'arche du logo (consignes de Caroline, 9 octobre 2026).
  * Les étapes reprennent les phases des devis. Le parcours part du pied de l'arche, en bas à gauche (Écoute),
  * monte le trait vertical, la Modélisation 3D est au sommet de la courbe, puis Plans techniques et Sélection
  * suivent le trait horizontal jusqu'à l'ouverture ; « Les travaux » est après l'ouverture, hors du trait :
@@ -14,10 +15,16 @@ import {rendreImage} from '../../lib/image'
 import type {EtapeArche, PageOffre} from '../../lib/types'
 
 interface Props {
-  /** Contenu modifiable dans Sanity (page L'accompagnement, « Le déroulé en arche »). */
+  /** Contenu modifiable dans Sanity (pages L'accompagnement et Trouver votre bien, « Le déroulé en arche »). */
   deroule?: PageOffre['deroule']
+  /** Étapes de secours propres à la page (par défaut, celles de L'accompagnement). */
+  parDefaut?: {etapes: EtapeArche[]; travaux: EtapeArche}
+  /** Surtitre de l'étape placée après l'ouverture de l'arche. */
+  surtitreApres?: string
+  /** Titre (caché) de la section, lu par les lecteurs d'écran. */
+  titreSection?: string
 }
-const {deroule} = Astro.props
+const {deroule, parDefaut, surtitreApres = 'Ensuite, je passe la main', titreSection = 'Le déroulé d’un projet'} = Astro.props
 
 // Textes de secours, si Sanity est vide.
 const etapesParDefaut: EtapeArche[] = [
@@ -32,8 +39,9 @@ const travauxParDefaut: EtapeArche = {
   texte:
     'Suivi de chantier par un maître d’œuvre partenaire. Si vous préférez piloter vous-même, je présente le projet aux artisans et je passe en cours de chantier pour les choix décoratifs.',
 }
-const etapes = (deroule?.etapes?.length ? deroule.etapes : etapesParDefaut).slice(0, 5).map((e) => ({titre: e.titre || '', texte: e.texte || '', photo: e.photo}))
-const travaux = {titre: deroule?.travaux?.titre || travauxParDefaut.titre!, texte: deroule?.travaux?.texte || travauxParDefaut.texte!, photo: deroule?.travaux?.photo}
+const secours = parDefaut ?? {etapes: etapesParDefaut, travaux: travauxParDefaut}
+const etapes = (deroule?.etapes?.length ? deroule.etapes : secours.etapes).slice(0, 5).map((e) => ({titre: e.titre || '', texte: e.texte || '', photo: e.photo}))
+const travaux = {titre: deroule?.travaux?.titre || secours.travaux.titre || '', texte: deroule?.travaux?.texte || secours.travaux.texte || '', photo: deroule?.travaux?.photo}
 
 // Arche du logo dans un repère 920 × 440 : trait vertical à gauche, angle arrondi (centre 230, 230 ; rayon 190),
 // trait horizontal jusqu'à l'ouverture (720, 40). Les points sont placés en % de ce repère.
@@ -57,7 +65,7 @@ const toutes = [...etapes.map((e, i) => ({...e, numero: String(i + 1).padStart(2
 
 <section class="section deroule" aria-labelledby="deroule-titre">
   <div class="conteneur">
-    <h2 id="deroule-titre" class="visuellement-cache">Le déroulé d’un projet</h2>
+    <h2 id="deroule-titre" class="visuellement-cache">{titreSection}</h2>
 
     <!-- Ordinateur : arche interactive -->
     <div class="parcours" data-arche>
@@ -110,7 +118,7 @@ const toutes = [...etapes.map((e, i) => ({...e, numero: String(i + 1).padStart(2
         {
           toutes.map((e, i) => (
             <div class="parcours__panneau" role="tabpanel" id={`arche-panneau-${i}`} aria-labelledby={`arche-onglet-${i}`} hidden={i !== 0}>
-              <p class="parcours__num">{e.numero ? `Étape ${e.numero}` : 'Ensuite, je passe la main'}</p>
+              <p class="parcours__num">{e.numero ? `Étape ${e.numero}` : surtitreApres}</p>
               <h3>{e.titre}</h3>
               <p class="parcours__texte">{e.texte}</p>
             </div>
@@ -134,7 +142,7 @@ const toutes = [...etapes.map((e, i) => ({...e, numero: String(i + 1).padStart(2
       }
     </ol>
     <div class="deroule__relais">
-      <p class="deroule__relais-surtitre">Ensuite, je passe la main</p>
+      <p class="deroule__relais-surtitre">{surtitreApres}</p>
       <h3>{travaux.titre}</h3>
       <p>{travaux.texte}</p>
     </div>

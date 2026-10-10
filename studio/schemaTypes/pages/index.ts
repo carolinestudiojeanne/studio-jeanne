@@ -33,7 +33,44 @@ const etapes = (title: string, description: string) =>
     validation: (r) => r.length(3).warning('La mise en page est prévue pour trois blocs.'),
   })
 
-/** Une étape de l'arche (page L'accompagnement) : titre court, texte de deux lignes, photo verticale. */
+/** Le déroulé en arche (même arche sur L'accompagnement et Trouver votre bien, étapes propres à chaque page). */
+const deroule = (ordre: string, apres: {title: string; description: string}) =>
+  defineField({
+    name: 'deroule',
+    title: 'Le déroulé en arche',
+    type: 'object',
+    group: 'contenu',
+    description:
+      'Les étapes affichées le long de l’arche. Un clic sur une étape montre son texte et sa photo dans l’arche. Dans les textes, un retour à la ligne est repris tel quel sur le site.',
+    options: {collapsible: true, collapsed: false},
+    fields: [
+      defineField({
+        name: 'etapes',
+        title: 'Les cinq étapes',
+        type: 'array',
+        description: ordre,
+        of: [defineArrayMember({type: 'etapeArche'})],
+        validation: (r) => r.length(5).warning('L’arche est prévue pour cinq étapes.'),
+      }),
+      defineField({name: 'travaux', type: 'etapeArche', ...apres}),
+    ],
+  })
+const derouleAccompagnement = defineField({
+  ...deroule('Dans l’ordre de l’arche : Écoute, Aménagement, Modélisation 3D (au sommet), Plans techniques, Sélection.', {
+    title: 'Après l’arche : les travaux',
+    description: 'Affiché après l’ouverture de l’arche, en pointillés : le moment où Caroline passe la main.',
+  }),
+  title: '3. Le déroulé en arche',
+})
+const derouleTrouver = defineField({
+  ...deroule('Dans l’ordre de l’arche, du bas à gauche jusqu’à l’ouverture (la 3e étape est au sommet de la courbe).', {
+    title: 'Après l’arche : le projet',
+    description: 'Affiché après l’ouverture de l’arche, en pointillés : la suite, une fois le bien acheté.',
+  }),
+  title: '3. Le déroulé en arche',
+})
+
+/** Une étape de l'arche (pages L'accompagnement et Trouver votre bien) : titre court, texte de deux lignes, photo verticale. */
 export const etapeArche = defineType({
   name: 'etapeArche',
   title: 'Étape',
@@ -91,131 +128,7 @@ export const pageAccueil = defineType({
         defineField({name: 'lienLibelle', title: 'Texte du lien', type: 'string'}),
       ],
     }),
-    defineField({
-      name: 'deroule',
-      title: '3. Le déroulé',
-      type: 'object',
-      group: 'contenu',
-      options: {collapsible: true, collapsed: false},
-      fields: [
-        defineField({name: 'titre', title: 'Titre', type: 'string'}),
-        defineField({name: 'texte', title: 'Texte', type: 'texteRiche'}),
-        defineField({name: 'lienLibelle', title: 'Texte du lien', type: 'string'}),
-      ],
-    }),
-    defineField({
-      name: 'aiguillage',
-      title: '4. Deux points de départ',
-      type: 'object',
-      group: 'contenu',
-      options: {collapsible: true, collapsed: false},
-      fields: [
-        defineField({name: 'titre', title: 'Titre', type: 'string'}),
-        ...(['colonne1', 'colonne2'] as const).map((name, i) =>
-          defineField({
-            name,
-            title: i === 0 ? 'Colonne « déjà votre maison » (vers L’accompagnement)' : 'Colonne « pas encore trouvée » (vers Trouver votre bien)',
-            type: 'object',
-            fields: [
-              defineField({name: 'titre', title: 'Titre', type: 'string'}),
-              defineField({name: 'texte', title: 'Texte', type: 'text', rows: 3}),
-              defineField({name: 'boutonLibelle', title: 'Texte du bouton', type: 'string'}),
-            ],
-          }),
-        ),
-      ],
-    }),
-    defineField({
-      name: 'caroline',
-      title: '5. Caroline',
-      type: 'object',
-      group: 'contenu',
-      options: {collapsible: true, collapsed: false},
-      fields: [
-        defineField({name: 'image', title: 'Photo', type: 'imageAlt'}),
-        defineField({name: 'texte', title: 'Texte', type: 'text', rows: 4}),
-        defineField({name: 'lienLibelle', title: 'Texte du lien', type: 'string'}),
-      ],
-    }),
-    defineField({
-      name: 'avis',
-      title: '6. Avis',
-      type: 'object',
-      group: 'contenu',
-      description: 'Les avis affichés sont ceux cochés « Afficher sur l’accueil ». Le nombre d’avis se règle dans Réglages.',
-      options: {collapsible: true, collapsed: false},
-      fields: [
-        defineField({name: 'titre', title: 'Titre', type: 'string'}),
-        defineField({name: 'lienLibelle', title: 'Texte du lien', type: 'string'}),
-      ],
-    }),
-    {...appel, title: '7. Appel à l’action'},
-    seoField,
-  ],
-  preview: {prepare: () => ({title: 'Accueil'})},
-})
-
-export const pageProjets = defineType({
-  name: 'pageProjets',
-  title: 'Projets',
-  type: 'document',
-  icon: DocumentIcon,
-  groups,
-  fields: [
-    defineField({name: 'intro', title: '1. Introduction', type: 'sectionTexte', group: 'contenu'}),
-    defineField({
-      name: 'blocPro',
-      title: '3. Bloc Professionnels',
-      type: 'object',
-      group: 'contenu',
-      description: 'En bas de la page, après la grille des projets. Mène à la page Professionnels.',
-      options: {collapsible: true, collapsed: false},
-      fields: [
-        defineField({name: 'image', title: 'Image', type: 'imageAlt'}),
-        defineField({name: 'titre', title: 'Titre', type: 'string'}),
-        defineField({name: 'texte', title: 'Phrase', type: 'text', rows: 2}),
-        defineField({name: 'lienLibelle', title: 'Texte du lien', type: 'string'}),
-      ],
-    }),
-    seoField,
-  ],
-  preview: {prepare: () => ({title: 'Projets'})},
-})
-
-export const pageAccompagnement = defineType({
-  name: 'pageAccompagnement',
-  title: 'L’accompagnement',
-  type: 'document',
-  icon: DocumentIcon,
-  groups,
-  fields: [
-    defineField({name: 'aiguillage', title: '1. Ligne vers Trouver votre bien', type: 'ligneAiguillage', group: 'contenu'}),
-    defineField({name: 'intro', title: '2. Titre et introduction', type: 'sectionTexte', group: 'contenu'}),
-    defineField({
-      name: 'deroule',
-      title: '3. Le déroulé en arche',
-      type: 'object',
-      group: 'contenu',
-      description:
-        'Les étapes affichées le long de l’arche. Un clic sur une étape montre son texte et sa photo dans l’arche. Dans les textes, un retour à la ligne est repris tel quel sur le site.',
-      options: {collapsible: true, collapsed: false},
-      fields: [
-        defineField({
-          name: 'etapes',
-          title: 'Les cinq étapes',
-          type: 'array',
-          description: 'Dans l’ordre de l’arche : Écoute, Aménagement, Modélisation 3D (au sommet), Plans techniques, Sélection.',
-          of: [defineArrayMember({type: 'etapeArche'})],
-          validation: (r) => r.length(5).warning('L’arche est prévue pour cinq étapes.'),
-        }),
-        defineField({
-          name: 'travaux',
-          title: 'Après l’arche : les travaux',
-          type: 'etapeArche',
-          description: 'Affiché après l’ouverture de l’arche, en pointillés : le moment où Caroline passe la main.',
-        }),
-      ],
-    }),
+    derouleAccompagnement,
     // Anciennes sections (trois temps, chantier, commandes) : plus affichées, gardées en réserve.
     defineField({...etapes('Ancien déroulé en trois temps', 'Plus affiché sur le site.'), hidden: true}),
     defineField({name: 'horsPerimetre', title: 'Ancien texte : le chantier', type: 'sectionTexte', group: 'contenu', hidden: true}),
@@ -237,9 +150,11 @@ export const pageTrouverVotreBien = defineType({
   fields: [
     defineField({name: 'aiguillage', title: '1. Ligne vers L’accompagnement', type: 'ligneAiguillage', group: 'contenu'}),
     defineField({name: 'intro', title: '2. Titre et introduction', type: 'sectionTexte', group: 'contenu'}),
-    etapes('3. Trois blocs', 'Le regard sur les biens, la double compétence, ce qu’on voit avant de signer.'),
-    defineField({name: 'apresAchat', title: '4. Après l’achat', type: 'sectionTexte', group: 'contenu'}),
-    defineField({name: 'deuxStructures', title: '5. Deux structures', type: 'sectionTexte', group: 'contenu'}),
+    derouleTrouver,
+    // Anciennes sections (trois blocs, après l'achat, deux structures) : remplacées par l'arche, gardées en réserve.
+    defineField({...etapes('Anciens trois blocs', 'Plus affiché sur le site.'), hidden: true}),
+    defineField({name: 'apresAchat', title: 'Ancien texte : après l’achat', type: 'sectionTexte', group: 'contenu', hidden: true}),
+    defineField({name: 'deuxStructures', title: 'Ancien texte : deux structures', type: 'sectionTexte', group: 'contenu', hidden: true}),
     ancienneFaq,
     appel,
     defineField({
