@@ -11,7 +11,7 @@ const tel = r.telephone?.replace(/\s/g, '')
 ---
 
 <footer class="pied fond-ardoise">
-  <div class="conteneur pied__haut">
+  <div class="conteneur pied__ligne">
     <a href="/" class="pied__marque" aria-label="Studio Jeanne, retour à l’accueil"><Logo clair class="pied__logo" /></a>
 
     <ul class="pied__contact">
@@ -43,23 +43,19 @@ const tel = r.telephone?.replace(/\s/g, '')
         )
       }
     </ul>
-  </div>
 
-  <div class="conteneur pied__bas">
-    <ul>
-      <li><a href="/professionnels">Professionnels</a></li>
+    <ul class="pied__legal">
       <li><a href="/mentions-legales">Mentions légales</a></li>
       <li><a href="/politique-de-confidentialite">Politique de confidentialité</a></li>
-      <li><a href="/cgv">CGV</a></li>
       {analytics && <li><button type="button" class="pied__cookies" data-gerer-cookies>Gérer les cookies</button></li>}
     </ul>
   </div>
 </footer>
 
 <style>
-  /* Pied de page fin : une ligne (logo, menu, contact) puis une ligne de mentions. */
+  /* Pied de page sur une seule ligne : logo à gauche, contact, puis mentions obligatoires à droite. */
   .pied {
-    padding-block: 1rem 0.75rem;
+    padding-block: 1.5rem;
     font-size: var(--t-xs);
     letter-spacing: 0.06em;
   }
@@ -78,15 +74,19 @@ const tel = r.telephone?.replace(/\s/g, '')
     flex-wrap: wrap;
     gap: 0.4rem 1.5rem;
   }
-  .pied__haut {
+  .pied__ligne {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    justify-content: space-between;
-    gap: 1.25rem 2.5rem;
+    gap: 1.25rem clamp(2rem, 6vw, 5rem);
   }
   .pied__marque :global(.pied__logo) {
-    width: 3.5rem;
+    width: 8rem;
+  }
+  /* Mentions obligatoires : poussées complètement à droite. */
+  .pied .pied__legal {
+    margin-left: auto;
+    opacity: 0.85;
   }
   /* Contacts : même typo que le menu du haut (capitales espacées). */
   .pied__contact {
@@ -114,16 +114,6 @@ const tel = r.telephone?.replace(/\s/g, '')
   }
   .pied__reseau:hover {
     color: var(--ocre);
-  }
-  .pied__bas {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 0.5rem 2rem;
-    margin-top: 0.75rem;
-    padding-top: 0.6rem;
-    border-top: 1px solid color-mix(in srgb, var(--creme) 25%, transparent);
-    opacity: 0.85;
   }
   .pied__cookies {
     background: none;
