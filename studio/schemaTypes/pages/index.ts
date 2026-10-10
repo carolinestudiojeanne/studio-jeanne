@@ -64,8 +64,8 @@ const derouleAccompagnement = defineField({
 })
 const derouleTrouver = defineField({
   ...deroule('Dans l’ordre de l’arche, du bas à gauche jusqu’à l’ouverture (la 3e étape est au sommet de la courbe).', {
-    title: 'Après l’arche : le projet',
-    description: 'Affiché après l’ouverture de l’arche, en pointillés : la suite, une fois le bien acheté.',
+    title: 'Après l’arche : l’aménagement',
+    description: 'Affiché après l’ouverture de l’arche, en pointillés (« Et après ») : l’aménagement avec Studio Jeanne.',
   }),
   title: '3. Le déroulé en arche',
 })

@@ -10,16 +10,16 @@ const [page, reglages] = await Promise.all([getPageTrouverVotreBien(), getReglag
 // Étapes de secours, si Sanity est vide (même arche que L'accompagnement, étapes de la recherche).
 const parDefaut: {etapes: EtapeArche[]; travaux: EtapeArche} = {
   etapes: [
-    {titre: 'Écoute', texte: 'Comprendre votre projet de vie,\net ce que le futur bien devra permettre.'},
-    {titre: 'Recherche', texte: 'Je cherche votre bien au sein de l’agence\nHomelike Home, en sachant ce que vous voulez en faire.'},
-    {titre: 'Visites', texte: 'Je visite en voyant ce que chaque bien\npeut devenir : volumes, lumière, distribution.'},
-    {titre: 'Points de vigilance', texte: 'Humidité, copropriété, contraintes techniques :\nce qu’il faut savoir avant de signer.'},
-    {titre: 'Achat', texte: 'Vous n’achetez pas en espérant que le bien conviendra.\nVous l’achetez en sachant ce qu’il deviendra.'},
+    {titre: 'Cahier des charges', texte: 'Je l’établis avec vous : votre façon de vivre, votre budget, tous vos critères de recherche. C’est la base sur laquelle je sélectionne chaque bien.'},
+    {titre: 'Recherche', texte: 'Annonces, réseau d’agents immobiliers partenaires de Homelike Home, ventes entre particuliers, bouche-à-oreille : je regarde partout pour ne passer à côté d’aucun bien.'},
+    {titre: 'Pré-visites', texte: 'Je visite chaque bien avant vous, en voyant ce qu’il peut devenir, ou ce qui doit vous en détourner. Vous ne vous déplacez que pour ceux qui peuvent vraiment vous plaire.'},
+    {titre: 'Vérifications', texte: 'Règlement de copropriété, diagnostics, contraintes techniques : j’examine chaque document avant que vous ne vous engagiez.'},
+    {titre: 'De l’offre aux clés', texte: 'Je mène avec vous l’offre, la négociation et le compromis, puis je vous accompagne jusqu’à la signature chez le notaire et la remise des clés.'},
   ],
   travaux: {
-    titre: 'Votre projet',
+    titre: 'Aménagement',
     texte:
-      'Le projet se poursuit comme les autres : conception, plans, modélisation 3D, sélection. Sans reprendre à zéro. La recherche est facturée par Homelike Home, la conception par Studio Jeanne : un seul interlocuteur du début à la fin.',
+      'Si vous le souhaitez, je poursuis l’accompagnement avec Studio Jeanne pour concevoir votre intérieur. Le projet ne repart pas de zéro, puisque j’y réfléchis avec vous depuis la première visite.',
   },
 }
 ---
@@ -34,5 +34,5 @@ const parDefaut: {etapes: EtapeArche[]; travaux: EtapeArche} = {
   finBande
   boutonFin="Parlons de votre recherche"
 >
-  <DerouleArche slot="apres-intro" deroule={page.deroule} parDefaut={parDefaut} surtitreApres="Une fois le bien acheté" titreSection="Le déroulé de la recherche" />
+  <DerouleArche slot="apres-intro" deroule={page.deroule} parDefaut={parDefaut} surtitreApres="Et après" titreSection="Le déroulé de la recherche" />
 </PageOffre>
