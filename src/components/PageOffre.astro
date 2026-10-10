@@ -20,8 +20,11 @@ interface Props {
   formulaire: string
   /** Masque les trois temps et les deux textes courts (L'accompagnement : remplacés par le déroulé en arche). */
   sansTemps?: boolean
+  /** Fin de page resserrée (L'accompagnement) : un bouton juste après l'arche, puis une bande beige vers l'autre page,
+      au format de la bande « projet précédent / suivant » des pages projet. Remplace la ligne d'aiguillage et l'appel à l'action. */
+  finBande?: boolean
 }
-const {page, titre, aiguillageHref, lienSortant, formulaire, sansTemps = false} = Astro.props
+const {page, titre, aiguillageHref, lienSortant, formulaire, sansTemps = false, finBande = false} = Astro.props
 const numeros = ['Premier temps', 'Deuxième temps', 'Troisième temps']
 ---
 
@@ -55,9 +58,26 @@ const numeros = ['Premier temps', 'Deuxième temps', 'Troisième temps']
     )
   }
 
+  <!-- Fin de page resserrée : bouton, puis bande vers l'autre porte d'entrée -->
+  {
+    finBande && (
+      <>
+        <div class="fin-bouton">
+          <a class="bouton" href={formulaire}>Parlons de votre projet</a>
+        </div>
+        {page.aiguillage?.texte && (
+          <a class="fin-bande" href={aiguillageHref}>
+            <span class="fin-bande__question">{page.aiguillage.texte}</span>
+            <span class="fin-bande__lien">{page.aiguillage.lienLibelle || 'Trouver votre bien'}</span>
+          </a>
+        )}
+      </>
+    )
+  }
+
   <!-- Ligne d'aiguillage vers l'autre porte d'entrée, en fin de page -->
   {
-    page.aiguillage?.texte && (
+    !finBande && page.aiguillage?.texte && (
       <div class="aiguillage-ligne">
         <div class="conteneur">
           {page.aiguillage.texte} <a href={aiguillageHref}>{page.aiguillage.lienLibelle || 'En savoir plus'}</a>
@@ -68,7 +88,7 @@ const numeros = ['Premier temps', 'Deuxième temps', 'Troisième temps']
 
 
   <!-- 7. Appel à l'action -->
-  <AppelAction appel={page.appel} href={formulaire} />
+  {!finBande && <AppelAction appel={page.appel} href={formulaire} />}
 
   {
     lienSortant?.href && lienSortant.libelle && (
@@ -87,6 +107,45 @@ const numeros = ['Premier temps', 'Deuxième temps', 'Troisième temps']
     padding-block: 0.9rem;
     font-size: var(--t-s);
     text-align: center;
+  }
+  .fin-bouton {
+    text-align: center;
+    padding-bottom: clamp(3rem, 6vw, 4.5rem);
+  }
+  /* Bouton ocre au trait, comme dans les appels à l'action. */
+  .fin-bouton .bouton {
+    background: transparent;
+    color: var(--ocre);
+    border-color: var(--ocre);
+  }
+  .fin-bouton .bouton:hover {
+    background: var(--ocre);
+    color: var(--blanc);
+  }
+  /* Même bande que « projet précédent / suivant » en bas des pages projet. */
+  .fin-bande {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: clamp(1.75rem, 3.5vw, 2.5rem) var(--gouttiere);
+    background: var(--creme-soutenu);
+    text-align: center;
+    text-decoration: none;
+    font-size: var(--t-s);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .fin-bande__question {
+    color: var(--ardoise);
+  }
+  .fin-bande__lien {
+    color: var(--ocre);
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.25s;
+  }
+  .fin-bande:hover .fin-bande__lien {
+    border-bottom-color: var(--ocre);
   }
   .lien-sortant {
     padding-block: 2.5rem;

@@ -7,6 +7,6 @@ import {getPageAccompagnement, getReglages} from '../lib/contenu'
 const [page, reglages] = await Promise.all([getPageAccompagnement(), getReglages()])
 ---
 
-<PageOffre page={page} titre={page.seo?.metaTitle || `L’accompagnement${reglages.suffixeTitre}`} aiguillageHref="/trouver-votre-bien" formulaire={FORMULAIRES.projet} sansTemps>
+<PageOffre page={page} titre={page.seo?.metaTitle || `L’accompagnement${reglages.suffixeTitre}`} aiguillageHref="/trouver-votre-bien" formulaire={FORMULAIRES.projet} sansTemps finBande>
   <DerouleArche slot="apres-intro" deroule={page.deroule} />
 </PageOffre>
