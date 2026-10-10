@@ -24,7 +24,7 @@ const titre = page.seo?.metaTitle || `Projets${reglages.suffixeTitre}`
   </section>
 
   <!-- 3. Commerces et restaurants : bande beige minimaliste vers la page Professionnels -->
-  {page.blocPro?.titre && <Bande texte={page.blocPro.titre} lien={page.blocPro.lienLibelle || 'Voir les projets professionnels'} href="/professionnels" />}
+  {page.blocPro?.titre && <Bande texte={page.blocPro.titre} lien={page.blocPro.lienLibelle || 'Voir les projets professionnels'} href="/professionnels" description={page.blocPro.texte} />}
 </Base>
 
 <script>
