@@ -9,15 +9,17 @@ import type {PageAccueil} from '../../lib/types'
 
 interface Props {
   aiguillage: NonNullable<PageAccueil['aiguillage']>
+  /** Encadre chaque colonne d'un filet ocre aux coins arrondis (page Contact). */
+  cadre?: boolean
 }
-const {aiguillage} = Astro.props
+const {aiguillage, cadre = false} = Astro.props
 const colonnes = [
   {...aiguillage.colonne1, href: FORMULAIRES.projet, page: {href: '/accompagnement', libelle: 'Découvrir l’accompagnement'}},
   {...aiguillage.colonne2, href: FORMULAIRES.trouver, page: {href: '/trouver-votre-bien', libelle: 'Découvrir la recherche de bien'}},
 ]
 ---
 
-<div class="aiguillage">
+<div class:list={['aiguillage', {'aiguillage--cadre': cadre}]}>
   {
     colonnes.map((c) => (
       <div class="aiguillage__colonne">
@@ -50,6 +52,11 @@ const colonnes = [
   .aiguillage__colonne {
     padding: clamp(1rem, 3vw, 2rem) clamp(1rem, 4vw, 3rem);
     text-align: center;
+  }
+  /* Page Contact : chaque colonne dans un cadre ocre fin, coins arrondis. */
+  .aiguillage--cadre .aiguillage__colonne {
+    border: 1px solid var(--ocre);
+    border-radius: var(--arrondi);
   }
   /* Un retour à la ligne saisi dans le titre est respecté. */
   .aiguillage__colonne h3 {
