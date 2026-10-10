@@ -14,11 +14,11 @@ const {faq = [], titre = 'Questions fréquentes', soutenu = true} = Astro.props
 {
   faq.length > 0 && (
     <section class:list={['section', {'fond-soutenu': soutenu}]}>
-      <div class="colonne">
+      <div class="conteneur">
         <h2>{titre}</h2>
         <div class="faq">
           {faq.map((q) => (
-            <details class="faq__item">
+            <details class="faq__item" name="faq">
               <summary>{q.question}</summary>
               <p>{q.reponse}</p>
             </details>
@@ -29,7 +29,21 @@ const {faq = [], titre = 'Questions fréquentes', soutenu = true} = Astro.props
   )
 }
 
+<script>
+  // Une seule question ouverte à la fois, et un clic ailleurs sur la page referme la question ouverte.
+  const questions = [...document.querySelectorAll<HTMLDetailsElement>('.faq__item')]
+  questions.forEach((q) =>
+    q.addEventListener('toggle', () => {
+      if (q.open) questions.forEach((autre) => autre !== q && (autre.open = false))
+    }),
+  )
+  document.addEventListener('click', (e) => {
+    if (!(e.target as Element).closest('.faq__item')) questions.forEach((q) => (q.open = false))
+  })
+</script>
+
 <style>
+  /* Pleine largeur du site, questions serrées, en capitales espacées comme le menu du haut. */
   .faq {
     border-top: 1px solid color-mix(in srgb, var(--ardoise) 25%, transparent);
   }
@@ -41,18 +55,22 @@ const {faq = [], titre = 'Questions fréquentes', soutenu = true} = Astro.props
     list-style: none;
     display: flex;
     justify-content: space-between;
+    align-items: center;
     gap: 1.5rem;
-    padding: 1.4rem 0;
+    padding: 0.85rem 0;
     color: var(--ardoise);
-    font-size: var(--t-m);
+    font-size: var(--t-xs);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
   }
   .faq__item summary::-webkit-details-marker {
     display: none;
   }
   .faq__item summary::after {
     content: '+';
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     line-height: 1;
+    letter-spacing: 0;
     color: var(--ocre);
     transition: transform 0.3s;
   }
@@ -60,7 +78,8 @@ const {faq = [], titre = 'Questions fréquentes', soutenu = true} = Astro.props
     transform: rotate(45deg);
   }
   .faq__item p {
-    padding-bottom: 1.5rem;
+    max-width: none;
+    padding-bottom: 1rem;
     margin: 0;
   }
 </style>
