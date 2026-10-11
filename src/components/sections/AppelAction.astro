@@ -1,71 +1,32 @@
 ---
-/** S5 : bloc d'appel à l'action, en fin de chaque page. Le bouton mène au formulaire de la page, sinon à /contact. */
+/**
+ * S5 : appel à l'action en fin de page, au format bande beige minimaliste (comme « La première étape » sur l'accueil) :
+ * « TITRE : LIEN VERS LE FORMULAIRE », puis la phrase en italique dessous. Le lien mène au formulaire de la page, sinon à /contact.
+ */
+import Bande from './Bande.astro'
 import type {AppelAction} from '../../lib/types'
 
 interface Props {
   appel?: AppelAction
-  /** Lien secondaire facultatif (ex. vers L'accompagnement sur les pages projet). */
+  /** Ancien lien secondaire : plus affiché (toute la bande est déjà un lien). */
   lien?: {libelle: string; href: string}
-  /** Adresse du bouton : le formulaire Tally de la page (par défaut, la page Contact). */
+  /** Adresse du lien : le formulaire Tally de la page (par défaut, la page Contact). */
   href?: string
 }
-const {appel, lien, href = '/contact'} = Astro.props
+const {appel, href = '/contact'} = Astro.props
 ---
 
 {
   appel?.titre && (
-    <section class="section appel">
-      <div class="colonne appel__contenu">
-        <h2>{appel.titre}</h2>
-        {appel.texte && <p>{appel.texte}</p>}
-        <div class="appel__actions">
-          {appel.boutonLibelle && (
-            <a class="bouton" href={href}>
-              {appel.boutonLibelle}
-            </a>
-          )}
-          {lien && (
-            <a class="lien-fleche" href={lien.href}>
-              {lien.libelle}
-            </a>
-          )}
-        </div>
-      </div>
-    </section>
+    <div class="appel">
+      <Bande texte={appel.titre} lien={appel.boutonLibelle || 'Remplir le formulaire'} href={href} description={appel.texte?.replaceAll('\n', ' ')} deuxPoints />
+    </div>
   )
 }
 
 <style>
-  /* Bloc plus compact, pour ne pas former une énorme bande bleue avec le pied de page. */
-  /* Version discrète : pas de fond, un filet fin au-dessus, bouton ocre au trait. */
+  /* Filet fin quand la bande suit directement une autre bande beige (pages projet). */
   .appel {
-    padding-block: clamp(2.5rem, 5vw, 4rem);
-    border-top: 1px solid color-mix(in srgb, var(--ardoise) 15%, transparent);
-  }
-  .appel__contenu :global(.bouton) {
-    background: transparent;
-    color: var(--ocre);
-    border-color: var(--ocre);
-  }
-  .appel__contenu :global(.bouton:hover) {
-    background: var(--ocre);
-    color: var(--blanc);
-  }
-  .appel__contenu {
-    text-align: center;
-  }
-  .appel__contenu :global(h2) {
-    margin-bottom: 0.75rem;
-  }
-  .appel__contenu p {
-    font-size: var(--t-s);
-  }
-  .appel__actions {
-    margin-top: 1rem;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    gap: 1.5rem 2.5rem;
+    border-top: 1px solid color-mix(in srgb, var(--ardoise) 12%, transparent);
   }
 </style>
