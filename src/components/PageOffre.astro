@@ -74,7 +74,7 @@ const numeros = ['Premier temps', 'Deuxième temps', 'Troisième temps']
             </p>
           )}
         </div>
-        {page.aiguillage?.texte && <Bande texte={page.aiguillage.texte} lien={page.aiguillage.lienLibelle || 'En savoir plus'} href={aiguillageHref} />}
+        {page.aiguillage?.texte && <Bande texte={page.aiguillage.texte} lien={page.aiguillage.lienLibelle || 'En savoir plus'} href={aiguillageHref} deuxPoints />}
       </>
     )
   }
