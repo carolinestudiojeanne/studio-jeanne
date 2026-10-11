@@ -31,7 +31,8 @@ Copier `.env.example` en `.env` (et `studio/.env.example` en `studio/.env`) et r
 4. **Netlify** : nouveau site depuis ce dépôt GitHub. Les réglages de construction sont lus dans `netlify.toml`. Variables d’environnement à saisir :
    - `PUBLIC_SANITY_PROJECT_ID`, `PUBLIC_SANITY_DATASET=production`
    - `SANITY_API_READ_TOKEN` (jeton Viewer) et `SANITY_PREVIEW_SECRET` (un mot de passe au choix)
-   - `PUBLIC_GA_ID` (identifiant de mesure Google Analytics existant de Caroline)
+   - `PUBLIC_GTM_ID` (conteneur Google Tag Manager de Caroline : `GTM-PS5GZBCP`). Le bandeau cookies s'affiche, et Tag Manager n'est chargé qu'après « Accepter ». Le conteneur doit contenir la balise Google Analytics 4 (G-…).
+   - `PUBLIC_GA_ID` (facultatif, à la place de Tag Manager : identifiant de mesure Google Analytics G-…)
    - `PUBLIC_NOINDEX=true` jusqu’au jour de la mise en ligne
 5. **Publication automatique** : dans Netlify, *Build hooks* > créer un hook ; dans Sanity, *API > Webhooks* > coller l’adresse du hook (déclencheur : création, mise à jour, suppression). Chaque publication de Caroline reconstruit le site en une à deux minutes.
 6. **Bouton « Voir la page »** : dans `studio/.env`, `SANITY_STUDIO_SITE_URL` = l’adresse Netlify et `SANITY_STUDIO_PREVIEW_SECRET` = la même valeur que `SANITY_PREVIEW_SECRET`, puis redéployer le Studio.

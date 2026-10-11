@@ -26,6 +26,8 @@ const url = canonique(Astro.url.pathname)
 const image = imagePartageUrl(imagePartage) || imagePartageUrl(reglages.imagePartage) || '/partage.png'
 const imageAbsolue = image.startsWith('http') ? image : `${SITE}${image}`
 const gaId = (import.meta.env.PUBLIC_GA_ID as string | undefined) || ''
+const gtmId = (import.meta.env.PUBLIC_GTM_ID as string | undefined) || ''
+const mesure = Boolean(gaId || gtmId)
 const sansIndex = noindex || import.meta.env.PUBLIC_NOINDEX === 'true'
 const jsonLd = [schemaEntreprise(reglages), ...schemas].filter(Boolean)
 ---
@@ -72,8 +74,8 @@ const jsonLd = [schemaEntreprise(reglages), ...schemas].filter(Boolean)
     <main id="contenu">
       <slot />
     </main>
-    <Footer reglages={reglages} analytics={Boolean(gaId)} />
-    {gaId && <Cookies gaId={gaId} />}
+    <Footer reglages={reglages} analytics={mesure} />
+    {mesure && <Cookies gaId={gaId} gtmId={gtmId} />}
   </body>
 </html>
 

@@ -1,16 +1,18 @@
 ---
 /**
  * Bandeau cookies conforme CNIL : « Accepter » et « Refuser » au même niveau.
- * Google Analytics (propriété existante de Caroline) n'est chargé qu'après accord.
+ * Google Tag Manager (conteneur de Caroline, GTM-…) ou, à défaut, Google Analytics (G-…) n'est chargé qu'après accord :
+ * rien n'est déposé avant. Refuser ensuite (« Gérer les cookies ») efface les cookies de mesure et recharge la page.
  * Le choix est gardé 6 mois ; « Gérer les cookies » en pied de page rouvre le bandeau.
  */
 interface Props {
-  gaId: string
+  gaId?: string
+  gtmId?: string
 }
-const {gaId} = Astro.props
+const {gaId = '', gtmId = ''} = Astro.props
 ---
 
-<div class="cookies" role="dialog" aria-live="polite" aria-label="Cookies" hidden data-ga={gaId}>
+<div class="cookies" role="dialog" aria-live="polite" aria-label="Cookies" hidden data-ga={gaId} data-gtm={gtmId}>
   <p>
     Des cookies de mesure d’audience, uniquement avec votre accord.{' '}
     <a href="/politique-de-confidentialite">En savoir plus</a>
@@ -26,6 +28,7 @@ const {gaId} = Astro.props
   const DUREE = 1000 * 60 * 60 * 24 * 182
   const bandeau = document.querySelector<HTMLElement>('.cookies')
   const gaId = bandeau?.dataset.ga
+  const gtmId = bandeau?.dataset.gtm
 
   function lireChoix(): string | null {
     try {
@@ -39,19 +42,38 @@ const {gaId} = Astro.props
   }
 
   function chargerAnalytics() {
-    if (!gaId || (window as any).__gaCharge) return
-    ;(window as any).__gaCharge = true
+    const w = window as any
+    if ((!gaId && !gtmId) || w.__gaCharge) return
+    w.__gaCharge = true
+    w.dataLayer = w.dataLayer || []
     const s = document.createElement('script')
     s.async = true
+    if (gtmId) {
+      // Google Tag Manager : le conteneur de Caroline contient la balise Google Analytics.
+      w.dataLayer.push({'gtm.start': Date.now(), event: 'gtm.js'})
+      s.src = `https://www.googletagmanager.com/gtm.js?id=${gtmId}`
+      document.head.appendChild(s)
+      return
+    }
     s.src = `https://www.googletagmanager.com/gtag/js?id=${gaId}`
     document.head.appendChild(s)
-    const w = window as any
-    w.dataLayer = w.dataLayer || []
     w.gtag = function () {
       w.dataLayer.push(arguments)
     }
     w.gtag('js', new Date())
     w.gtag('config', gaId, {anonymize_ip: true})
+  }
+
+  // Retrait du consentement : efface les cookies Google Analytics (_ga, _ga_…, _gid) sur le domaine du site.
+  function effacerCookiesMesure() {
+    const domaines = ['', location.hostname, '.' + location.hostname.replace(/^www\./, '')]
+    document.cookie.split(';').forEach((c) => {
+      const nom = c.split('=')[0].trim()
+      if (!/^(_ga|_gid|_gat)/.test(nom)) return
+      domaines.forEach((d) => {
+        document.cookie = `${nom}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/${d ? `; domain=${d}` : ''}`
+      })
+    })
   }
 
   function enregistrer(choix: string) {
@@ -60,7 +82,10 @@ const {gaId} = Astro.props
     } catch {}
     if (bandeau) bandeau.hidden = true
     if (choix === 'accepte') chargerAnalytics()
-    else if ((window as any).__gaCharge) location.reload()
+    else {
+      effacerCookiesMesure()
+      if ((window as any).__gaCharge) location.reload()
+    }
   }
 
   const choix = lireChoix()
