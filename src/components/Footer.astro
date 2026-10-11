@@ -124,7 +124,11 @@ const tel = r.telephone?.replace(/\s/g, '')
     letter-spacing: inherit;
     cursor: pointer;
   }
+  /* Même soulignement ocre au survol que les liens voisins. */
   .pied__cookies:hover {
     text-decoration: underline;
+    text-decoration-color: var(--ocre);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
   }
 </style>
