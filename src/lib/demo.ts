@@ -290,7 +290,7 @@ export const avis: Avis[] = [
 export const pageAccueil: PageAccueil = {
   hero: {
     image: img('chene', 'Pièce de vie lumineuse en chêne clair, projet Studio Jeanne à Bordeaux'),
-    h1: 'Studio Jeanne, architecte d’intérieur à Bordeaux',
+    h1: 'Studio Jeanne, décoratrice d’intérieur à Bordeaux',
     accroche: 'Votre intérieur devrait vous ressembler, vraiment.',
     sousTitre: 'J’écoute, je questionne, je traduis.',
     boutonLibelle: 'Parler de votre projet',
