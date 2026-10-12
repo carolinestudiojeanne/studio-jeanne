@@ -26,17 +26,15 @@ const zone = texteBrut(page.zone?.texte).replace(/\.$/, '')
     </div>
   </section>
 
-  <!-- 3. Coordonnées -->
-  <section class="section section--serree">
+  <!-- 3. Coordonnées, sur fond blanc : la phrase, puis le téléphone et l'e-mail au même format que dans le pied de page. -->
+  <section class="section section--serree fond-blanc">
     <div class="colonne coordonnees">
-      <p>
-        {page.coordonnees}
-        {' '}
-        {tel && <a href={`tel:${tel}`}>{r.telephone}</a>}
-        {tel && r.email && ' · '}
-        {r.email && <a href={`mailto:${r.email}`}>{r.email}</a>}
-      </p>
-      {r.afficherAdresse && r.adresse && <p>{r.adresse}, {r.codePostal} {r.ville}</p>}
+      {page.coordonnees && <p class="coordonnees__phrase">{page.coordonnees.trim().replace(/[\s.!]+$/, '')} :</p>}
+      <ul class="coordonnees__liens">
+        {tel && <li><a href={`tel:${tel}`}>{r.telephone}</a></li>}
+        {r.email && <li><a href={`mailto:${r.email}`}>{r.email}</a></li>}
+      </ul>
+      {r.afficherAdresse && r.adresse && <p class="coordonnees__adresse">{r.adresse}, {r.codePostal} {r.ville}</p>}
     </div>
   </section>
 
@@ -45,9 +43,42 @@ const zone = texteBrut(page.zone?.texte).replace(/\.$/, '')
 </Base>
 
 <style>
+  .fond-blanc {
+    background: var(--blanc);
+  }
+  /* Même taille de texte que le reste du site ; centré. */
   .coordonnees {
-    font-size: var(--t-l);
-    line-height: 1.5;
+    text-align: center;
     color: var(--ardoise);
+  }
+  .coordonnees__phrase {
+    margin: 0 0 1rem;
+  }
+  /* Téléphone et e-mail : même format que dans le pied de page (petites capitales espacées). */
+  .coordonnees__liens {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.4rem 1.5rem;
+    font-size: var(--t-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+  }
+  .coordonnees__liens a {
+    color: var(--ardoise);
+    text-decoration: none;
+  }
+  .coordonnees__liens a:hover {
+    text-decoration: underline;
+    text-decoration-color: var(--ocre);
+  }
+  .coordonnees__adresse {
+    margin: 1rem 0 0;
+    font-size: var(--t-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
   }
 </style>
