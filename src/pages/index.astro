@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro'
 import Hero from '../components/sections/Hero.astro'
-import Aiguillage from '../components/sections/Aiguillage.astro'
+import ArchesContact from '../components/sections/ArchesContact.astro'
 import CarrouselProjets from '../components/sections/CarrouselProjets.astro'
 import MurAvis from '../components/sections/MurAvis.astro'
 import Bande from '../components/sections/Bande.astro'
@@ -49,13 +49,14 @@ const {hero, projetsRecents, aiguillage} = page
     )
   }
 
-  <!-- 4. Deux points de départ -->
+  <!-- 4. Deux points de départ, en arches basses comme sur la page Contact (sans l'arche pro), avec les liens vers les pages.
+       Ancienne version (deux colonnes avec photos) : <ArchesContact aiguillage={aiguillage} sansPro liens />. -->
   {
     aiguillage && (
       <section class="section section-portes">
         <div class="conteneur">
           <h2 class="visuellement-cache">{aiguillage.titre || 'Deux points de départ'}</h2>
-          <Aiguillage aiguillage={aiguillage} />
+          <ArchesContact aiguillage={aiguillage} sansPro liens />
         </div>
       </section>
     )

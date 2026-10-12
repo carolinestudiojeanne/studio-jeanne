@@ -1,6 +1,6 @@
 ---
 /**
- * Page Contact : les trois portes d'entrée, chacune dans une arche basse, empilées l'une sous l'autre.
+ * Page Contact (et accueil, sans l'arche pro et avec les liens « Découvrir… ») : les portes d'entrée, chacune dans une arche basse, empilées l'une sous l'autre.
  * Même tracé que l'arche du logo et du déroulé (L'accompagnement, Trouver votre bien) : trait vertical à gauche,
  * angle arrondi, trait horizontal jusqu'au bord droit ; pas d'étapes, juste un titre, une phrase et le bouton
  * vers le bon formulaire Tally. Les trois au même niveau, pour que le choix soit clair.
@@ -12,29 +12,53 @@ import type {PageAccueil, PageContact} from '../../lib/types'
 interface Props {
   aiguillage?: PageAccueil['aiguillage']
   pro?: PageContact['pro']
+  /** Accueil : pas d'arche pour les professionnels. */
+  sansPro?: boolean
+  /** Accueil : un lien « Découvrir… » sous le bouton, vers la page qui présente l'offre. */
+  liens?: boolean
 }
-const {aiguillage, pro} = Astro.props
-const arches = [
-  {titre: aiguillage?.colonne1?.titre, texte: aiguillage?.colonne1?.texte, bouton: aiguillage?.colonne1?.boutonLibelle || 'Parlons de votre projet', href: FORMULAIRES.projet},
-  {titre: aiguillage?.colonne2?.titre, texte: aiguillage?.colonne2?.texte, bouton: aiguillage?.colonne2?.boutonLibelle || 'Trouver votre bien', href: FORMULAIRES.trouver},
+const {aiguillage, pro, sansPro = false, liens = false} = Astro.props
+type Arche = {titre?: string; texte?: string; bouton: string; href: string; page?: {href: string; libelle: string}}
+const arches: Arche[] = [
   {
+    titre: aiguillage?.colonne1?.titre,
+    texte: aiguillage?.colonne1?.texte,
+    bouton: aiguillage?.colonne1?.boutonLibelle || 'Parlons de votre projet',
+    href: FORMULAIRES.projet,
+    page: {href: '/accompagnement', libelle: 'Découvrir l’accompagnement'},
+  },
+  {
+    titre: aiguillage?.colonne2?.titre,
+    texte: aiguillage?.colonne2?.texte,
+    bouton: aiguillage?.colonne2?.boutonLibelle || 'Trouver votre bien',
+    href: FORMULAIRES.trouver,
+    page: {href: '/trouver-votre-bien', libelle: 'Découvrir la recherche de bien'},
+  },
+  ...(sansPro ? [] : [{
     titre: pro?.titre || 'Vous êtes un professionnel.',
     texte: pro?.texte || 'Restaurant, bar, boutique ou bureau : un lieu à votre image.',
     bouton: pro?.boutonLibelle || 'Parlons de vos locaux',
     href: FORMULAIRES.professionnel,
-  },
+  }]),
 ].filter((a) => a.titre)
 ---
 
 <div class="arches" data-arches>
   {
-    arches.map((a, i) => (
-      <div class="arche-contact" style={`--rang: ${i}`}>
+    arches.map((a) => (
+      <div class="arche-contact">
         <h3>{a.titre}</h3>
         {a.texte && <p>{a.texte}</p>}
-        <a class="bouton arche-contact__bouton" href={a.href}>
-          {a.bouton}
-        </a>
+        <div class="arche-contact__actions">
+          <a class="bouton arche-contact__bouton" href={a.href}>
+            {a.bouton}
+          </a>
+          {liens && a.page && (
+            <a class="lien-fleche lien-chevron arche-contact__page" href={a.page.href}>
+              {a.page.libelle}
+            </a>
+          )}
+        </div>
       </div>
     ))
   }
@@ -42,18 +66,24 @@ const arches = [
 
 <script>
   // Les arches apparaissent l'une après l'autre quand on arrive dessus en faisant défiler la page.
+  // Une arche ne se dévoile que lorsqu'elle est bien entrée dans l'écran (un quart d'elle au-dessus des 15 % du bas),
+  // pour qu'une arche qui affleure en bas de l'écran au chargement attende le défilement, comme les suivantes.
   document.querySelectorAll<HTMLElement>('[data-arches]').forEach((bloc) => {
     if (!('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) return
     const arches = [...bloc.querySelectorAll<HTMLElement>('.arche-contact')]
     bloc.classList.add('arches--animees')
     const obs = new IntersectionObserver(
       (entrees) =>
-        entrees.forEach((e) => {
-          if (!e.isIntersecting) return
-          ;(e.target as HTMLElement).classList.add('est-visible')
-          obs.unobserve(e.target)
-        }),
-      {threshold: 0.25},
+        // Si plusieurs arches entrent en même temps, elles apparaissent l'une après l'autre.
+        entrees
+          .filter((e) => e.isIntersecting)
+          .forEach((e, i) => {
+            const arche = e.target as HTMLElement
+            arche.style.transitionDelay = `${i * 0.15}s`
+            arche.classList.add('est-visible')
+            obs.unobserve(arche)
+          }),
+      {threshold: 0.25, rootMargin: '0px 0px -15% 0px'},
     )
     arches.forEach((a) => obs.observe(a))
   })
@@ -70,8 +100,6 @@ const arches = [
     opacity: 0;
     transform: translateY(1.5rem);
     transition: opacity 0.8s ease, transform 0.8s ease;
-    /* Quand plusieurs arches entrent en même temps, elles apparaissent l'une après l'autre. */
-    transition-delay: calc(var(--rang) * 0.15s);
   }
   .arches--animees .arche-contact.est-visible {
     opacity: 1;
@@ -91,6 +119,14 @@ const arches = [
   .arche-contact__bouton:hover {
     background: transparent;
     color: var(--ocre);
+  }
+  .arche-contact__actions {
+    display: grid;
+    justify-items: center;
+    gap: 1rem;
+  }
+  .arche-contact__page {
+    font-size: 0.7rem;
   }
   /* L'arche : trait vertical à gauche, angle arrondi, trait horizontal jusqu'au bord droit (pas de bas ni de côté droit). */
   .arche-contact {
@@ -122,7 +158,8 @@ const arches = [
   /* Ordinateur : arche basse, titre à gauche, phrase au milieu, bouton à droite, sur une seule rangée. */
   @media (min-width: 52rem) {
     .arche-contact {
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr) 17rem;
+      /* Première colonne plus étroite : la phrase du milieu se rapproche du titre. */
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.45fr) 17rem;
       align-items: center;
       justify-items: start;
       gap: clamp(1.5rem, 3vw, 3rem);
@@ -130,8 +167,10 @@ const arches = [
       min-height: 9rem;
       padding: clamp(2rem, 4vw, 2.75rem) clamp(1.25rem, 3vw, 2rem) 0 calc(var(--rayon-arche) + 0.5rem);
     }
-    .arche-contact__bouton {
+    .arche-contact__actions {
       justify-self: end;
+    }
+    .arche-contact__bouton {
       white-space: nowrap;
     }
   }

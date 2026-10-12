@@ -159,6 +159,8 @@ export const pageAccueil = defineType({
                 title: 'Surtitre (petit, en ocre, facultatif)',
                 type: 'string',
                 description: 'Laisser vide pour ne rien afficher au-dessus du titre.',
+                // Plus affiché depuis que le bloc est en arches (octobre 2026), gardé en réserve.
+                hidden: true,
               }),
               defineField({name: 'titre', title: 'Titre', type: 'string'}),
               defineField({name: 'texte', title: 'Texte', type: 'text', rows: 3}),
@@ -168,6 +170,8 @@ export const pageAccueil = defineType({
                 title: 'Photo (verticale)',
                 type: 'imageAlt',
                 description: 'S’affiche à droite du texte, comme les photos des étapes de l’arche.',
+                // Plus affichée depuis que le bloc est en arches (octobre 2026), gardée en réserve.
+                hidden: true,
               }),
             ],
           }),
