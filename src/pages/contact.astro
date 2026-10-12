@@ -9,7 +9,6 @@ import {texteBrut} from '../lib/texte'
 
 const [page, accueil, r] = await Promise.all([getPageContact(), getPageAccueil(), getReglages()])
 const titre = page.seo?.metaTitle || `Contact${r.suffixeTitre}`
-const tel = r.telephone?.replace(/\s/g, '')
 // Zone d'intervention, en capitales ocre sous le titre de la page.
 const zone = texteBrut(page.zone?.texte).replace(/\.$/, '')
 ---
@@ -26,59 +25,9 @@ const zone = texteBrut(page.zone?.texte).replace(/\.$/, '')
     </div>
   </section>
 
-  <!-- 3. Coordonnées, sur fond blanc : la phrase, puis le téléphone et l'e-mail au même format que dans le pied de page. -->
-  <section class="section section--serree fond-blanc">
-    <div class="colonne coordonnees">
-      {page.coordonnees && <p class="coordonnees__phrase">{page.coordonnees.trim().replace(/[\s.!]+$/, '')} :</p>}
-      <ul class="coordonnees__liens">
-        {tel && <li><a href={`tel:${tel}`}>{r.telephone}</a></li>}
-        {r.email && <li><a href={`mailto:${r.email}`}>{r.email}</a></li>}
-      </ul>
-      {r.afficherAdresse && r.adresse && <p class="coordonnees__adresse">{r.adresse}, {r.codePostal} {r.ville}</p>}
-    </div>
-  </section>
+  <!-- Ancienne section « Vous pouvez aussi m'appeler ou m'écrire » : retirée (octobre 2026), les coordonnées sont dans le pied de page. -->
 
-  <!-- 4. Questions fréquentes (uniquement sur cette page) -->
-  <Faq faq={page.faq} soutenu={false} />
+  <!-- 3. Questions fréquentes (uniquement sur cette page), sur fond blanc -->
+  <Faq faq={page.faq} soutenu={false} blanc />
 </Base>
 
-<style>
-  .fond-blanc {
-    background: var(--blanc);
-  }
-  /* Même taille de texte que le reste du site ; centré. */
-  .coordonnees {
-    text-align: center;
-    color: var(--ardoise);
-  }
-  .coordonnees__phrase {
-    margin: 0 0 1rem;
-  }
-  /* Téléphone et e-mail : même format que dans le pied de page (petites capitales espacées). */
-  .coordonnees__liens {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.4rem 1.5rem;
-    font-size: var(--t-xs);
-    text-transform: uppercase;
-    letter-spacing: 0.18em;
-  }
-  .coordonnees__liens a {
-    color: var(--ardoise);
-    text-decoration: none;
-  }
-  .coordonnees__liens a:hover {
-    text-decoration: underline;
-    text-decoration-color: var(--ocre);
-  }
-  .coordonnees__adresse {
-    margin: 1rem 0 0;
-    font-size: var(--t-xs);
-    text-transform: uppercase;
-    letter-spacing: 0.18em;
-  }
-</style>

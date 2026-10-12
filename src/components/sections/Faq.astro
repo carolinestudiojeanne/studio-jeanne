@@ -7,13 +7,15 @@ interface Props {
   titre?: string
   /** Fond crème soutenu (par défaut) ou fond de page. */
   soutenu?: boolean
+  /** Fond blanc (page Contact). */
+  blanc?: boolean
 }
-const {faq = [], titre = 'Questions fréquentes', soutenu = true} = Astro.props
+const {faq = [], titre = 'Questions fréquentes', soutenu = true, blanc = false} = Astro.props
 ---
 
 {
   faq.length > 0 && (
-    <section class:list={['section', {'fond-soutenu': soutenu}]}>
+    <section class:list={['section', {'fond-soutenu': soutenu && !blanc, 'faq--blanc': blanc}]}>
       <div class="conteneur">
         <h2>{titre}</h2>
         <div class="faq">
@@ -46,6 +48,9 @@ const {faq = [], titre = 'Questions fréquentes', soutenu = true} = Astro.props
 </script>
 
 <style>
+  .faq--blanc {
+    background: var(--blanc);
+  }
   /* Pleine largeur du site, questions serrées, en ocre, au format des titres du site (en plus petit). */
   .faq {
     border-top: 1px solid color-mix(in srgb, var(--ardoise) 25%, transparent);
