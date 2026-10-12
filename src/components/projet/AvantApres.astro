@@ -46,11 +46,13 @@ for (let i = 0; i < items.length; i += 3) rangees.push(items.slice(i, i + 3))
           <figure class:list={['aa', `aa--${p.format}`]} style={`--r: ${p.ratio}`}>
             <div class="aa__cadre" style={`aspect-ratio: ${p.ratio}`}>
               <img class="aa__img" src={p.apres!.src} srcset={p.apres!.srcset} sizes={p.sizes} width={p.apres!.width} height={p.apres!.height} alt={`Après : ${p.apres!.alt}`} loading="lazy" />
+              <div class="aa__cote-apres" aria-hidden="true">
+                <span class="aa__etiquette aa__etiquette--apres">Après</span>
+              </div>
               <div class="aa__avant">
                 <img class="aa__img" src={p.avant!.src} srcset={p.avant!.srcset} sizes={p.sizes} width={p.avant!.width} height={p.avant!.height} alt={`Avant : ${p.avant!.alt}`} loading="lazy" />
+                <span class="aa__etiquette aa__etiquette--avant" aria-hidden="true">Avant</span>
               </div>
-              <span class="aa__etiquette aa__etiquette--avant" aria-hidden="true">Avant</span>
-              <span class="aa__etiquette aa__etiquette--apres" aria-hidden="true">Après</span>
               <div class="aa__poignee" aria-hidden="true" />
               <input class="aa__curseur" type="range" min="0" max="100" value="50" aria-label="Comparer avant et après" />
             </div>
@@ -127,10 +129,18 @@ for (let i = 0; i < items.length; i += 3) rangees.push(items.slice(i, i + 3))
     height: 100%;
     object-fit: cover;
   }
+  /* Chaque étiquette est coupée par le trait, comme sa photo : « Avant » reste dans la partie gauche,
+     « Après » dans la partie droite ; quand on glisse jusqu'au bout, celle du côté masqué disparaît. */
   .aa__avant {
     position: absolute;
     inset: 0;
     clip-path: inset(0 calc(100% - var(--pos)) 0 0);
+  }
+  .aa__cote-apres {
+    position: absolute;
+    inset: 0;
+    clip-path: inset(0 0 0 var(--pos));
+    pointer-events: none;
   }
   .aa__poignee {
     position: absolute;
