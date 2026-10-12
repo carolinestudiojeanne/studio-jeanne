@@ -13,7 +13,7 @@ const titre = page.seo?.metaTitle || `Avis clients${r.suffixeTitre}`
   <!-- En-tête, même format que les autres pages -->
   <IntroPage titre={page.intro?.titre || 'Avis clients'} texte={page.intro?.texte} espaceBas={false}>
     <p class="liens">
-        {r.ficheGoogle && <a class="lien-fleche" href={r.ficheGoogle} target="_blank" rel="noopener">Tous les avis sur Google</a>}
+        {r.ficheGoogle && <a class="lien-fleche lien-chevron" href={r.ficheGoogle} target="_blank" rel="noopener">Tous les avis sur Google</a>}
         {r.lienLaisserAvis && <a class="lien-fleche" href={r.lienLaisserAvis} target="_blank" rel="noopener">Laisser un avis</a>}
     </p>
   </IntroPage>
