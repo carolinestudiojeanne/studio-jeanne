@@ -121,13 +121,16 @@ const {hero, projetsRecents, aiguillage} = page
       font-size: min(var(--t-m), calc((100vw - 10rem) / 84));
     }
   }
-  /* Juste au-dessus des photos, à droite, en ocre avec une tête de flèche. */
+  /* Juste au-dessus des photos, à droite, en ocre, sans trait ni flèche. */
   .voir-projets {
     margin: 1.5rem 0 0.75rem;
     text-align: right;
   }
   .voir-projets .lien-fleche {
     font-size: 0.75rem;
+  }
+  .voir-projets .lien-fleche::after {
+    content: none;
   }
   /* Les deux portes d'entrée, sur fond blanc, sans titre visible. */
   .section-portes {
