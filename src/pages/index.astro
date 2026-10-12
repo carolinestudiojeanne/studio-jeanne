@@ -143,4 +143,9 @@ const {hero, projetsRecents, aiguillage} = page
     background: var(--blanc);
     padding-top: calc(var(--section) * 0.7);
   }
+  /* Les deux arches plus espacées, sans agrandir la section : l'espace pris au-dessus de la première arche passe entre les deux. */
+  .section-portes :global(.arches) {
+    margin-top: 0;
+    gap: calc(clamp(3.5rem, 7vw, 5rem) + clamp(1.5rem, 3vw, 2.5rem));
+  }
 </style>
