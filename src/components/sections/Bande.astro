@@ -13,15 +13,17 @@ interface Props {
   description?: string
   /** Termine la phrase par « : » (« La première étape : Remplir le formulaire ») ; un « ? » final est remplacé par « : ». */
   deuxPoints?: boolean
+  /** Garde la description sur une seule ligne sur ordinateur (la bande s'élargit, la taille ne change pas). */
+  descriptionUneLigne?: boolean
 }
-const {texte, lien, href, externe = false, description, deuxPoints = false} = Astro.props
+const {texte, lien, href, externe = false, description, deuxPoints = false, descriptionUneLigne = false} = Astro.props
 const phrase = deuxPoints ? `${texte.replace(/\s*[?:]\s*$/, '').trim()} :` : texte
 ---
 
 <a class="bande" href={href} {...(externe ? {target: '_blank', rel: 'noopener'} : {})}>
   <span class="bande__texte">{phrase}</span>
   <span class="bande__lien">{lien}</span>
-  {description && <span class="bande__description">{description}</span>}
+  {description && <span class:list={['bande__description', {'bande__description--une-ligne': descriptionUneLigne}]}>{description}</span>}
 </a>
 
 <style>
@@ -54,5 +56,10 @@ const phrase = deuxPoints ? `${texte.replace(/\s*[?:]\s*$/, '').trim()} :` : tex
     font-style: italic;
     letter-spacing: 0.02em;
     text-transform: none;
+  }
+  @media (min-width: 64rem) {
+    .bande__description--une-ligne {
+      white-space: nowrap;
+    }
   }
 </style>

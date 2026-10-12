@@ -424,7 +424,7 @@ export const pageTrouverVotreBien: PageOffre = {
   aiguillage: {texte: 'Vous avez déjà votre maison ?', lienLibelle: 'L’accompagnement'},
   intro: {
     titre: 'Trouver le bien, puis en faire votre maison',
-    texte: paragraphes('Vous avez un projet en tête mais pas encore le lieu pour l’accueillir. Chercher un bien, c’est déjà commencer à le dessiner.'),
+    texte: paragraphes('Chasseuse en immobilier et décoratrice d’intérieur à Bordeaux, je ne cherche pas seulement un bien qui coche vos critères : je cherche celui qui pourra accueillir le projet que vous avez en tête.'),
   },
   etapes: [
     {

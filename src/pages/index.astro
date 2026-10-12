@@ -81,7 +81,7 @@ const {hero, projetsRecents, aiguillage} = page
   }
 
   <!-- 7. La première étape : bande beige minimaliste, comme en bas de L'accompagnement -->
-  {page.appel?.titre && <Bande texte={page.appel.titre} lien={page.appel.boutonLibelle || 'Remplir le formulaire'} href={FORMULAIRES.projet} description={page.appel.texte} deuxPoints />}
+  {page.appel?.titre && <Bande texte={page.appel.titre} lien={page.appel.boutonLibelle || 'Remplir le formulaire'} href={FORMULAIRES.projet} description={page.appel.texte} deuxPoints descriptionUneLigne />}
 </Base>
 
 <style>
