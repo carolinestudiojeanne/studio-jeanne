@@ -20,10 +20,12 @@ interface Props {
   avantApres?: boolean
   /** Une vidéo est passée dans le slot « video » (affichée sous les avant / après). */
   video?: boolean
+  /** La vidéo se place à gauche des avant / après (empilés à sa droite) au lieu d'être dessous. */
+  videoACote?: boolean
   /** Formulaire Tally du bouton « Parlons de votre projet ». */
   formulaire: string
 }
-const {projet, portrait, bande, caracteristiques, avantApres = false, video = false, formulaire} = Astro.props
+const {projet, portrait, bande, caracteristiques, avantApres = false, video = false, videoACote = false, formulaire} = Astro.props
 ---
 
 <section class="ep">
@@ -92,7 +94,12 @@ const {projet, portrait, bande, caracteristiques, avantApres = false, video = fa
 
   {
     avantApres ? (
-      <div class="ep__appel ep__appel--aa">
+      <div class:list={['ep__appel', 'ep__appel--aa', {'ep__appel--video': videoACote}]}>
+        {videoACote && (
+          <div class="ep__video-cote">
+            <slot name="video" />
+          </div>
+        )}
         <div class="ep__aa">
           <slot name="avant-apres" />
         </div>
@@ -106,7 +113,7 @@ const {projet, portrait, bande, caracteristiques, avantApres = false, video = fa
   }
 
   {
-    video && (
+    video && !videoACote && (
       <div class="ep__video">
         <slot name="video" />
       </div>
@@ -312,6 +319,14 @@ const {projet, portrait, bande, caracteristiques, avantApres = false, video = fa
     .ep__appel--aa {
       grid-template-columns: 1fr auto;
       align-items: center;
+    }
+    /* Vidéo à gauche, avant / après empilés à sa droite (même hauteur que la vidéo), bouton à droite. */
+    .ep__appel--video {
+      grid-template-columns: auto auto 1fr;
+      justify-items: start;
+    }
+    .ep__appel--video > .bouton {
+      justify-self: end;
     }
   }
 

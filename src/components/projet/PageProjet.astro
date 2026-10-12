@@ -75,6 +75,8 @@ const autres = galerie.filter((_, i) => i !== iPortrait)
 const bande = autres.length > 1 ? autres : []
 const resteGalerie = autres.slice(bande.length)
 const aVideo = !!(projet.video && (projet.video.fichierUrl || projet.video.lien))
+// Vidéo en fichier (souvent verticale) + avant / après : la vidéo se place à gauche des avant / après, empilés à sa droite.
+const videoACote = !!(projet.video?.fichierUrl && projet.avantApres?.length)
 const caracteristiques = [projet.typeDeProjet && {libelle: 'Projet', valeur: projet.typeDeProjet}, ...details].filter(Boolean) as Array<{
   libelle: string
   valeur: string
@@ -92,7 +94,7 @@ const caracteristiques = [projet.typeDeProjet && {libelle: 'Projet', valeur: pro
   {apercu && <div class="apercu">Aperçu du brouillon : cette page n’est pas encore publiée.</div>}
 
   <!-- 1. Grand visuel, photo à cheval, caractéristiques, textes, bande de photos, avant / après -->
-  <EnTeteProjet projet={projet} portrait={portrait} bande={bande.map((g) => g.image)} caracteristiques={caracteristiques} avantApres={!!projet.avantApres?.length} video={aVideo} formulaire={formulaire}>
+  <EnTeteProjet projet={projet} portrait={portrait} bande={bande.map((g) => g.image)} caracteristiques={caracteristiques} avantApres={!!projet.avantApres?.length} video={aVideo} videoACote={videoACote} formulaire={formulaire}>
     {
       projet.demande?.length ? (
         <div>
@@ -109,7 +111,7 @@ const caracteristiques = [projet.typeDeProjet && {libelle: 'Projet', valeur: pro
         </div>
       )
     }
-    {projet.avantApres?.length && <AvantApres slot="avant-apres" paires={projet.avantApres} />}
+    {projet.avantApres?.length && <AvantApres slot="avant-apres" paires={projet.avantApres} colonne={videoACote} />}
     {aVideo && <Video slot="video" video={projet.video!} titre={projet.titre} />}
   </EnTeteProjet>
 
