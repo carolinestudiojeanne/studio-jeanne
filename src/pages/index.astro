@@ -101,10 +101,11 @@ const {hero, projetsRecents, aiguillage} = page
     max-width: 36rem;
   }
   /* Titre et phrase alignés sur la photo la plus à gauche ; phrase sur une seule ligne sur grand écran. */
-  /* Titre et phrase bien aérés : même espace au-dessus (depuis le grand visuel) et en dessous (jusqu'aux photos). */
+  /* Titre et phrase bien aérés, avec un peu plus d'espace au-dessus (depuis le grand visuel) qu'en dessous (jusqu'aux photos). */
   .section-projets-recents {
     --air: clamp(3rem, 5.5vw, 5rem);
-    padding-top: var(--air);
+    /* Un peu plus d'espace entre le grand visuel et le titre. */
+    padding-top: calc(var(--air) * 1.4);
     /* Un peu moins d'espace avant les arches. */
     padding-bottom: calc(var(--section) * 0.7);
   }
