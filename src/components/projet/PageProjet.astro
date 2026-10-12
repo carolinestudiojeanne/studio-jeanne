@@ -7,7 +7,6 @@ import Base from '../../layouts/Base.astro'
 import EnTeteProjet from './EnTeteProjet.astro'
 import SectionTexte from '../sections/SectionTexte.astro'
 import NavProjets from './NavProjets.astro'
-import AppelAction from '../sections/AppelAction.astro'
 import ListeAvis from '../sections/ListeAvis.astro'
 import Galerie from './Galerie.astro'
 import AvantApres from './AvantApres.astro'
@@ -137,16 +136,7 @@ const caracteristiques = [projet.typeDeProjet && {libelle: 'Projet', valeur: pro
   <!-- 7. Autres projets -->
   <NavProjets precedent={precedent} suivant={suivant} />
 
-  <!-- 8. Appel à l'action -->
-  <AppelAction
-    appel={{
-      titre: 'Un projet comme celui-ci ?',
-      texte: 'Un formulaire d’une dizaine de minutes, puis un premier appel téléphonique de trente minutes.',
-      boutonLibelle: 'Parler de votre projet',
-    }}
-    lien={{libelle: 'Le détail de l’accompagnement', href: '/accompagnement'}}
-    href={formulaire}
-  />
+  <!-- 8. Plus de bloc « Un projet comme celui-ci ? » en bas : le bouton « Parlons de votre projet » est déjà sous les photos. -->
 </Base>
 
 <style>
