@@ -245,6 +245,17 @@ a:hover {
 .lien-fleche:hover::after {
   transform: translateX(4px);
 }
+/* Variante : en ocre, sans trait, avec une simple tête de flèche. */
+.lien-fleche.lien-chevron {
+  color: var(--ocre);
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+.lien-fleche.lien-chevron::after {
+  content: '›';
+  font-size: 1.4em;
+  line-height: 1;
+}
 
 /* Images */
 .arche {

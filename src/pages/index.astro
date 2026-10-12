@@ -39,7 +39,7 @@ const {hero, projetsRecents, aiguillage} = page
           </div>
           {projetsRecents?.lienLibelle && (
             <p class="voir-projets" slot="lien">
-              <a class="lien-fleche" href="/projets">
+              <a class="lien-fleche lien-chevron" href="/projets">
                 {projetsRecents.lienLibelle}
               </a>
             </p>
@@ -121,17 +121,13 @@ const {hero, projetsRecents, aiguillage} = page
       font-size: min(var(--t-m), calc((100vw - 10rem) / 84));
     }
   }
-  /* Juste au-dessus des photos, à droite, sans soulignement. */
+  /* Juste au-dessus des photos, à droite, en ocre avec une tête de flèche. */
   .voir-projets {
     margin: 1.5rem 0 0.75rem;
     text-align: right;
   }
   .voir-projets .lien-fleche {
-    border-bottom: 0;
     font-size: 0.75rem;
-  }
-  .voir-projets .lien-fleche::after {
-    content: none;
   }
   /* Les deux portes d'entrée, sur fond blanc, sans titre visible. */
   .section-portes {
