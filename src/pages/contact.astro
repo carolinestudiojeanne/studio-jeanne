@@ -6,6 +6,7 @@ import Faq from '../components/sections/Faq.astro'
 import {schemaFaq} from '../lib/seo'
 import {getPageAccueil, getPageContact, getReglages} from '../lib/contenu'
 import {texteBrut} from '../lib/texte'
+import {FORMULAIRES} from '../lib/formulaires'
 
 const [page, accueil, r] = await Promise.all([getPageContact(), getPageAccueil(), getReglages()])
 const titre = page.seo?.metaTitle || `Contact${r.suffixeTitre}`
@@ -19,10 +20,13 @@ const zone = texteBrut(page.zone?.texte).replace(/\.$/, '')
   <IntroPage titre={page.intro?.titre} sousTitre={zone} texte={page.intro?.texte} espaceBas={false} />
 
   <!-- 2. Deux portes d'entrée, chacune vers son formulaire Tally (qui redirige ensuite vers l'agenda),
-       mêmes formulations que sur l'accueil. -->
+       mêmes formulations que sur l'accueil, puis une simple ligne pour les professionnels. -->
   <section class="section section--serree" id="formulaire">
     <div class="conteneur">
       {accueil.aiguillage && <Aiguillage aiguillage={accueil.aiguillage} sansLiens />}
+      <p class="contact-pro">
+        Vous êtes un professionnel ? <a class="lien-fleche lien-chevron" href={FORMULAIRES.professionnel}>Parlons de vos locaux</a>
+      </p>
     </div>
   </section>
 
@@ -45,6 +49,16 @@ const zone = texteBrut(page.zone?.texte).replace(/\.$/, '')
 </Base>
 
 <style>
+  /* Les professionnels : une simple ligne sous les deux options, le lien en ocre avec une tête de flèche. */
+  .contact-pro {
+    margin: clamp(2.5rem, 5vw, 3.5rem) 0 0;
+    text-align: center;
+    font-size: var(--t-m);
+  }
+  .contact-pro .lien-fleche {
+    margin-left: 0.5rem;
+    vertical-align: 0.1em;
+  }
   .coordonnees {
     font-size: var(--t-l);
     line-height: 1.5;
