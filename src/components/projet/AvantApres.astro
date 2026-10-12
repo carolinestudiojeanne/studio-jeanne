@@ -72,7 +72,7 @@ const groupes = !colonne
                 <span class="aa__etiquette aa__etiquette--avant" aria-hidden="true">Avant</span>
               </div>
               <div class="aa__poignee" aria-hidden="true" />
-              <input class="aa__curseur" type="range" min="0" max="100" value="50" aria-label="Comparer avant et après" />
+              <input class="aa__curseur" type="range" min="0" max="100" value="50" aria-label="Comparer avant et après" aria-valuetext="Avant 50 %, après 50 %" />
             </div>
             {p.legende && <figcaption>{p.legende}</figcaption>}
           </figure>
@@ -88,7 +88,11 @@ const groupes = !colonne
 <script>
   document.querySelectorAll<HTMLElement>('.aa__cadre').forEach((cadre) => {
     const curseur = cadre.querySelector<HTMLInputElement>('.aa__curseur')
-    const maj = () => cadre.style.setProperty('--pos', `${curseur?.value ?? 50}%`)
+    const maj = () => {
+      const v = Number(curseur?.value ?? 50)
+      cadre.style.setProperty('--pos', `${v}%`)
+      curseur?.setAttribute('aria-valuetext', `Avant ${v} %, après ${100 - v} %`)
+    }
     curseur?.addEventListener('input', maj)
     maj()
   })

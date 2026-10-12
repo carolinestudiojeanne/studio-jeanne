@@ -12,7 +12,7 @@ interface Props {
 const {gaId = '', gtmId = ''} = Astro.props
 ---
 
-<div class="cookies" role="dialog" aria-live="polite" aria-label="Cookies" hidden data-ga={gaId} data-gtm={gtmId}>
+<div class="cookies" role="dialog" aria-live="polite" aria-label="Cookies" tabindex="-1" hidden data-ga={gaId} data-gtm={gtmId}>
   <p>
     Des cookies de mesure d’audience, uniquement avec votre accord.{' '}
     <a href="/politique-de-confidentialite">En savoir plus</a>
@@ -97,7 +97,10 @@ const {gaId = '', gtmId = ''} = Astro.props
   )
   document.querySelectorAll('[data-gerer-cookies]').forEach((b) =>
     b.addEventListener('click', () => {
-      if (bandeau) bandeau.hidden = false
+      if (!bandeau) return
+      bandeau.hidden = false
+      // Rouvert depuis le pied de page : le focus passe sur le bandeau, sans défilement.
+      bandeau.focus({preventScroll: true})
     }),
   )
 </script>

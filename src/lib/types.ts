@@ -125,7 +125,6 @@ export interface PageAccueil {
 
 export interface PageProjets {
   intro?: SectionTexte
-  blocPro?: {image?: ImageData; titre?: string; texte?: string; lienLibelle?: string}
   seo?: Seo
 }
 

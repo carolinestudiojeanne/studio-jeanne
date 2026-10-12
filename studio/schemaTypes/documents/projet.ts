@@ -68,7 +68,7 @@ export const projet = defineType({
       title: 'Catégorie',
       type: 'string',
       group: 'essentiel',
-      description: 'Professionnel : le projet s’affiche sur la page Professionnels, pas dans la page Projets.',
+      description: 'Professionnel : le projet s’affiche dans la page Projets avec le filtre « Professionnels ».',
       options: {
         list: [
           {title: 'Résidentiel', value: 'residentiel'},

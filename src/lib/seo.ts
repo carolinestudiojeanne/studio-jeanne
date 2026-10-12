@@ -33,7 +33,7 @@ export function schemaEntreprise(r: Reglages) {
     name: 'Studio Jeanne',
     alternateName: 'Studio Jeanne Intérieurs',
     description:
-      'Studio Jeanne est un studio d’architecture intérieure fondé en 2021 à Bordeaux par Caroline Canova.',
+      'Studio Jeanne est un studio de décoration intérieure fondé en 2021 à Bordeaux par Caroline Canova.',
     url: SITE,
     logo: `${SITE}/logo.svg`,
     image: `${SITE}/partage.png`,

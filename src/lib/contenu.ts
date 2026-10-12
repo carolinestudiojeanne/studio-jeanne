@@ -55,7 +55,6 @@ export const getPageTrouverVotreBien = () =>
   memo('pageTrouver', () => lire<PageOffre>(Q.pageOffreTrouver, {}, demo.pageTrouverVotreBien))
 export const getPageAPropos = () => page<PageAPropos>('pageAPropos', demo.pageAPropos)
 export const getPageContact = () => page<PageContact>('pageContact', demo.pageContact)
-export const getPageProfessionnels = () => page<PageSimple>('pageProfessionnels', demo.pageProfessionnels)
 export const getPageAvisClients = () => page<PageSimple>('pageAvisClients', demo.pageAvisClients)
 export const getPageLegale = (id: 'mentions-legales' | 'politique-de-confidentialite' | 'cgv') =>
   page<PageLegale>(id, demo.pagesLegales[id])

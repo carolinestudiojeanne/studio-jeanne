@@ -176,6 +176,10 @@ a:hover {
 .fond-ardoise .surtitre {
   color: var(--creme);
 }
+/* Sur fond ardoise (pied de page), le contour de focus ardoise serait invisible. */
+.fond-ardoise :focus-visible {
+  outline-color: var(--creme);
+}
 
 /* Texte riche */
 .texte > * + h3 {

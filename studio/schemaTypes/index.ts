@@ -7,7 +7,6 @@ import {projet} from './documents/projet'
 import {avis} from './documents/avis'
 import {reglages} from './documents/reglages'
 import {pageLegale} from './documents/pageLegale'
-import {article} from './documents/article'
 import {etapeArche, pagesFixes} from './pages'
 
 export const schemaTypes = [
@@ -30,7 +29,6 @@ export const schemaTypes = [
   avis,
   reglages,
   pageLegale,
-  article,
   ...pagesFixes,
 ]
 

@@ -35,7 +35,7 @@ export const reglages: Reglages = {
   afficherAdresse: false,
   zone: 'Bordeaux, Gironde et côte atlantique',
   phraseLocale:
-    'Studio Jeanne, architecte d’intérieur à Bordeaux, accompagne les projets de rénovation à Caudéran, au Bouscat, à Mérignac, en Gironde et sur la côte atlantique.',
+    'Studio Jeanne, décoratrice d’intérieur à Bordeaux, accompagne les projets de rénovation à Caudéran, au Bouscat, à Mérignac, en Gironde et sur la côte atlantique.',
   lienTally: '',
   instagram: 'https://www.instagram.com/studio._.jeanne/',
   linkedin: 'https://www.linkedin.com/in/caroline-canova-0401a571',
@@ -55,7 +55,7 @@ export const projets: Projet[] = [
     slug: 'appartement-la-rochelle',
     categorie: 'residentiel',
     typeDeBien: 'Appartement',
-    typeDeProjet: 'Architecture d’intérieur et décoration',
+    typeDeProjet: 'Rénovation complète et décoration',
     commune: 'La Rochelle',
     departement: 'Charente-Maritime',
     surface: 110,
@@ -77,7 +77,7 @@ export const projets: Projet[] = [
       {image: {src: 'https://cdn.prod.website-files.com/6239daed454ddd32df1bfe6d/643e44a37bf2fe7ca2d6c1a9_633c00c6f4a3353a417c4bd4_20220728_170954-p-2600.jpeg', width: 1950, height: 2600, alt: 'Appartement La Rochelle, photo 19'}, affichage: 'paire'},
       {image: {src: 'https://cdn.prod.website-files.com/6239daed454ddd32df1bfe6d/643e44a3e5cb551df08345c0_633bfe96f9aa6fd443f979b2_20220728_145828-p-2600.jpeg', width: 1950, height: 2600, alt: 'Appartement La Rochelle, photo 20'}, affichage: 'paire'},
     ],
-    seo: {metaDescription: 'Appartement La Rochelle : un appartement avec vue mer, resté dans les années 80, rendu actuel et fonctionnel. Studio Jeanne, architecte d’intérieur à Bordeaux.'},
+    seo: {metaTitle: 'Décoration intérieure d’un appartement à La Rochelle', metaDescription: 'Appartement La Rochelle : un appartement avec vue mer, resté dans les années 80, rendu actuel et fonctionnel. Studio Jeanne, décoratrice d’intérieur à Bordeaux.'},
   },
   {
     _id: 'projet-replay',
@@ -100,7 +100,7 @@ export const projets: Projet[] = [
       {image: {src: 'https://cdn.prod.website-files.com/6239daed454ddd32df1bfe6d/65085b0e3b547478d9569a07_Le-replay-7-studio-jeanne-p-1600.jpg', width: 500, height: 333, alt: 'Bar-restaurant Le Replay, photo 5'}, affichage: 'pleine'},
       {image: {src: 'https://cdn.prod.website-files.com/6239daed454ddd32df1bfe6d/65085b0e9cbb07610ecc0d91_Le-replay-8-studio-jeanne-p-1600.jpg', width: 500, height: 333, alt: 'Bar-restaurant Le Replay, photo 6'}, affichage: 'pleine'},
     ],
-    seo: {metaDescription: 'Bar-restaurant Le Replay : un très grand bar intégré au cœur d’un restaurant du bassin d’Arcachon. Studio Jeanne, architecte d’intérieur à Bordeaux.'},
+    seo: {metaDescription: 'Bar-restaurant Le Replay : un très grand bar intégré au cœur d’un restaurant du bassin d’Arcachon. Studio Jeanne, décoratrice d’intérieur à Bordeaux.'},
   },
   {
     _id: 'projet-cuisine-bouscat',
@@ -108,7 +108,7 @@ export const projets: Projet[] = [
     slug: 'cuisine-le-bouscat',
     categorie: 'residentiel',
     typeDeBien: 'Maison neuve',
-    typeDeProjet: 'Architecture d’intérieur',
+    typeDeProjet: 'Rénovation',
     commune: 'Le Bouscat',
     departement: 'Gironde',
     resume: 'Une maison neuve pensée pour une famille nombreuse, de la cuisine au séjour.',
@@ -123,7 +123,7 @@ export const projets: Projet[] = [
       {image: {src: 'https://cdn.prod.website-files.com/6239daed454ddd32df1bfe6d/67a63b7a12d285701a32c8a0_STUDIO%20JEANNE%20CUISINE%20LE%20BOUSCAT%205-p-1600.jpg', width: 500, height: 750, alt: 'Cuisine Le Bouscat, photo 5'}, affichage: 'paire'},
       {image: {src: 'https://cdn.prod.website-files.com/6239daed454ddd32df1bfe6d/67a63b7ac0f1f0f72b8eb702_STUDIO%20JEANNE%20CUISINE%20LE%20BOUSCAT%206-p-1600.jpg', width: 500, height: 750, alt: 'Cuisine Le Bouscat, photo 6'}, affichage: 'paire'},
     ],
-    seo: {metaDescription: 'Cuisine Le Bouscat : une très grande cuisine ouverte sur le séjour, pensée pour une famille nombreuse. Studio Jeanne, architecte d’intérieur à Bordeaux.'},
+    seo: {metaDescription: 'Cuisine Le Bouscat : une très grande cuisine ouverte sur le séjour, pensée pour une famille nombreuse. Studio Jeanne, décoratrice d’intérieur à Bordeaux.'},
   },
   {
     _id: 'projet-echoppe-merignac',
@@ -163,7 +163,7 @@ export const projets: Projet[] = [
       {image: {src: 'https://cdn.prod.website-files.com/6239daed454ddd32df1bfe6d/661e8ed15ca7c515a8f7cf49_Veuve%20Crocq%20studio%20jeanne%2024-p-1600.jpg', width: 500, height: 333, alt: 'Échoppe double Mérignac, photo 22'}, affichage: 'pleine'},
       {image: {src: 'https://cdn.prod.website-files.com/6239daed454ddd32df1bfe6d/661e8ed70376cde610809dc8_Veuve%20Crocq%20studio%20jeanne%2026-p-1600.jpg', width: 500, height: 333, alt: 'Échoppe double Mérignac, photo 23'}, affichage: 'pleine'},
     ],
-    seo: {metaDescription: 'Échoppe double Mérignac : toute la décoration et le mobilier d’une maison, pour une nouvelle vie bordelaise. Studio Jeanne, architecte d’intérieur à Bordeaux.'},
+    seo: {metaDescription: 'Échoppe double Mérignac : toute la décoration et le mobilier d’une maison, pour une nouvelle vie bordelaise. Studio Jeanne, décoratrice d’intérieur à Bordeaux.'},
   },
   {
     _id: 'projet-etage-echoppe-bordeaux',
@@ -194,7 +194,7 @@ export const projets: Projet[] = [
       {image: {src: 'https://cdn.prod.website-files.com/6239daed454ddd32df1bfe6d/6508642f3b547478d95fcf26_Projet-patay-studio-jeanne-25-p-1600.jpg', width: 500, height: 333, alt: 'Étage échoppe double Bordeaux, photo 12'}, affichage: 'pleine'},
       {image: {src: 'https://cdn.prod.website-files.com/6239daed454ddd32df1bfe6d/6508642f511db7320d816096_Projet-patay-studio-jeanne-27-p-1600.jpg', width: 500, height: 333, alt: 'Étage échoppe double Bordeaux, photo 13'}, affichage: 'pleine'},
     ],
-    seo: {metaDescription: 'Étage échoppe double Bordeaux : l’étage d’une échoppe double achetée « dans son jus », près du centre de Bordeaux. Studio Jeanne, architecte d’intérieur à Bordeaux.'},
+    seo: {metaTitle: 'Décoration d’une échoppe double à Bordeaux', metaDescription: 'Étage échoppe double Bordeaux : l’étage d’une échoppe double achetée « dans son jus », près du centre de Bordeaux. Studio Jeanne, décoratrice d’intérieur à Bordeaux.'},
   },
   {
     _id: 'projet-rdc-cauderan',
@@ -222,7 +222,7 @@ export const projets: Projet[] = [
       {image: {src: 'https://cdn.prod.website-files.com/6239daed454ddd32df1bfe6d/6491b1eeea6ea06d6dec5602_Capture%20d%27%C3%A9cran%202023-06-20%20152041.png', width: 835, height: 832, alt: 'RDC d’une maison Caudéran, photo 9'}, affichage: 'pleine'},
       {image: {src: 'https://cdn.prod.website-files.com/6239daed454ddd32df1bfe6d/6491b1ed3939ec70562dbe8a_Capture%20d%27%C3%A9cran%202023-06-20%20152250.png', width: 852, height: 841, alt: 'RDC d’une maison Caudéran, photo 10'}, affichage: 'pleine'},
     ],
-    seo: {metaDescription: 'RDC d’une maison Caudéran : des meubles multifonctions sur mesure pour l’entrée, le séjour et une chambre d’enfant. Studio Jeanne, architecte d’intérieur à Bordeaux.'},
+    seo: {metaDescription: 'RDC d’une maison Caudéran : des meubles multifonctions sur mesure pour l’entrée, le séjour et une chambre d’enfant. Studio Jeanne, décoratrice d’intérieur à Bordeaux.'},
   },
   {
     _id: 'projet-mirefleurs',
@@ -251,7 +251,7 @@ export const projets: Projet[] = [
       {image: {src: 'https://cdn.prod.website-files.com/6239daed454ddd32df1bfe6d/662a668e929b842335cb0f3d_20231208_113118-p-1600.jpg', width: 500, height: 282, alt: 'Restaurant Le Mirefleurs, avant les travaux', legende: 'Avant'}, affichage: 'pleine'},
       {image: {src: 'https://cdn.prod.website-files.com/6239daed454ddd32df1bfe6d/662a668ecc8d2252b7294367_20231208_113318-p-1600.jpg', width: 500, height: 282, alt: 'Restaurant Le Mirefleurs, avant les travaux', legende: 'Avant'}, affichage: 'pleine'},
     ],
-    seo: {metaDescription: 'Restaurant Le Mirefleurs : une nouvelle identité « steakhouse américain » pour un restaurant près de Bordeaux. Studio Jeanne, architecte d’intérieur à Bordeaux.'},
+    seo: {metaDescription: 'Restaurant Le Mirefleurs : une nouvelle identité « steakhouse américain » pour un restaurant près de Bordeaux. Studio Jeanne, décoratrice d’intérieur à Bordeaux.'},
   },
   {
     _id: 'projet-suite-cauderan',
@@ -276,7 +276,7 @@ export const projets: Projet[] = [
       {image: {src: 'https://cdn.prod.website-files.com/6239daed454ddd32df1bfe6d/66758efd948b79958f9c61c8_20240618_112835-p-1600.jpg', width: 500, height: 888, alt: 'Suite parentale Caudéran, photo 8'}, affichage: 'paire'},
       {image: {src: 'https://cdn.prod.website-files.com/6239daed454ddd32df1bfe6d/66758fa5dd56262b2d7ab0ac_20230918_150744-p-1600.jpg', width: 500, height: 282, alt: 'Suite parentale Caudéran, photo 9'}, affichage: 'pleine'},
     ],
-    seo: {metaDescription: 'Suite parentale Caudéran : une suite parentale transformée dans un immeuble bordelais. Studio Jeanne, architecte d’intérieur à Bordeaux.'},
+    seo: {metaDescription: 'Suite parentale Caudéran : une suite parentale transformée dans un immeuble bordelais. Studio Jeanne, décoratrice d’intérieur à Bordeaux.'},
   },
 ]
 
@@ -313,7 +313,7 @@ export const pageAccueil: PageAccueil = {
     colonne1: {
       titre: 'Vous avez déjà votre maison.',
       texte: 'Vous venez de l’acheter, ou vous y vivez depuis des années et le moment est enfin venu de la transformer.',
-      boutonLibelle: 'L’accompagnement',
+      boutonLibelle: 'Accompagnement',
     },
     colonne2: {
       titre: 'Vous ne l’avez pas encore trouvée.',
@@ -322,7 +322,7 @@ export const pageAccueil: PageAccueil = {
     },
   },
   caroline: {
-    image: img('lin', 'Portrait de Caroline Canova, architecte d’intérieur à Bordeaux', 'portrait'),
+    image: img('lin', 'Portrait de Caroline Canova, décoratrice d’intérieur à Bordeaux', 'portrait'),
     texte:
       'Je m’appelle Caroline Canova. J’ai commencé par un autre métier, l’orthophonie, où j’ai passé quinze ans à comprendre ce que les gens n’arrivent pas à formuler. C’est resté ma façon de travailler.',
     lienLibelle: 'Mon parcours',
@@ -335,9 +335,9 @@ export const pageAccueil: PageAccueil = {
     boutonLibelle: 'Remplir le formulaire',
   },
   seo: {
-    metaTitle: 'Architecte d’intérieur à Bordeaux · Studio Jeanne',
+    metaTitle: 'Décoratrice d’intérieur à Bordeaux · Studio Jeanne',
     metaDescription:
-      'Caroline Canova, architecte et décoratrice d’intérieur à Bordeaux. Rénovation et conception de maisons de famille, de l’écoute aux finitions.',
+      'Caroline Canova, décoratrice d’intérieur à Bordeaux. Rénovation et conception de maisons de famille, de l’écoute aux finitions.',
   },
 }
 
@@ -352,14 +352,8 @@ export const pageProjets: PageProjets = {
     titre: 'Projets de rénovation intérieure à Bordeaux',
     texte: paragraphes('Maisons, appartements, bars et restaurants, à Bordeaux, en Gironde et sur la côte atlantique.'),
   },
-  blocPro: {
-    image: img('ardoise', 'Salle de restaurant aménagée par Studio Jeanne à Bordeaux'),
-    titre: 'Commerces et restaurants',
-    texte: 'Studio Jeanne accompagne aussi les professionnels qui veulent un lieu à leur image.',
-    lienLibelle: 'Voir les projets professionnels',
-  },
   seo: {
-    metaTitle: 'Projets d’architecture intérieure, Bordeaux et Gironde · Studio Jeanne',
+    metaTitle: 'Projets de décoration intérieure à Bordeaux · Studio Jeanne',
     metaDescription: 'Les réalisations de Studio Jeanne : rénovations de maisons et d’appartements à Bordeaux, Caudéran, Le Bouscat, Mérignac et sur la côte atlantique.',
   },
 }
@@ -414,13 +408,13 @@ export const pageAccompagnement: PageOffre = {
   ],
   appel: appelStandard,
   seo: {
-    metaTitle: 'Rénovation et architecture intérieure à Bordeaux · Studio Jeanne',
+    metaTitle: 'Rénovation, décoration intérieure à Bordeaux · Studio Jeanne',
     metaDescription: 'Écoute, plans, 3D, matériaux, artisans : comment Studio Jeanne conçoit la rénovation de votre maison à Bordeaux, dans son ensemble.',
   },
 }
 
 export const pageTrouverVotreBien: PageOffre = {
-  aiguillage: {texte: 'Vous avez déjà votre maison ?', lienLibelle: 'L’accompagnement'},
+  aiguillage: {texte: 'Vous avez déjà votre maison ?', lienLibelle: 'Accompagnement'},
   intro: {
     titre: 'Trouver le bien, puis en faire votre maison',
     texte: paragraphes('Chasseuse en immobilier et décoratrice d’intérieur à Bordeaux, je ne cherche pas seulement un bien qui coche vos critères : je cherche celui qui pourra accueillir le projet que vous avez en tête.'),
@@ -438,7 +432,7 @@ export const pageTrouverVotreBien: PageOffre = {
       _key: 'e2',
       titre: 'Une double compétence',
       texte: paragraphes(
-        'Je suis chasseuse en immobilier au sein de l’agence Homelike Home, et architecte d’intérieur chez Studio Jeanne. Je cherche votre bien en sachant déjà ce que vous voulez en faire, et je le visite en voyant ce qu’il peut devenir.',
+        'Je suis chasseuse en immobilier au sein de l’agence Homelike Home, et décoratrice d’intérieur chez Studio Jeanne. Je cherche votre bien en sachant déjà ce que vous voulez en faire, et je le visite en voyant ce qu’il peut devenir.',
       ),
       image: img('lin', 'Visite d’un bien à rénover à Bordeaux', 'portrait'),
     },
@@ -472,8 +466,8 @@ export const pageTrouverVotreBien: PageOffre = {
   appel: appelStandard,
   lienHomelikeLibelle: 'Découvrir l’agence Homelike Home',
   seo: {
-    metaTitle: 'Chasseur immobilier et architecte d’intérieur à Bordeaux · Studio Jeanne',
-    metaDescription: 'Chasseuse en immobilier et architecte d’intérieur à Bordeaux : Caroline Canova cherche votre bien en sachant déjà ce que vous voulez en faire.',
+    metaTitle: 'Chasseuse immobilier et décoratrice d’intérieur à Bordeaux',
+    metaDescription: 'Chasseuse en immobilier et décoratrice d’intérieur à Bordeaux : Caroline Canova cherche votre bien en sachant déjà ce que vous voulez en faire.',
   },
 }
 
@@ -484,13 +478,13 @@ export const pageAPropos: PageAPropos = {
     'Avant de concevoir des espaces, j’ai passé quinze ans à écouter. Orthophoniste, j’ai appris à comprendre ce que les gens ne parviennent pas à formuler. C’est exactement ce que je fais aujourd’hui avec les lieux de vie.',
     'Depuis 2021, j’accompagne des familles qui veulent transformer leur maison en profondeur, à Bordeaux comme au bord de l’océan. Chaque projet commence par une écoute attentive de votre mode de vie, et se construit étape par étape jusqu’à un intérieur qui vous ressemble.',
   ),
-  portrait: img('lin', 'Portrait de Caroline Canova, architecte d’intérieur à Bordeaux', 'portrait'),
+  portrait: img('lin', 'Portrait de Caroline Canova, décoratrice d’intérieur à Bordeaux', 'portrait'),
   portrait2: img('sauge', 'Caroline Canova au travail dans un intérieur rénové à Bordeaux', 'portrait'),
   imageEchoppe: img('creme', 'L’échoppe de la rue Jeanne à Bordeaux après rénovation'),
   lienAvisLibelle: 'Ce qu’en disent mes clients',
   appel: appelStandard,
   seo: {
-    metaTitle: 'Caroline Canova, architecte d’intérieur à Bordeaux · Studio Jeanne',
+    metaTitle: 'Caroline Canova, décoratrice d’intérieur à Bordeaux',
     metaDescription: 'Caroline Canova a fondé Studio Jeanne à Bordeaux en 2021, après quinze ans d’orthophonie. Son parcours et sa façon de travailler.',
   },
 }
@@ -512,29 +506,18 @@ export const pageContact: PageContact = {
     ),
   },
   seo: {
-    metaTitle: 'Contact · Architecte d’intérieur à Bordeaux et en Gironde',
+    metaTitle: 'Contact · Décoratrice d’intérieur à Bordeaux et en Gironde',
     metaDescription: 'Parlons de votre projet : un formulaire d’une dizaine de minutes, puis un premier appel téléphonique de trente minutes. Studio Jeanne, Bordeaux et Gironde.',
   },
 }
 
-export const pageProfessionnels: PageSimple = {
-  intro: {
-    titre: 'Aménagement de commerces et restaurants à Bordeaux',
-    texte: paragraphes('Texte à écrire. Studio Jeanne conçoit aussi des lieux pour les professionnels : restaurants, bars, boutiques.'),
-  },
-  appel: {...appelStandard, titre: 'Un lieu à aménager ?'},
-  seo: {
-    metaTitle: 'Aménagement de commerces et restaurants à Bordeaux · Studio Jeanne',
-    metaDescription: 'Studio Jeanne aménage commerces et restaurants à Bordeaux : Le Replay, Le Mirefleurs, Boutik Optik.',
-  },
-}
 
 export const pageAvisClients: PageSimple = {
   intro: {titre: 'Ce qu’en disent mes clients'},
   appel: appelStandard,
   seo: {
-    metaTitle: 'Avis clients · Studio Jeanne, architecte d’intérieur à Bordeaux',
-    metaDescription: 'Les avis des clients de Studio Jeanne, architecte d’intérieur à Bordeaux, tels qu’ils les ont laissés sur Google.',
+    metaTitle: 'Avis clients · Studio Jeanne, décoratrice à Bordeaux',
+    metaDescription: 'Les avis des clients de Studio Jeanne, décoratrice d’intérieur à Bordeaux, tels qu’ils les ont laissés sur Google.',
   },
 }
 

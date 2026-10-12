@@ -17,7 +17,7 @@ const n = projets.length
 const place = (i: number, centre: number) => placeCarrousel(i, centre, n)
 ---
 
-<div class="carrousel" data-carrousel>
+<div class="carrousel" data-carrousel role="region" aria-roledescription="carrousel" aria-label="Projets récents">
   {
     Astro.slots.has('default') && (
       <div class="carrousel__entete">

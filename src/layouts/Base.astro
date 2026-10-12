@@ -18,9 +18,11 @@ interface Props {
   schemas?: Array<Record<string, unknown> | null>
   type?: 'website' | 'article'
   noindex?: boolean
+  /** Pas d'adresse canonique (page 404). */
+  sansCanonique?: boolean
 }
 
-const {titre, description, imagePartage, schemas = [], type = 'website', noindex = false} = Astro.props
+const {titre, description, imagePartage, schemas = [], type = 'website', noindex = false, sansCanonique = false} = Astro.props
 const reglages = await getReglages()
 const url = canonique(Astro.url.pathname)
 const image = imagePartageUrl(imagePartage) || imagePartageUrl(reglages.imagePartage) || '/partage.png'
@@ -39,7 +41,7 @@ const jsonLd = [schemaEntreprise(reglages), ...schemas].filter(Boolean)
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{titre}</title>
     {description && <meta name="description" content={description} />}
-    <link rel="canonical" href={url} />
+    {!sansCanonique && <link rel="canonical" href={url} />}
     {sansIndex && <meta name="robots" content="noindex, nofollow" />}
 
     <link rel="preload" href="/fonts/glacial-indifference-400.woff2" as="font" type="font/woff2" crossorigin />
@@ -52,7 +54,7 @@ const jsonLd = [schemaEntreprise(reglages), ...schemas].filter(Boolean)
     <meta property="og:site_name" content="Studio Jeanne" />
     <meta property="og:title" content={titre} />
     {description && <meta property="og:description" content={description} />}
-    <meta property="og:url" content={url} />
+    {!sansCanonique && <meta property="og:url" content={url} />}
     <meta property="og:image" content={imageAbsolue} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={titre} />

@@ -68,7 +68,7 @@ const {projet, portrait, bande, caracteristiques, avantApres = false, video = fa
 
   {
     bande.length > 1 && (
-      <div class:list={['ep__bande-cadre', {'ep__bande-cadre--defile': bande.length > 4}]} data-bande>
+      <div class:list={['ep__bande-cadre', {'ep__bande-cadre--defile': bande.length > 4}]} data-bande role="region" aria-label={`Photos du projet ${projet.titre}`}>
         {bande.length > 4 && (
           <button type="button" class="ep__fleche" data-sens="-1" aria-label="Photos précédentes">
             <svg viewBox="0 0 10 18" aria-hidden="true"><path d="M9 1 1 9l8 8" /></svg>

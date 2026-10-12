@@ -4,7 +4,6 @@ import {CogIcon} from '@sanity/icons/Cog'
 import {CommentIcon} from '@sanity/icons/Comment'
 import {DocumentTextIcon} from '@sanity/icons/DocumentText'
 import {HomeIcon} from '@sanity/icons/Home'
-import {BookIcon} from '@sanity/icons/Book'
 import {DocumentsIcon} from '@sanity/icons/Documents'
 import {pagesFixes} from './schemaTypes/pages'
 
@@ -63,6 +62,4 @@ export const structure: StructureResolver = (S, context) =>
         .title('Réglages du site')
         .icon(CogIcon)
         .child(S.document().schemaType('reglages').documentId('reglages').title('Réglages du site')),
-      S.divider(),
-      S.documentTypeListItem('article').title('Journal (plus tard)').icon(BookIcon),
     ])

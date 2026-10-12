@@ -108,7 +108,7 @@ export const pageAccueil = defineType({
           name: 'h1',
           title: 'Petite ligne au-dessus de l’accroche',
           type: 'string',
-          description: 'C’est le titre principal pour Google : gardez « architecte d’intérieur » et « Bordeaux ».',
+          description: 'C’est le titre principal pour Google : gardez « décoratrice d’intérieur » et « Bordeaux ».',
         }),
         defineField({name: 'accroche', title: 'Accroche', type: 'string'}),
         defineField({name: 'sousTitre', title: 'Sous-titre', type: 'string'}),
@@ -216,20 +216,6 @@ export const pageProjets = defineType({
   groups,
   fields: [
     defineField({name: 'intro', title: '1. Introduction', type: 'sectionTexte', group: 'contenu'}),
-    defineField({
-      name: 'blocPro',
-      title: '3. Bloc Professionnels',
-      type: 'object',
-      group: 'contenu',
-      description: 'En bas de la page, après la grille des projets. Mène à la page Professionnels.',
-      options: {collapsible: true, collapsed: false},
-      fields: [
-        defineField({name: 'image', title: 'Image', type: 'imageAlt'}),
-        defineField({name: 'titre', title: 'Titre', type: 'string'}),
-        defineField({name: 'texte', title: 'Phrase', type: 'text', rows: 2}),
-        defineField({name: 'lienLibelle', title: 'Texte du lien', type: 'string'}),
-      ],
-    }),
     seoField,
   ],
   preview: {prepare: () => ({title: 'Projets'})},
@@ -351,20 +337,6 @@ export const pageContact = defineType({
   preview: {prepare: () => ({title: 'Contact'})},
 })
 
-export const pageProfessionnels = defineType({
-  name: 'pageProfessionnels',
-  title: 'Professionnels',
-  type: 'document',
-  icon: DocumentIcon,
-  groups,
-  fields: [
-    defineField({name: 'intro', title: '1. Introduction', type: 'sectionTexte', group: 'contenu'}),
-    appel,
-    seoField,
-  ],
-  preview: {prepare: () => ({title: 'Professionnels'})},
-})
-
 export const pageAvisClients = defineType({
   name: 'pageAvisClients',
   title: 'Avis clients',
@@ -386,6 +358,5 @@ export const pagesFixes = [
   pageTrouverVotreBien,
   pageAPropos,
   pageContact,
-  pageProfessionnels,
   pageAvisClients,
 ]

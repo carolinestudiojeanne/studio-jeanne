@@ -39,7 +39,6 @@ const docs: Array<Record<string, unknown>> = [
   {_id: 'pageTrouverVotreBien', _type: 'pageTrouverVotreBien', ...trouver, apresAchat: a2, deuxStructures: b2},
   {_id: 'pageAPropos', _type: 'pageAPropos', ...demo.pageAPropos},
   {_id: 'pageContact', _type: 'pageContact', ...demo.pageContact},
-  {_id: 'pageProfessionnels', _type: 'pageProfessionnels', ...demo.pageProfessionnels},
   {_id: 'pageAvisClients', _type: 'pageAvisClients', ...demo.pageAvisClients},
   ...Object.entries(demo.pagesLegales).map(([id, p]) => ({_id: id, _type: 'pageLegale', ...p})),
 ]

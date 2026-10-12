@@ -11,7 +11,7 @@ import {FORMULAIRES} from '../lib/formulaires'
 const [page, tousProjets, avis, reglages] = await Promise.all([getPageAccueil(), getProjets(), getAvisAccueil(), getReglages()])
 // L'accueil ne montre que les projets de particuliers (diaporama et projets récents).
 const projets = tousProjets.filter((p) => p.categorie === 'residentiel')
-const titre = page.seo?.metaTitle || `Architecte d’intérieur à Bordeaux${reglages.suffixeTitre}`
+const titre = page.seo?.metaTitle || `Décoratrice d’intérieur à Bordeaux${reglages.suffixeTitre}`
 const {hero, projetsRecents, aiguillage} = page
 ---
 
