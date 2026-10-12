@@ -13,6 +13,9 @@ const date = page.miseAJour ? new Date(page.miseAJour).toLocaleDateString('fr-FR
 <Base titre={page.seo?.metaTitle || `${page.titre}${reglages.suffixeTitre}`} description={page.seo?.metaDescription}>
   <section class="section">
     <div class="conteneur page-legale">
+      <a class="retour" href="/" data-retour aria-label="Revenir à la page précédente">
+        <svg viewBox="0 0 9 16" aria-hidden="true"><path d="M8 1 1 8l7 7" /></svg>
+      </a>
       <h1>{page.titre}</h1>
       {date && <p class="maj">Mis à jour le {date}</p>}
       <div class="texte" set:html={texteEnHtml(page.texte)} />
@@ -20,7 +23,37 @@ const date = page.miseAJour ? new Date(page.miseAJour).toLocaleDateString('fr-FR
   </section>
 </Base>
 
+<script>
+  // Revient à la page précédente du site ; sans page précédente (lien direct), mène à l'accueil.
+  document.querySelector<HTMLAnchorElement>('[data-retour]')?.addEventListener('click', (e) => {
+    if (document.referrer && new URL(document.referrer).origin === location.origin && history.length > 1) {
+      e.preventDefault()
+      history.back()
+    }
+  })
+</script>
+
 <style>
+  /* Tête de flèche ocre, fine, comme celles du carrousel de l'accueil. */
+  .retour {
+    display: inline-block;
+    color: var(--ocre);
+    padding: 0.5rem 0.75rem 0.5rem 0;
+    margin-bottom: 1.25rem;
+    line-height: 0;
+    transition: transform 0.25s;
+  }
+  .retour:hover {
+    transform: translateX(-4px);
+  }
+  .retour svg {
+    width: 0.65rem;
+    height: auto;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1;
+    overflow: visible;
+  }
   /* Même largeur que le reste du site. */
   /* Titre de la page à la même taille que les titres des autres pages (bloc d'introduction). */
   .page-legale h1 {
