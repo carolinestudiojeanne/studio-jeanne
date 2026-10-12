@@ -5,7 +5,7 @@
  * Le bouton mène au formulaire Tally de la porte ; le lien dessous, à la page qui la présente.
  *
  * Même composition que la description d'une étape dans l'arche (pages L'accompagnement et Trouver votre bien),
- * sans l'arche : surtitre ocre, titre et texte alignés à droite, à gauche d'une photo verticale aux coins arrondis,
+ * sans l'arche : surtitre ocre facultatif, titre et texte alignés à droite, à gauche d'une photo verticale aux coins arrondis,
  * la dernière ligne au niveau du bas de la photo. Tant qu'il n'y a pas de photo, l'emplacement reste une forme crème.
  */
 import {FORMULAIRES} from '../../lib/formulaires'
@@ -21,13 +21,11 @@ const {aiguillage, sansLiens = false} = Astro.props
 const colonnes = [
   {
     ...aiguillage.colonne1,
-    surtitre: aiguillage.colonne1?.surtitre || 'L’accompagnement',
     href: FORMULAIRES.projet,
     page: {href: '/accompagnement', libelle: 'Découvrir l’accompagnement'},
   },
   {
     ...aiguillage.colonne2,
-    surtitre: aiguillage.colonne2?.surtitre || 'La recherche de bien',
     href: FORMULAIRES.trouver,
     page: {href: '/trouver-votre-bien', libelle: 'Découvrir la recherche de bien'},
   },
@@ -39,7 +37,7 @@ const colonnes = [
     colonnes.map((c) => (
       <div class="aiguillage__colonne">
         <div class="aiguillage__texte">
-          <p class="aiguillage__surtitre">{c.surtitre}</p>
+          {c.surtitre && <p class="aiguillage__surtitre">{c.surtitre}</p>}
           <h3>{c.titre}</h3>
           {c.texte && <p class="aiguillage__description">{c.texte}</p>}
           {c.boutonLibelle && (

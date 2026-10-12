@@ -156,9 +156,9 @@ export const pageAccueil = defineType({
             fields: [
               defineField({
                 name: 'surtitre',
-                title: 'Surtitre (petit, en ocre)',
+                title: 'Surtitre (petit, en ocre, facultatif)',
                 type: 'string',
-                description: i === 0 ? 'Par défaut : « L’accompagnement ».' : 'Par défaut : « La recherche de bien ».',
+                description: 'Laisser vide pour ne rien afficher au-dessus du titre.',
               }),
               defineField({name: 'titre', title: 'Titre', type: 'string'}),
               defineField({name: 'texte', title: 'Texte', type: 'text', rows: 3}),
