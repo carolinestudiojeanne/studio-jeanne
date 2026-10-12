@@ -320,13 +320,34 @@ const {projet, portrait, bande, caracteristiques, avantApres = false, video = fa
       grid-template-columns: 1fr auto;
       align-items: center;
     }
-    /* Vidéo à gauche, avant / après empilés à sa droite (même hauteur que la vidéo), bouton à droite. */
+    /* Vidéo à gauche ; à sa droite, les avant / après horizontaux empilés (même hauteur que la vidéo) ;
+       puis les verticaux, avec le bouton dessous, alignés à gauche. */
     .ep__appel--video {
       grid-template-columns: auto auto 1fr;
+      grid-template-rows: auto 1fr;
       justify-items: start;
+      align-items: start;
+      justify-content: start;
+    }
+    .ep__appel--video .ep__aa,
+    .ep__appel--video :global(.aa-groupes) {
+      display: contents;
+    }
+    .ep__appel--video .ep__video-cote {
+      grid-column: 1;
+      grid-row: 1 / span 2;
+    }
+    .ep__appel--video :global(.aa-liste--colonne) {
+      grid-column: 2;
+      grid-row: 1 / span 2;
+    }
+    .ep__appel--video :global(.aa-liste--verticaux) {
+      grid-column: 3;
+      grid-row: 1;
     }
     .ep__appel--video > .bouton {
-      justify-self: end;
+      grid-column: 3;
+      grid-row: 2;
     }
   }
 

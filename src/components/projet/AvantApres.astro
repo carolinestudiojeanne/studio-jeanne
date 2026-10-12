@@ -37,13 +37,24 @@ const items = paires
 // Rangées de 3 au plus : dans une rangée, la largeur de chaque cadre est proportionnelle à son format,
 // ce qui leur donne exactement la même hauteur.
 const rangees: (typeof items)[] = []
-const parRangee = colonne ? 1 : 3
-for (let i = 0; i < items.length; i += parRangee) rangees.push(items.slice(i, i + parRangee))
+for (let i = 0; i < items.length; i += 3) rangees.push(items.slice(i, i + 3))
+// À côté d'une vidéo : les avant / après horizontaux (et carrés) empilés d'un côté, les verticaux de l'autre.
+const horizontaux = items.filter((p) => p.format !== 'portrait')
+const verticaux = items.filter((p) => p.format === 'portrait')
+const groupes = colonne
+  ? [
+      {classe: 'aa-liste--colonne', total: horizontaux.length, rangees: horizontaux.map((p) => [p])},
+      {classe: 'aa-liste--verticaux', total: verticaux.length, rangees: verticaux.map((p) => [p])},
+    ].filter((g) => g.total)
+  : [{classe: '', total: items.length, rangees}]
 ---
 
-<div class:list={['aa-liste', {'aa-liste--colonne': colonne}]} style={`--total: ${items.length}`}>
+<div class="aa-groupes">
+{
+  groupes.map((g) => (
+<div class:list={['aa-liste', g.classe]} style={`--total: ${g.total}`}>
   {
-    rangees.map((rangee) => (
+    g.rangees.map((rangee) => (
       <div class="aa-rangee" style={`--somme: ${rangee.reduce((t, p) => t + p.ratio, 0)}; --n: ${rangee.length}`}>
         {rangee.map((p) => (
           <figure class:list={['aa', `aa--${p.format}`]} style={`--r: ${p.ratio}`}>
@@ -66,6 +77,9 @@ for (let i = 0; i < items.length; i += parRangee) rangees.push(items.slice(i, i 
     ))
   }
 </div>
+  ))
+}
+</div>
 
 <script>
   document.querySelectorAll<HTMLElement>('.aa__cadre').forEach((cadre) => {
@@ -77,6 +91,11 @@ for (let i = 0; i < items.length; i += parRangee) rangees.push(items.slice(i, i 
 </script>
 
 <style>
+  /* Groupes d'avant / après (horizontaux / verticaux à côté d'une vidéo) : même écart entre eux qu'entre les avant / après. */
+  .aa-groupes {
+    display: grid;
+    gap: clamp(1rem, 2vw, 1.5rem);
+  }
   .aa-liste {
     --ecart: clamp(1rem, 2vw, 1.5rem);
     /* Hauteur commune des avant / après. */
@@ -117,9 +136,14 @@ for (let i = 0; i < items.length; i += parRangee) rangees.push(items.slice(i, i 
     .aa-liste--colonne {
       --hauteur: calc((min(80svh, 42rem) - (var(--total) - 1) * var(--ecart)) / var(--total));
     }
-    .aa-liste--colonne .aa-rangee .aa {
+    .aa-liste--colonne .aa-rangee .aa,
+    .aa-liste--verticaux .aa-rangee .aa {
       flex: none;
       width: calc(var(--hauteur) * var(--r));
+    }
+    /* Les verticaux, un peu plus grands, au-dessus du bouton. */
+    .aa-liste--verticaux {
+      --hauteur: calc(min(80svh, 42rem) * 0.62);
     }
   }
   .aa figcaption {
