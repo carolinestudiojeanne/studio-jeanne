@@ -138,7 +138,7 @@ const groupes = !colonne
   /* À droite d'une vidéo (ordinateur) : les avant / après empilés occupent exactement la hauteur de la vidéo. */
   @media (min-width: 64rem) {
     .aa-liste--colonne {
-      --hauteur: calc((min(80svh, 42rem) - (var(--total) - 1) * var(--ecart)) / var(--total));
+      --hauteur: calc((var(--h-video, min(80svh, 42rem)) - (var(--total) - 1) * var(--ecart)) / var(--total));
     }
     .aa-liste--colonne .aa-rangee .aa,
     .aa-liste--verticaux .aa-rangee .aa {
@@ -147,7 +147,7 @@ const groupes = !colonne
     }
     /* Les verticaux, un peu plus grands, au-dessus du bouton. */
     .aa-liste--verticaux {
-      --hauteur: calc(min(80svh, 42rem) * 0.62 / var(--total));
+      --hauteur: calc(var(--h-video, min(80svh, 42rem)) * 0.62 / var(--total));
     }
   }
   .aa figcaption {

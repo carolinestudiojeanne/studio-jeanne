@@ -75,9 +75,9 @@ const autres = galerie.filter((_, i) => i !== iPortrait)
 const bande = autres.length > 1 ? autres : []
 const resteGalerie = autres.slice(bande.length)
 const aVideo = !!(projet.video && (projet.video.fichierUrl || projet.video.lien))
-// Vidéo 3D (fichier vidéo) : elle se place à gauche, à hauteur des avant / après et du bouton « Parlons de votre projet »
-// (règles de mise en page dans EnTeteProjet et AvantApres).
-const videoACote = !!projet.video?.fichierUrl
+// Projet avec une vidéo (fichier ou lien YouTube / Vimeo) : elle se place à gauche, à hauteur des avant / après
+// et du bouton « Parlons de votre projet » (règles de mise en page dans EnTeteProjet et AvantApres).
+const videoACote = aVideo
 const caracteristiques = [projet.typeDeProjet && {libelle: 'Projet', valeur: projet.typeDeProjet}, ...details].filter(Boolean) as Array<{
   libelle: string
   valeur: string
