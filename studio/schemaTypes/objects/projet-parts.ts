@@ -79,5 +79,12 @@ export const video = defineType({
       type: 'imageAlt',
       description: 'Affichée avant la lecture.',
     }),
+    defineField({
+      name: 'mention3d',
+      title: 'Afficher la mention « Vidéo 3D »',
+      type: 'boolean',
+      initialValue: true,
+      description: 'Petite mention en haut à droite de la vidéo. À décocher si ce n’est pas une vidéo 3D.',
+    }),
   ],
 })

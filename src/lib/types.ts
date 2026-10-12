@@ -65,7 +65,7 @@ export interface Projet extends ProjetCarte {
   realisation?: PortableText
   galerie?: Array<{_key?: string; image: ImageData; affichage?: 'pleine' | 'paire'}>
   avantApres?: Array<{_key?: string; avant: ImageData; apres: ImageData; legende?: string}>
-  video?: {fichierUrl?: string; lien?: string; imageAttente?: ImageData}
+  video?: {fichierUrl?: string; lien?: string; imageAttente?: ImageData; mention3d?: boolean}
   retourClient?: {citation?: string; prenom?: string}
   projetsLies?: ProjetCarte[]
   seo?: Seo

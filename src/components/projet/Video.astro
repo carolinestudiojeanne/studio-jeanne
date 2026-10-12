@@ -22,7 +22,11 @@ function intégration(lien: string): string | null {
   return null
 }
 const iframe = !video.fichierUrl && video.lien ? intégration(video.lien) : null
+// Mention « Vidéo 3D » affichée sauf si elle est décochée dans Sanity.
+const mention = video.mention3d !== false
 ---
+
+<div class="video-cadre">
 
 {
   video.fichierUrl ? (
@@ -35,8 +39,34 @@ const iframe = !video.fichierUrl && video.lien ? intégration(video.lien) : null
     </div>
   ) : null
 }
+{mention && <span class="video-mention">Vidéo 3D</span>}
+</div>
 
 <style>
+  .video-cadre {
+    position: relative;
+    display: inline-block;
+    max-width: 100%;
+    line-height: 0;
+  }
+  .video-cadre:has(.video--iframe) {
+    display: block;
+  }
+  /* Mention « Vidéo 3D » en haut à droite : même lettrage et même taille que les mots du menu, sur une petite pastille crème. */
+  .video-mention {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    padding: 0.35rem 0.7rem;
+    background: var(--creme);
+    border-radius: 999px;
+    color: var(--ardoise);
+    font-size: var(--t-xs);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    line-height: 1.2;
+    pointer-events: none;
+  }
   video.video {
     display: block;
     max-width: 100%;

@@ -23,7 +23,7 @@ const projetComplet = /* groq */ `
   realisation,
   galerie,
   avantApres,
-  "video": video{lien, imageAttente, "fichierUrl": fichier.asset->url},
+  "video": video{lien, imageAttente, mention3d, "fichierUrl": fichier.asset->url},
   retourClient,
   "projetsLies": projetsLies[]->{${carte}},
   seo,
