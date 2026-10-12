@@ -1,7 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro'
 import GrilleProjets from '../../components/sections/GrilleProjets.astro'
-import Bande from '../../components/sections/Bande.astro'
 import IntroPage from '../../components/sections/IntroPage.astro'
 import {getPageProjets, getProjets, getReglages} from '../../lib/contenu'
 
@@ -23,19 +22,23 @@ const titre = page.seo?.metaTitle || `Projets${reglages.suffixeTitre}`
     <GrilleProjets projets={projets} colonnes={4} />
   </section>
 
-  <!-- 3. Commerces et restaurants : bande beige minimaliste vers la page Professionnels -->
-  {page.blocPro?.titre && <Bande texte={page.blocPro.titre} lien={page.blocPro.lienLibelle || 'Voir les projets professionnels'} href="/professionnels" description={page.blocPro.texte} deuxPoints />}
+  <!-- Ancienne bande « Commerces et restaurants » vers la page Professionnels : retirée (octobre 2026),
+       les projets professionnels s'affichent avec le filtre ci-dessus. -->
 </Base>
 
 <script>
-  // Filtres Particuliers / Professionnels : on arrive sur « Particuliers ».
+  // Filtres Particuliers / Professionnels : on arrive sur « Particuliers »,
+  // ou sur « Professionnels » avec /projets?type=professionnels (ancienne page /professionnels, fil d'Ariane des projets pros).
   document.querySelectorAll<HTMLElement>('[data-filtre]').forEach((zone) => {
-    zone.querySelectorAll<HTMLButtonElement>('.filtre').forEach((bouton) => {
-      bouton.addEventListener('click', () => {
-        zone.dataset.filtre = bouton.dataset.categorie
-        zone.querySelectorAll('.filtre').forEach((b) => b.setAttribute('aria-pressed', String(b === bouton)))
-      })
-    })
+    const choisir = (bouton: HTMLButtonElement) => {
+      zone.dataset.filtre = bouton.dataset.categorie
+      zone.querySelectorAll('.filtre').forEach((b) => b.setAttribute('aria-pressed', String(b === bouton)))
+    }
+    zone.querySelectorAll<HTMLButtonElement>('.filtre').forEach((bouton) => bouton.addEventListener('click', () => choisir(bouton)))
+    if (new URLSearchParams(location.search).get('type') === 'professionnels') {
+      const pro = zone.querySelector<HTMLButtonElement>('.filtre[data-categorie="professionnel"]')
+      if (pro) choisir(pro)
+    }
   })
 </script>
 

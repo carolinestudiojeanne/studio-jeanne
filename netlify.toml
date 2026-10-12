@@ -10,3 +10,9 @@
   for = "/fonts/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+
+# L'ancienne page Professionnels (supprimée en octobre 2026) mène aux projets, filtre « Professionnels » activé.
+[[redirects]]
+  from = "/professionnels"
+  to = "/projets?type=professionnels"
+  status = 301

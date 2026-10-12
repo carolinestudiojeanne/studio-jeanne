@@ -37,7 +37,7 @@ const description = projet.seo?.metaDescription || projet.resume || ''
 
 const filAriane = [
   {nom: 'Accueil', chemin: '/'},
-  pro ? {nom: 'Professionnels', chemin: '/professionnels'} : {nom: 'Projets', chemin: '/projets'},
+  pro ? {nom: 'Professionnels', chemin: '/projets?type=professionnels'} : {nom: 'Projets', chemin: '/projets'},
   {nom: projet.titre, chemin},
 ]
 
