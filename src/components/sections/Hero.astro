@@ -52,7 +52,7 @@ const SurtitreTag = surtitreEstH1 ? 'h1' : 'p'
 </section>
 
 <script>
-  // Diaporama du grand visuel : une image toutes les 7 secondes, en fondu.
+  // Diaporama du grand visuel : une image toutes les 3 secondes, en fondu.
   document.querySelectorAll<HTMLElement>('[data-diaporama]').forEach((zone) => {
     const diapos = [...zone.querySelectorAll<HTMLElement>('.hero__diapo')]
     if (diapos.length < 2) return
@@ -61,7 +61,7 @@ const SurtitreTag = surtitreEstH1 ? 'h1' : 'p'
       diapos[i].classList.remove('est-visible')
       i = (i + 1) % diapos.length
       diapos[i].classList.add('est-visible')
-    }, 7000)
+    }, 3000)
   })
 </script>
 
@@ -85,7 +85,7 @@ const SurtitreTag = surtitreEstH1 ? 'h1' : 'p'
     position: absolute;
     inset: 0;
     opacity: 0;
-    transition: opacity 1.6s ease;
+    transition: opacity 1s ease;
   }
   .hero__diapo.est-visible {
     opacity: 1;
