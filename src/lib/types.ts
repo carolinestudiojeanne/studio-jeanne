@@ -146,6 +146,7 @@ export interface PageAPropos {
   titre?: string
   texte?: PortableText
   portrait?: ImageData
+  portrait2?: ImageData
   imageEchoppe?: ImageData
   lienAvisLibelle?: string
   appel?: AppelAction

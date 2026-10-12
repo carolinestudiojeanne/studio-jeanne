@@ -25,8 +25,9 @@ const personne = {
 <Base titre={titre} description={page.seo?.metaDescription} imagePartage={page.seo?.imagePartage || page.portrait} schemas={[personne]}>
   <section class="section">
     <div class="conteneur apropos">
-      <div class="apropos__portrait">
-        <Image image={page.portrait} ratio={4 / 5} arche prioritaire sizes="(min-width: 52rem) 35vw, 90vw" />
+      <div class:list={['apropos__photos', {'apropos__photos--deux': page.portrait && page.portrait2}]}>
+        <Image class="apropos__photo apropos__photo--1" image={page.portrait} ratio={4 / 5} legende={false} prioritaire sizes="(min-width: 52rem) 28vw, 70vw" />
+        <Image class="apropos__photo apropos__photo--2" image={page.portrait2} ratio={4 / 5} legende={false} sizes="(min-width: 52rem) 24vw, 60vw" />
       </div>
       <div class="apropos__texte">
         <h1>{page.titre}</h1>
@@ -65,13 +66,30 @@ const personne = {
       gap: clamp(3rem, 8vw, 8rem);
       align-items: start;
     }
-    .apropos__portrait {
+    .apropos__photos {
       position: sticky;
       top: 7rem;
     }
   }
-  .apropos__portrait {
-    max-width: 26rem;
+  /* Deux portraits décalés en diagonale : le premier en haut à gauche, le second plus bas à droite, qui le chevauche un peu. */
+  .apropos__photos {
+    max-width: 30rem;
+  }
+  .apropos__photos--deux {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+  }
+  .apropos__photos--deux :global(.apropos__photo--1) {
+    grid-area: 1 / 1 / 2 / 8;
+  }
+  .apropos__photos--deux :global(.apropos__photo--2) {
+    grid-area: 1 / 5 / 2 / 11;
+    margin-top: 55%;
+    position: relative;
+  }
+  /* Liseré couleur de fond pour détacher la seconde photo de la première. */
+  .apropos__photos--deux :global(.apropos__photo--2 .image__cadre) {
+    box-shadow: 0 0 0 0.5rem var(--creme);
   }
   .apropos__texte {
     max-width: var(--etroit);

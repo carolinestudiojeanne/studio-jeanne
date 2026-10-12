@@ -278,7 +278,14 @@ export const pageAPropos = defineType({
   fields: [
     defineField({name: 'titre', title: 'Titre', type: 'string', group: 'contenu'}),
     defineField({name: 'texte', title: 'Texte', type: 'texteRiche', group: 'contenu'}),
-    defineField({name: 'portrait', title: 'Portrait', type: 'imageAlt', group: 'contenu'}),
+    defineField({name: 'portrait', title: 'Portrait 1 (en haut à gauche)', type: 'imageAlt', group: 'contenu'}),
+    defineField({
+      name: 'portrait2',
+      title: 'Portrait 2 (plus bas, à droite)',
+      type: 'imageAlt',
+      group: 'contenu',
+      description: 'Les deux portraits s’affichent décalés en diagonale, à gauche du texte. Photos verticales de préférence.',
+    }),
     defineField({name: 'imageEchoppe', title: 'Image de l’échoppe', type: 'imageAlt', group: 'contenu'}),
     defineField({name: 'lienAvisLibelle', title: 'Texte du lien vers les avis', type: 'string', group: 'contenu'}),
     appel,

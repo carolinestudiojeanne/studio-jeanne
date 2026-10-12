@@ -486,6 +486,7 @@ export const pageAPropos: PageAPropos = {
     'Depuis 2021, j’accompagne des familles qui veulent transformer leur maison en profondeur, à Bordeaux comme au bord de l’océan. Chaque projet commence par une écoute attentive de votre mode de vie, et se construit étape par étape jusqu’à un intérieur qui vous ressemble.',
   ),
   portrait: img('lin', 'Portrait de Caroline Canova, architecte d’intérieur à Bordeaux', 'portrait'),
+  portrait2: img('sauge', 'Caroline Canova au travail dans un intérieur rénové à Bordeaux', 'portrait'),
   imageEchoppe: img('creme', 'L’échoppe de la rue Jeanne à Bordeaux après rénovation'),
   lienAvisLibelle: 'Ce qu’en disent mes clients',
   appel: appelStandard,
