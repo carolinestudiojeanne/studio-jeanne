@@ -19,7 +19,7 @@ const zone = texteBrut(page.zone?.texte).replace(/\.$/, '')
 
   <!-- 2. Trois portes d'entrée en arches, chacune vers son formulaire Tally (qui redirige ensuite vers l'agenda).
        Ancienne version (deux options de l'accueil + ligne pros) : <Aiguillage aiguillage={accueil.aiguillage} sansLiens />. -->
-  <section class="section section--serree" id="formulaire">
+  <section class="section section--serree arches-contact" id="formulaire">
     <div class="conteneur">
       <ArchesContact aiguillage={accueil.aiguillage} pro={page.pro} />
     </div>
@@ -31,3 +31,9 @@ const zone = texteBrut(page.zone?.texte).replace(/\.$/, '')
   <Faq faq={page.faq} soutenu={false} blanc />
 </Base>
 
+<style>
+  /* Un peu plus d'air sous les arches, avant les questions fréquentes sur fond blanc. */
+  .arches-contact {
+    padding-bottom: var(--section);
+  }
+</style>
