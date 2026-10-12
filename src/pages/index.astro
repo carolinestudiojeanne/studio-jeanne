@@ -105,6 +105,8 @@ const {hero, projetsRecents, aiguillage} = page
   .section-projets-recents {
     --air: clamp(3rem, 5.5vw, 5rem);
     padding-top: var(--air);
+    /* Un peu moins d'espace avant les arches. */
+    padding-bottom: calc(var(--section) * 0.7);
   }
   .projets-recents {
     margin-bottom: var(--air);
@@ -136,5 +138,6 @@ const {hero, projetsRecents, aiguillage} = page
   /* Les deux portes d'entrée, sur fond blanc, sans titre visible. */
   .section-portes {
     background: var(--blanc);
+    padding-top: calc(var(--section) * 0.7);
   }
 </style>
