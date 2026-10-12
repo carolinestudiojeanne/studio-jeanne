@@ -509,7 +509,7 @@ export const pageContact: PageContact = {
   zone: {
     titre: 'Où j’interviens',
     texte: paragraphes(
-      'Bordeaux et alentours, Gironde, côte atlantique',
+      'Bordeaux – Gironde – côte atlantique',
     ),
   },
   seo: {
