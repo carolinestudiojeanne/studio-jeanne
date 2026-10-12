@@ -70,6 +70,10 @@ const personne = {
       position: sticky;
       top: 7rem;
     }
+    /* Sur ordinateur, la seconde photo déborde un peu plus vers la droite ; la première ne bouge pas. */
+    .apropos__photos--deux :global(.apropos__photo--2) {
+      transform: translateX(20%);
+    }
   }
   /* Deux portraits décalés en diagonale : le premier en haut à gauche, le second plus bas à droite, qui le chevauche un peu. */
   .apropos__photos {
