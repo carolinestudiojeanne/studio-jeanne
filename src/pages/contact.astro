@@ -1,31 +1,40 @@
 ---
 import Base from '../layouts/Base.astro'
-import SectionTexte from '../components/sections/SectionTexte.astro'
 import IntroPage from '../components/sections/IntroPage.astro'
 import Aiguillage from '../components/sections/Aiguillage.astro'
 import Faq from '../components/sections/Faq.astro'
 import {schemaFaq} from '../lib/seo'
 import {getPageAccueil, getPageContact, getReglages} from '../lib/contenu'
-import {FORMULAIRES} from '../lib/formulaires'
+import {texteBrut} from '../lib/texte'
 
 const [page, accueil, r] = await Promise.all([getPageContact(), getPageAccueil(), getReglages()])
 const titre = page.seo?.metaTitle || `Contact${r.suffixeTitre}`
 const tel = r.telephone?.replace(/\s/g, '')
+// Zone d'intervention : la première phrase (les lieux) en capitales ocre sous le titre, la suite en texte courant.
+const zone = texteBrut(page.zone?.texte)
+const coupure = zone.indexOf('. ')
+const lieux = (coupure > -1 ? zone.slice(0, coupure) : zone).replace(/\.$/, '')
+const suiteZone = coupure > -1 ? zone.slice(coupure + 2) : ''
 ---
 
 <Base titre={titre} description={page.seo?.metaDescription} imagePartage={page.seo?.imagePartage} schemas={[schemaFaq(page.faq)]}>
   <!-- 1. Texte -->
   <IntroPage titre={page.intro?.titre} texte={page.intro?.texte} espaceBas={false} />
 
-  <!-- 2. Trois portes d'entrée, chacune vers son formulaire Tally (qui redirige ensuite vers l'agenda) :
-       les deux grandes, mêmes formulations que sur l'accueil, puis les professionnels, un cran en dessous. -->
+  <!-- 2. Deux portes d'entrée, chacune vers son formulaire Tally (qui redirige ensuite vers l'agenda),
+       mêmes formulations que sur l'accueil, puis la zone d'intervention. -->
   <section class="section section--serree" id="formulaire">
     <div class="conteneur">
       {accueil.aiguillage && <Aiguillage aiguillage={accueil.aiguillage} sansLiens />}
-      <div class="contact-pro">
-        <p>Vous êtes un professionnel ?</p>
-        <a class="bouton bouton--contour" href={FORMULAIRES.professionnel}>Parlons de vos locaux</a>
-      </div>
+      {
+        page.zone?.titre && (
+          <div class="contact-zone">
+            <h2>{page.zone.titre}</h2>
+            {lieux && <p class="contact-zone__lieux">{lieux}</p>}
+            {suiteZone && <p>{suiteZone}</p>}
+          </div>
+        )
+      }
     </div>
   </section>
 
@@ -43,29 +52,28 @@ const tel = r.telephone?.replace(/\s/g, '')
     </div>
   </section>
 
-  <!-- 4. Zone d'intervention -->
-  <SectionTexte titre={page.zone?.titre} texte={page.zone?.texte} fond="soutenu" />
-
-  <!-- 5. Questions fréquentes (uniquement sur cette page) -->
+  <!-- 4. Questions fréquentes (uniquement sur cette page) -->
   <Faq faq={page.faq} soutenu={false} />
 </Base>
 
 <style>
-  .contact-pro {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem 1.75rem;
-    margin-top: clamp(2rem, 4vw, 3rem);
-    padding: clamp(1.5rem, 3vw, 2rem);
-    border: 1px solid color-mix(in srgb, var(--ardoise) 22%, transparent);
-    border-radius: var(--arrondi);
+  .contact-zone {
+    max-width: 56rem;
+    margin: clamp(3.5rem, 7vw, 5.5rem) auto 0;
     text-align: center;
   }
-  .contact-pro p {
-    margin: 0;
-    font-size: var(--t-m);
+  .contact-zone h2 {
+    margin-bottom: 1rem;
+  }
+  /* Les lieux : en capitales espacées, en ocre. */
+  .contact-zone__lieux {
+    font-size: var(--t-s);
+    letter-spacing: 0.16em;
+    line-height: 1.8;
+    text-transform: uppercase;
+    color: var(--ocre);
+    margin-bottom: 0.75rem;
+    text-wrap: balance;
   }
   .coordonnees {
     font-size: var(--t-l);
