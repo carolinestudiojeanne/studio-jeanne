@@ -21,7 +21,7 @@ const tel = r.telephone?.replace(/\s/g, '')
        les deux grandes, mêmes formulations que sur l'accueil, puis les professionnels, un cran en dessous. -->
   <section class="section section--serree" id="formulaire">
     <div class="conteneur">
-      {accueil.aiguillage && <Aiguillage aiguillage={accueil.aiguillage} cadre />}
+      {accueil.aiguillage && <Aiguillage aiguillage={accueil.aiguillage} />}
       <div class="contact-pro">
         <p>Vous êtes un professionnel ?</p>
         <a class="bouton bouton--contour" href={FORMULAIRES.professionnel}>Parlons de vos locaux</a>

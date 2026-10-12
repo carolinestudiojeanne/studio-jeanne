@@ -3,36 +3,57 @@
  * Les deux portes d'entrée, côte à côte : « Vous avez déjà votre maison » et
  * « Vous ne l'avez pas encore trouvée ». Même bloc sur l'accueil et sur la page Contact.
  * Le bouton mène au formulaire Tally de la porte ; le lien dessous, à la page qui la présente.
+ *
+ * Même composition que la description d'une étape dans l'arche (pages L'accompagnement et Trouver votre bien),
+ * sans l'arche : surtitre ocre, titre et texte alignés à droite, à gauche d'une photo verticale aux coins arrondis,
+ * la dernière ligne au niveau du bas de la photo. Tant qu'il n'y a pas de photo, l'emplacement reste une forme crème.
  */
 import {FORMULAIRES} from '../../lib/formulaires'
+import {rendreImage} from '../../lib/image'
 import type {PageAccueil} from '../../lib/types'
 
 interface Props {
   aiguillage: NonNullable<PageAccueil['aiguillage']>
-  /** Encadre chaque colonne d'un filet ocre aux coins arrondis (page Contact). */
-  cadre?: boolean
 }
-const {aiguillage, cadre = false} = Astro.props
+const {aiguillage} = Astro.props
 const colonnes = [
-  {...aiguillage.colonne1, href: FORMULAIRES.projet, page: {href: '/accompagnement', libelle: 'Découvrir l’accompagnement'}},
-  {...aiguillage.colonne2, href: FORMULAIRES.trouver, page: {href: '/trouver-votre-bien', libelle: 'Découvrir la recherche de bien'}},
-]
+  {
+    ...aiguillage.colonne1,
+    surtitre: aiguillage.colonne1?.surtitre || 'L’accompagnement',
+    href: FORMULAIRES.projet,
+    page: {href: '/accompagnement', libelle: 'Découvrir l’accompagnement'},
+  },
+  {
+    ...aiguillage.colonne2,
+    surtitre: aiguillage.colonne2?.surtitre || 'La recherche de bien',
+    href: FORMULAIRES.trouver,
+    page: {href: '/trouver-votre-bien', libelle: 'Découvrir la recherche de bien'},
+  },
+].map((c) => ({...c, img: rendreImage(c.photo, {ratio: 3 / 4, maxWidth: 900})}))
 ---
 
-<div class:list={['aiguillage', {'aiguillage--cadre': cadre}]}>
+<div class="aiguillage">
   {
     colonnes.map((c) => (
       <div class="aiguillage__colonne">
-        <h3>{c.titre}</h3>
-        {c.texte && <p>{c.texte}</p>}
-        {c.boutonLibelle && (
-          <a class="bouton bouton--contour" href={c.href}>
-            {c.boutonLibelle}
+        <div class="aiguillage__texte">
+          <p class="aiguillage__surtitre">{c.surtitre}</p>
+          <h3>{c.titre}</h3>
+          {c.texte && <p class="aiguillage__description">{c.texte}</p>}
+          {c.boutonLibelle && (
+            <a class="bouton bouton--contour" href={c.href}>
+              {c.boutonLibelle}
+            </a>
+          )}
+          <a class="lien-fleche lien-chevron aiguillage__page" href={c.page.href}>
+            {c.page.libelle}
           </a>
-        )}
-        <a class="lien-fleche aiguillage__page" href={c.page.href}>
-          {c.page.libelle}
-        </a>
+        </div>
+        <div class="aiguillage__photo">
+          {c.img && (
+            <img src={c.img.src} srcset={c.img.srcset} sizes="(min-width: 52rem) 11.5rem, 60vw" width={c.img.width} height={c.img.height} alt={c.img.alt} loading="lazy" />
+          )}
+        </div>
       </div>
     ))
   }
@@ -41,35 +62,94 @@ const colonnes = [
 <style>
   .aiguillage {
     display: grid;
-    gap: 1.5rem;
+    gap: 4rem;
   }
   @media (min-width: 52rem) {
     .aiguillage {
       grid-template-columns: 1fr 1fr;
+      gap: clamp(2rem, 5vw, 5rem);
     }
   }
-  /* Deux colonnes simples, sans cadre. */
+
+  /* Mobile : la photo au-dessus, le texte centré dessous. */
   .aiguillage__colonne {
-    padding: clamp(1rem, 3vw, 2rem) clamp(1rem, 4vw, 3rem);
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    gap: 1.75rem;
     text-align: center;
   }
-  /* Page Contact : chaque colonne dans un cadre ocre fin, coins arrondis. */
-  .aiguillage--cadre .aiguillage__colonne {
-    border: 1px solid var(--ocre);
+  .aiguillage__photo {
+    width: min(60%, 14rem);
+  }
+  /* Ordinateur : texte à gauche aligné à droite, photo à droite ; le bas du texte au niveau du bas de la photo. */
+  @media (min-width: 52rem) {
+    .aiguillage__colonne {
+      display: grid;
+      grid-template-columns: 1fr minmax(8rem, 11.5rem);
+      align-items: end;
+      gap: clamp(1.25rem, 2.5vw, 2rem);
+      text-align: right;
+    }
+    .aiguillage__photo {
+      width: auto;
+    }
+    .aiguillage__texte {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+  }
+
+  /* Photo verticale, coins arrondis comme les photos des projets. */
+  .aiguillage__photo {
+    aspect-ratio: 3 / 4;
     border-radius: var(--arrondi);
+    overflow: hidden;
+    background: var(--creme-soutenu);
+  }
+  .aiguillage__photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Mêmes styles que la description d'une étape de l'arche. */
+  .aiguillage__surtitre {
+    font-size: var(--t-xs);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ocre);
+    margin: 0 0 0.75rem;
   }
   /* Un retour à la ligne saisi dans le titre est respecté. */
-  .aiguillage__colonne h3 {
+  .aiguillage__texte h3 {
+    font-size: clamp(1.2rem, 0.9rem + 0.6vw, 1.45rem);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 400;
+    margin: 0 0 1rem;
     white-space: pre-line;
   }
-  .aiguillage__colonne p {
-    max-width: 26rem;
-    margin-inline: auto;
-    margin-bottom: 2rem;
+  .aiguillage__description {
+    font-size: var(--t-m);
+    line-height: 1.6;
+    max-width: 24rem;
+    margin: 0 0 1.75rem;
+  }
+  @media (max-width: 51.99rem) {
+    .aiguillage__description {
+      margin-inline: auto;
+    }
   }
   .aiguillage__page {
     display: table;
-    margin: 1.5rem auto 0;
+    margin: 1.25rem 0 -0.35em;
     font-size: var(--t-xs);
+  }
+  @media (max-width: 51.99rem) {
+    .aiguillage__page {
+      margin-inline: auto;
+    }
   }
 </style>

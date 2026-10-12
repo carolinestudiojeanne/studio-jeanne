@@ -154,9 +154,21 @@ export const pageAccueil = defineType({
             title: i === 0 ? 'Colonne « déjà votre maison » (vers L’accompagnement)' : 'Colonne « pas encore trouvée » (vers Trouver votre bien)',
             type: 'object',
             fields: [
+              defineField({
+                name: 'surtitre',
+                title: 'Surtitre (petit, en ocre)',
+                type: 'string',
+                description: i === 0 ? 'Par défaut : « L’accompagnement ».' : 'Par défaut : « La recherche de bien ».',
+              }),
               defineField({name: 'titre', title: 'Titre', type: 'string'}),
               defineField({name: 'texte', title: 'Texte', type: 'text', rows: 3}),
               defineField({name: 'boutonLibelle', title: 'Texte du bouton', type: 'string'}),
+              defineField({
+                name: 'photo',
+                title: 'Photo (verticale)',
+                type: 'imageAlt',
+                description: 'S’affiche à droite du texte, comme les photos des étapes de l’arche.',
+              }),
             ],
           }),
         ),

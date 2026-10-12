@@ -100,14 +100,22 @@ export interface QuestionReponse {
   reponse: string
 }
 
+export interface ColonneAiguillage {
+  surtitre?: string
+  titre?: string
+  texte?: string
+  boutonLibelle?: string
+  photo?: ImageData
+}
+
 export interface PageAccueil {
   hero?: {image?: ImageData; h1?: string; accroche?: string; sousTitre?: string; boutonLibelle?: string}
   projetsRecents?: {titre?: string; texte?: string; lienLibelle?: string}
   deroule?: {titre?: string; texte?: PortableText; lienLibelle?: string}
   aiguillage?: {
     titre?: string
-    colonne1?: {titre?: string; texte?: string; boutonLibelle?: string}
-    colonne2?: {titre?: string; texte?: string; boutonLibelle?: string}
+    colonne1?: ColonneAiguillage
+    colonne2?: ColonneAiguillage
   }
   caroline?: {image?: ImageData; texte?: string; lienLibelle?: string}
   avis?: {titre?: string; lienLibelle?: string}
