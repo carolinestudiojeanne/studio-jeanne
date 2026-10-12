@@ -182,8 +182,10 @@ export const projet = defineType({
       title: 'Avant / après',
       type: 'array',
       group: 'images',
-      description: 'Facultatif. Une paire d’images par pièce.',
+      description:
+        'Facultatif. Une paire d’images par pièce, 3 au maximum. Avec une vidéo 3D, ils se placent à droite de la vidéo.',
       of: [defineArrayMember({type: 'avantApres'})],
+      validation: (r) => r.max(3).error('3 avant / après au maximum.'),
     }),
     defineField({name: 'video', title: 'Vidéo', type: 'video', group: 'images'}),
 

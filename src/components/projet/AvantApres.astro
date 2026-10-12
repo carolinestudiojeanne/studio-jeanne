@@ -38,15 +38,19 @@ const items = paires
 // ce qui leur donne exactement la même hauteur.
 const rangees: (typeof items)[] = []
 for (let i = 0; i < items.length; i += 3) rangees.push(items.slice(i, i + 3))
-// À côté d'une vidéo : les avant / après horizontaux (et carrés) empilés d'un côté, les verticaux de l'autre.
+// À côté d'une vidéo : 1 ou 2 avant / après empilés (chacun de la moitié de la hauteur de la vidéo) ;
+// 3 avant / après : les horizontaux (et carrés) empilés, les verticaux dans une colonne à part.
 const horizontaux = items.filter((p) => p.format !== 'portrait')
 const verticaux = items.filter((p) => p.format === 'portrait')
-const groupes = colonne
-  ? [
-      {classe: 'aa-liste--colonne', total: horizontaux.length, rangees: horizontaux.map((p) => [p])},
-      {classe: 'aa-liste--verticaux', total: verticaux.length, rangees: verticaux.map((p) => [p])},
-    ].filter((g) => g.total)
-  : [{classe: '', total: items.length, rangees}]
+const separer = items.length >= 3 && horizontaux.length > 0 && verticaux.length > 0
+const groupes = !colonne
+  ? [{classe: '', total: items.length, rangees}]
+  : separer
+    ? [
+        {classe: 'aa-liste--colonne', total: Math.max(horizontaux.length, 2), rangees: horizontaux.map((p) => [p])},
+        {classe: 'aa-liste--verticaux', total: verticaux.length, rangees: verticaux.map((p) => [p])},
+      ]
+    : [{classe: 'aa-liste--colonne', total: Math.max(items.length, 2), rangees: items.map((p) => [p])}]
 ---
 
 <div class="aa-groupes">
@@ -143,7 +147,7 @@ const groupes = colonne
     }
     /* Les verticaux, un peu plus grands, au-dessus du bouton. */
     .aa-liste--verticaux {
-      --hauteur: calc(min(80svh, 42rem) * 0.62);
+      --hauteur: calc(min(80svh, 42rem) * 0.62 / var(--total));
     }
   }
   .aa figcaption {

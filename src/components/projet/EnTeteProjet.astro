@@ -93,16 +93,18 @@ const {projet, portrait, bande, caracteristiques, avantApres = false, video = fa
   }
 
   {
-    avantApres ? (
-      <div class:list={['ep__appel', 'ep__appel--aa', {'ep__appel--video': videoACote}]}>
+    avantApres || videoACote ? (
+      <div class:list={['ep__appel', 'ep__appel--aa', {'ep__appel--video': videoACote, 'ep__appel--video-seule': videoACote && !avantApres}]}>
         {videoACote && (
           <div class="ep__video-cote">
             <slot name="video" />
           </div>
         )}
-        <div class="ep__aa">
-          <slot name="avant-apres" />
-        </div>
+        {avantApres && (
+          <div class="ep__aa">
+            <slot name="avant-apres" />
+          </div>
+        )}
         <a class="bouton bouton--contour" href={formulaire}>Parlons de votre projet</a>
       </div>
     ) : (
@@ -320,8 +322,14 @@ const {projet, portrait, bande, caracteristiques, avantApres = false, video = fa
       grid-template-columns: 1fr auto;
       align-items: center;
     }
-    /* Vidéo à gauche ; à sa droite, les avant / après horizontaux empilés (même hauteur que la vidéo) ;
-       puis les verticaux, avec le bouton dessous, alignés à gauche. */
+    /* Pages avec une vidéo 3D (règle valable pour tous les projets ajoutés dans Sanity) :
+       - sans avant / après : la vidéo à gauche, le bouton à droite (même place que sur les autres pages vidéo),
+         centré sur la hauteur de la vidéo ;
+       - 1 ou 2 avant / après : empilés à droite de la vidéo (à eux deux, la hauteur de la vidéo),
+         le bouton à leur droite, centré sur la hauteur de la vidéo ;
+       - 3 avant / après : les horizontaux empilés à droite de la vidéo, le vertical à leur droite,
+         le bouton centré dans l'espace sous le vertical.
+       L'ensemble est centré dans la page. */
     .ep__appel--video {
       grid-template-columns: auto auto auto;
       grid-template-rows: auto 1fr;
@@ -347,12 +355,21 @@ const {projet, portrait, bande, caracteristiques, avantApres = false, video = fa
       grid-column: 3;
       grid-row: 1;
     }
-    /* Bouton centré dans l'espace sous l'avant / après vertical (jusqu'au bas de la vidéo). */
     .ep__appel--video > .bouton {
       grid-column: 3;
-      grid-row: 2;
+      grid-row: 1 / span 2;
       justify-self: center;
       align-self: center;
+    }
+    /* Sans avant / après : la vidéo à gauche, le bouton à droite, au même endroit que sur les autres pages vidéo
+       (centré sur la largeur d'un avant / après vertical), et centré sur la hauteur de la vidéo. */
+    .ep__appel--video-seule {
+      grid-template-columns: auto 1fr calc(min(80svh, 42rem) * 0.62 * 0.8);
+      justify-content: stretch;
+    }
+    /* Avec un avant / après vertical à droite : bouton centré dans l'espace sous lui (jusqu'au bas de la vidéo). */
+    .ep__appel--video:has(.aa-liste--verticaux) > .bouton {
+      grid-row: 2;
     }
   }
 
