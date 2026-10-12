@@ -52,11 +52,13 @@ const mention = video.mention3d !== false
   .video-cadre:has(.video--iframe) {
     display: block;
   }
-  /* Mention « Vidéo 3D » en haut à droite : lettrage du menu (capitales espacées), en petit, en beige (crème du site), sans fond. */
+  /* Mention « Vidéo 3D » en haut, centrée : lettrage du menu (capitales espacées), en petit, en beige (crème du site), sans fond. */
   .video-mention {
     position: absolute;
     top: 1.15rem;
-    right: 1.15rem;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
     color: var(--creme);
     font-size: 0.625rem;
     letter-spacing: 0.18em;
