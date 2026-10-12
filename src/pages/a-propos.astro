@@ -35,7 +35,7 @@ const personne = {
         {
           page.lienAvisLibelle && (
             <p class="apropos__avis">
-              <a class="lien-fleche" href="/avis-clients">
+              <a class="lien-fleche apropos__lien-avis" href="/avis-clients">
                 {page.lienAvisLibelle}
               </a>
             </p>
@@ -106,6 +106,17 @@ const personne = {
   }
   .apropos__avis {
     margin-top: 2.5rem;
+  }
+  /* Lien vers les avis : en ocre, sans trait, avec une simple tête de flèche. */
+  .apropos__lien-avis {
+    color: var(--ocre);
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+  .apropos__lien-avis::after {
+    content: '›';
+    font-size: 1.4em;
+    line-height: 1;
   }
   .apropos__echoppe {
     margin-top: var(--section);
