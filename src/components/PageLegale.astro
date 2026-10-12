@@ -12,7 +12,7 @@ const date = page.miseAJour ? new Date(page.miseAJour).toLocaleDateString('fr-FR
 
 <Base titre={page.seo?.metaTitle || `${page.titre}${reglages.suffixeTitre}`} description={page.seo?.metaDescription}>
   <section class="section">
-    <div class="colonne">
+    <div class="conteneur page-legale">
       <h1>{page.titre}</h1>
       {date && <p class="maj">Mis à jour le {date}</p>}
       <div class="texte" set:html={texteEnHtml(page.texte)} />
@@ -21,8 +21,24 @@ const date = page.miseAJour ? new Date(page.miseAJour).toLocaleDateString('fr-FR
 </Base>
 
 <style>
+  /* Même largeur que le reste du site. */
+  /* Titre de la page à la même taille que les titres des autres pages (bloc d'introduction). */
+  .page-legale h1 {
+    font-size: clamp(1.3rem, 1rem + 0.8vw, 1.7rem);
+    margin-bottom: 1rem;
+  }
   .maj {
     font-size: var(--t-s);
-    margin-bottom: 2.5rem;
+    margin-bottom: 3rem;
+  }
+  /* Intertitres en ocre, plus petits que le titre de la page. */
+  .page-legale .texte :global(h3) {
+    font-size: clamp(1rem, 0.92rem + 0.3vw, 1.15rem);
+    letter-spacing: 0.16em;
+    color: var(--ocre);
+    margin-bottom: 0.9em;
+  }
+  .page-legale .texte :global(* + h3) {
+    margin-top: 2.5em;
   }
 </style>
