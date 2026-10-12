@@ -166,6 +166,7 @@ export interface PageContact {
   boutonLibelle?: string
   coordonnees?: string
   zone?: SectionTexte
+  pro?: {titre?: string; texte?: string; boutonLibelle?: string}
   faq?: QuestionReponse[]
   seo?: Seo
 }
