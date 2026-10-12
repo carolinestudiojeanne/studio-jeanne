@@ -14,8 +14,10 @@ import type {PageAccueil} from '../../lib/types'
 
 interface Props {
   aiguillage: NonNullable<PageAccueil['aiguillage']>
+  /** Sans les liens « Découvrir… » vers les pages (page Contact : le visiteur les a déjà vues). */
+  sansLiens?: boolean
 }
-const {aiguillage} = Astro.props
+const {aiguillage, sansLiens = false} = Astro.props
 const colonnes = [
   {
     ...aiguillage.colonne1,
@@ -45,9 +47,11 @@ const colonnes = [
               {c.boutonLibelle}
             </a>
           )}
-          <a class="lien-fleche lien-chevron aiguillage__page" href={c.page.href}>
-            {c.page.libelle}
-          </a>
+          {!sansLiens && (
+            <a class="lien-fleche lien-chevron aiguillage__page" href={c.page.href}>
+              {c.page.libelle}
+            </a>
+          )}
         </div>
         <div class="aiguillage__photo">
           {c.img && (
