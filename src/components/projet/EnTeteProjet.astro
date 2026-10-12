@@ -282,14 +282,15 @@ const {projet, portrait, bande, caracteristiques, avantApres = false, video = fa
     padding-bottom: clamp(2rem, 4vw, 3rem);
   }
 
-  /* Bouton « Parlons de votre projet » en ocre. */
+  /* Bouton « Parlons de votre projet » plein ocre ; au survol, sans fond (contour et texte ocre). */
   .ep__appel .bouton {
-    color: var(--ocre);
+    background: var(--ocre);
+    color: var(--blanc);
     border-color: var(--ocre);
   }
   .ep__appel .bouton:hover {
-    background: var(--ocre);
-    color: var(--blanc);
+    background: transparent;
+    color: var(--ocre);
   }
 
   /* Avant / après à gauche, bouton à droite (l'un sous l'autre sur mobile). */
