@@ -5,7 +5,7 @@
  * Le bouton mène au formulaire Tally de la porte ; le lien dessous, à la page qui la présente.
  *
  * Même composition que la description d'une étape dans l'arche (pages L'accompagnement et Trouver votre bien),
- * sans l'arche : surtitre ocre facultatif, titre et texte alignés à droite, à gauche d'une photo verticale aux coins arrondis,
+ * sans l'arche : surtitre ocre facultatif, titre et texte alignés à gauche, à droite d'une photo verticale aux coins arrondis,
  * la dernière ligne au niveau du bas de la photo. Tant qu'il n'y a pas de photo, l'emplacement reste une forme crème.
  */
 import {FORMULAIRES} from '../../lib/formulaires'
@@ -84,22 +84,26 @@ const colonnes = [
   .aiguillage__photo {
     width: min(60%, 14rem);
   }
-  /* Ordinateur : texte à gauche aligné à droite, photo à droite ; le bas du texte au niveau du bas de la photo. */
+  /* Ordinateur : photo à gauche, texte à droite aligné à gauche ; le bas du texte au niveau du bas de la photo. */
   @media (min-width: 52rem) {
     .aiguillage__colonne {
       display: grid;
-      grid-template-columns: 1fr minmax(8rem, 11.5rem);
+      grid-template-columns: minmax(8rem, 11.5rem) 1fr;
       align-items: end;
       gap: clamp(1.25rem, 2.5vw, 2rem);
-      text-align: right;
+      text-align: left;
     }
     .aiguillage__photo {
+      grid-column: 1;
+      grid-row: 1;
       width: auto;
     }
     .aiguillage__texte {
+      grid-column: 2;
+      grid-row: 1;
       display: flex;
       flex-direction: column;
-      align-items: flex-end;
+      align-items: flex-start;
     }
   }
 
