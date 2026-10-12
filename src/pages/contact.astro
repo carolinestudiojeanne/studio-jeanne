@@ -10,31 +10,19 @@ import {texteBrut} from '../lib/texte'
 const [page, accueil, r] = await Promise.all([getPageContact(), getPageAccueil(), getReglages()])
 const titre = page.seo?.metaTitle || `Contact${r.suffixeTitre}`
 const tel = r.telephone?.replace(/\s/g, '')
-// Zone d'intervention : la première phrase (les lieux) en capitales ocre sous le titre, la suite en texte courant.
-const zone = texteBrut(page.zone?.texte)
-const coupure = zone.indexOf('. ')
-const lieux = (coupure > -1 ? zone.slice(0, coupure) : zone).replace(/\.$/, '')
-const suiteZone = coupure > -1 ? zone.slice(coupure + 2) : ''
+// Zone d'intervention, en capitales ocre sous le titre de la page.
+const zone = texteBrut(page.zone?.texte).replace(/\.$/, '')
 ---
 
 <Base titre={titre} description={page.seo?.metaDescription} imagePartage={page.seo?.imagePartage} schemas={[schemaFaq(page.faq)]}>
   <!-- 1. Texte -->
-  <IntroPage titre={page.intro?.titre} texte={page.intro?.texte} espaceBas={false} />
+  <IntroPage titre={page.intro?.titre} sousTitre={zone} texte={page.intro?.texte} espaceBas={false} />
 
   <!-- 2. Deux portes d'entrée, chacune vers son formulaire Tally (qui redirige ensuite vers l'agenda),
-       mêmes formulations que sur l'accueil, puis la zone d'intervention. -->
+       mêmes formulations que sur l'accueil. -->
   <section class="section section--serree" id="formulaire">
     <div class="conteneur">
       {accueil.aiguillage && <Aiguillage aiguillage={accueil.aiguillage} sansLiens />}
-      {
-        page.zone?.titre && (
-          <div class="contact-zone">
-            <h2>{page.zone.titre}</h2>
-            {lieux && <p class="contact-zone__lieux">{lieux}</p>}
-            {suiteZone && <p>{suiteZone}</p>}
-          </div>
-        )
-      }
     </div>
   </section>
 
@@ -57,24 +45,6 @@ const suiteZone = coupure > -1 ? zone.slice(coupure + 2) : ''
 </Base>
 
 <style>
-  .contact-zone {
-    max-width: 56rem;
-    margin: clamp(3.5rem, 7vw, 5.5rem) auto 0;
-    text-align: center;
-  }
-  .contact-zone h2 {
-    margin-bottom: 1rem;
-  }
-  /* Les lieux : en capitales espacées, en ocre. */
-  .contact-zone__lieux {
-    font-size: var(--t-s);
-    letter-spacing: 0.16em;
-    line-height: 1.8;
-    text-transform: uppercase;
-    color: var(--ocre);
-    margin-bottom: 0.75rem;
-    text-wrap: balance;
-  }
   .coordonnees {
     font-size: var(--t-l);
     line-height: 1.5;

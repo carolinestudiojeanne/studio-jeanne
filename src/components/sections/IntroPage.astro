@@ -9,12 +9,14 @@ import type {PortableText} from '../../lib/types'
 
 interface Props {
   titre?: string
+  /** Ligne courte sous le titre, en capitales ocre (page Contact : la zone d'intervention). */
+  sousTitre?: string
   texte?: PortableText
   /** Espace sous l'introduction (par défaut le même qu'au-dessus du titre). */
   espaceBas?: boolean
   class?: string
 }
-const {titre, texte, espaceBas = true, class: classe} = Astro.props
+const {titre, sousTitre, texte, espaceBas = true, class: classe} = Astro.props
 const html = texteEnHtml(texte)
 // Une phrase courte tient sur une ligne ; un texte plus long reste centré, sur la même largeur que les autres pages.
 const unParagraphe = (texte?.length ?? 0) <= 1
@@ -24,6 +26,7 @@ const courte = texteBrut(texte).length <= 140 && unParagraphe
 <section class:list={['intro-page', {'intro-page--sans-bas': !espaceBas}, classe]}>
   <div class="conteneur">
     {titre && <h1>{titre}</h1>}
+    {sousTitre && <p class="intro-page__sous-titre">{sousTitre}</p>}
     {html && <div class:list={['texte', 'intro-page__texte', {'intro-page__texte--courte': courte, 'intro-page__texte--large': !courte, 'intro-page__texte--paragraphes': !unParagraphe}]} set:html={html} />}
     <slot />
   </div>
@@ -45,6 +48,13 @@ const courte = texteBrut(texte).length <= 140 && unParagraphe
     margin-bottom: 1.75rem;
     font-size: clamp(1.3rem, 1rem + 0.8vw, 1.7rem);
     text-wrap: balance;
+  }
+  .intro-page__sous-titre {
+    margin: -0.75rem 0 1.75rem;
+    font-size: var(--t-s);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ocre);
   }
   .intro-page__texte {
     max-width: 46rem;

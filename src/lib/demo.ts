@@ -509,7 +509,7 @@ export const pageContact: PageContact = {
   zone: {
     titre: 'Où j’interviens',
     texte: paragraphes(
-      'Bordeaux, Caudéran, Le Bouscat, Mérignac, la Gironde et la côte atlantique. Je me déplace chez vous une fois le projet lancé, pour la prise de côtes.',
+      'Bordeaux et alentours, Gironde, côte atlantique',
     ),
   },
   seo: {
