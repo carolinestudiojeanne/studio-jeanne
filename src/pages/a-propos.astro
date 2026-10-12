@@ -95,8 +95,10 @@ const personne = {
     max-width: var(--etroit);
   }
   /* Même taille de titre que l'en-tête des autres pages. */
+  /* Les retours à la ligne saisis dans le Studio sont respectés. */
   .apropos__texte h1 {
     font-size: clamp(1.3rem, 1rem + 0.8vw, 1.7rem);
+    white-space: pre-line;
   }
   .apropos__avis {
     margin-top: 2.5rem;
