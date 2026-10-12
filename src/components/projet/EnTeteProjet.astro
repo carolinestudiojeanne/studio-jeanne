@@ -355,19 +355,22 @@ const {projet, portrait, bande, caracteristiques, avantApres = false, video = fa
       --visibles: 2;
     }
   }
-  /* Têtes de flèches fines */
+  /* Têtes de flèches fines, en ocre (comme le carrousel de l'accueil) ; elles glissent un peu vers l'extérieur au survol. */
   .ep__fleche {
     flex: none;
     background: none;
     border: 0;
     padding: 0.75rem 0.5rem;
-    color: var(--ardoise);
+    color: var(--ocre);
     line-height: 0;
     cursor: pointer;
-    transition: color 0.25s;
+    transition: transform 0.25s;
   }
-  .ep__fleche:hover {
-    color: var(--ocre);
+  .ep__fleche[data-sens='-1']:hover {
+    transform: translateX(-4px);
+  }
+  .ep__fleche[data-sens='1']:hover {
+    transform: translateX(4px);
   }
   .ep__fleche svg {
     width: 0.7rem;
