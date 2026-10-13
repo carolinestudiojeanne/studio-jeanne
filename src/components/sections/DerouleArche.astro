@@ -9,7 +9,7 @@
  *
  * Ordinateur : grande arche centrée, seuls les titres sont sur l'arche. Un clic sur un point (ou son titre)
  * affiche la description de l'étape à l'intérieur de l'arche ; l'étape 1 est affichée d'emblée.
- * Mobile : déroulé vertical avec toutes les descriptions, l'arche en motif.
+ * Mobile : la même arche en plus petit ; la description et la photo de l'étape choisie passent dessous.
  */
 import {rendreImage} from '../../lib/image'
 import type {EtapeArche, PageOffre} from '../../lib/types'
@@ -69,6 +69,7 @@ const toutes = [...etapes.map((e, i) => ({...e, numero: String(i + 1)})), {...tr
 
     <!-- Ordinateur : arche interactive -->
     <div class="parcours" data-arche>
+      <div class="parcours__arche">
       <svg class="parcours__trait" viewBox={`0 0 ${L} ${H}`} aria-hidden="true" preserveAspectRatio="none">
         <path d="M40 420 V230 A190 190 0 0 1 230 40 H720" vector-effect="non-scaling-stroke" />
         <!-- Pointillés de l'ouverture jusqu'aux travaux -->
@@ -100,6 +101,7 @@ const toutes = [...etapes.map((e, i) => ({...e, numero: String(i + 1)})), {...tr
           ))
         }
       </div>
+      </div>
 
       <!-- Photo : son coin bas droit se pose là où se rencontreraient le bas de l'arche et la verticale des travaux -->
       <div class="parcours__photo" aria-hidden="true">
@@ -127,25 +129,6 @@ const toutes = [...etapes.map((e, i) => ({...e, numero: String(i + 1)})), {...tr
       </div>
     </div>
 
-    <!-- Mobile : déroulé vertical, toutes les descriptions -->
-    <ol class="deroule__etapes">
-      {
-        etapes.map((e, i) => (
-          <li class:list={{'est-sommet': i === 2}}>
-            <span class="deroule__num">{i + 1}</span>
-            <div>
-              <h3>{e.titre}</h3>
-              <p>{e.texte.replaceAll('\n', ' ')}</p>
-            </div>
-          </li>
-        ))
-      }
-    </ol>
-    <div class="deroule__relais">
-      <p class="deroule__relais-surtitre">{surtitreApres}</p>
-      <h3>{travaux.titre}</h3>
-      <p>{travaux.texte}</p>
-    </div>
   </div>
 </section>
 
@@ -187,6 +170,11 @@ const toutes = [...etapes.map((e, i) => ({...e, numero: String(i + 1)})), {...tr
     width: min(100%, 69rem);
     aspect-ratio: 920 / 440;
     margin-inline: auto;
+  }
+  /* Le trait et les points (ordinateur : toute la surface de l'arche). */
+  .parcours__arche {
+    position: absolute;
+    inset: 0;
   }
   .parcours__trait {
     position: absolute;
@@ -388,91 +376,94 @@ const toutes = [...etapes.map((e, i) => ({...e, numero: String(i + 1)})), {...tr
     }
   }
 
-  /* Mobile : liste verticale */
-  .deroule__etapes,
-  .deroule__relais {
-    display: none;
-  }
+  /* Mobile : la même arche, en plus petit. Les titres des étapes passent sur plusieurs lignes ;
+     la description et la photo de l'étape choisie s'affichent sous l'arche. */
   @media (max-width: 51.99rem) {
     .parcours {
-      display: none;
-    }
-    .deroule__etapes {
       display: grid;
-      gap: 1.25rem;
-      list-style: none;
-      margin: 0;
+      grid-template-columns: 1fr 38%;
+      align-items: end;
+      column-gap: 1rem;
+      aspect-ratio: auto;
+    }
+    .parcours__arche {
       position: relative;
-      padding: 2.5rem 0 0 2.25rem;
+      grid-column: 1 / -1;
+      aspect-ratio: 920 / 440;
+      margin-bottom: 2.5rem;
     }
-    .deroule__etapes::before {
-      content: '';
-      position: absolute;
-      left: 0.45rem;
-      top: 0;
-      bottom: 0.5rem;
-      width: 3rem;
-      border: 2px solid var(--ocre);
-      border-right: 0;
-      border-bottom: 0;
-      border-radius: 3rem 0 0 0;
+    .parcours__point {
+      gap: 0.5rem;
+      transform: translate(-0.35rem, -50%);
     }
-    .deroule__etapes li {
-      position: relative;
-      display: grid;
-      grid-template-columns: 2.25rem 1fr;
-      gap: 0.75rem;
-      align-items: baseline;
+    .parcours__point--dessous {
+      gap: 0.5rem;
+      transform: translate(-50%, -0.35rem);
     }
-    .deroule__etapes li::before {
-      content: '';
-      position: absolute;
-      left: calc(-2.25rem + 0.45rem - 5px);
-      top: 0.35rem;
-      width: 8px;
-      height: 8px;
-      border: 2px solid var(--ocre);
-      border-radius: 50%;
-      background: var(--creme);
+    .parcours__point--travaux {
+      transform: translate(-50%, -0.45rem);
     }
-    .deroule__etapes li.est-sommet::before {
-      background: var(--ocre);
+    .parcours__point--diagonale {
+      transform: translate(-0.4rem, -0.4rem);
     }
-    .deroule__num {
-      font-size: var(--t-xs);
-      letter-spacing: 0.14em;
-      color: var(--ocre);
+    .parcours__point--diagonale .parcours__libelle {
+      margin-top: 1.9rem;
     }
-    .deroule__etapes h3,
-    .deroule__relais h3 {
-      margin: 0 0 0.3rem;
-      font-size: var(--t-s);
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      font-weight: 400;
+    .parcours__rond {
+      width: 0.7rem;
+      height: 0.7rem;
+      border-width: 1.5px;
     }
-    .est-sommet h3 {
-      color: var(--ocre);
+    .parcours__point--sommet .parcours__rond {
+      width: 0.8rem;
+      height: 0.8rem;
     }
-    .deroule__etapes p,
-    .deroule__relais p {
-      margin: 0;
-      font-size: var(--t-s);
-      line-height: 1.6;
+    .parcours__rond--pointille {
+      width: 0.9rem;
+      height: 0.9rem;
     }
-    .deroule__relais {
+    .parcours__libelle {
+      font-size: 0.5625rem;
+      letter-spacing: 0.08em;
+      line-height: 1.35;
+    }
+    /* Sur le trait du haut et en diagonale : titres sur deux lignes, pour qu'ils ne se touchent pas. */
+    .parcours__point--dessous .parcours__libelle,
+    .parcours__point--diagonale .parcours__libelle {
+      max-width: 4.25rem;
+      white-space: normal;
+    }
+    .parcours__point--dessous .parcours__libelle {
+      text-align: center;
+    }
+    .parcours__panneaux {
+      position: static;
+      grid-column: 1;
+      grid-row: 2;
       display: block;
-      margin-top: 2rem;
-      padding: 1.25rem 1.5rem;
-      border: 1px dashed color-mix(in srgb, var(--ardoise) 35%, transparent);
-      border-radius: var(--arrondi);
+      text-align: left;
     }
-    .deroule__relais .deroule__relais-surtitre {
-      font-size: var(--t-xs);
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--ocre);
+    .parcours__photo {
+      position: relative;
+      grid-column: 2;
+      grid-row: 2;
+      width: auto;
+    }
+    .parcours__num {
       margin-bottom: 0.5rem;
+    }
+    .parcours__panneau h3 {
+      font-size: var(--t-s);
+      letter-spacing: 0.14em;
+      margin-bottom: 0.5rem;
+    }
+    .parcours__texte {
+      white-space: normal;
+      margin-bottom: 0 !important;
+    }
+    .parcours__panneau p:last-child {
+      font-size: var(--t-s);
+      line-height: 1.55;
     }
   }
 </style>
