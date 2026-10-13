@@ -10,7 +10,6 @@ const {reglages} = Astro.props
 const chemin = Astro.url.pathname.replace(/\.html$/, '')
 
 const actif = (href: string) => chemin === href || chemin.startsWith(`${href}/`)
-const tel = reglages.telephone?.replace(/\s/g, '')
 ---
 
 <header class="entete">
@@ -36,7 +35,6 @@ const tel = reglages.telephone?.replace(/\s/g, '')
           ))
         }
       </ul>
-      {tel && <a class="menu__tel" href={`tel:${tel}`}>{reglages.telephone}</a>}
     </nav>
   </div>
 </header>
@@ -119,9 +117,6 @@ const tel = reglages.telephone?.replace(/\s/g, '')
   .menu__lien[aria-current='page'] {
     color: var(--ocre);
   }
-  .menu__tel {
-    display: none;
-  }
 
   .entete__bouton {
     display: none;
@@ -188,15 +183,6 @@ const tel = reglages.telephone?.replace(/\s/g, '')
     /* Même écriture que le menu de l'ordinateur (capitales espacées), en plus grand. */
     .menu__lien {
       font-size: var(--t-l);
-    }
-    .menu__tel {
-      display: inline-block;
-      font-size: var(--t-m);
-      letter-spacing: 0.08em;
-      text-decoration: none;
-      border-top: 1px solid var(--ocre);
-      padding-top: 1.5rem;
-      align-self: flex-start;
     }
   }
 </style>
