@@ -9,7 +9,7 @@
  *
  * Ordinateur : grande arche centrée, seuls les titres sont sur l'arche. Un clic sur un point (ou son titre)
  * affiche la description de l'étape à l'intérieur de l'arche ; l'étape 1 est affichée d'emblée.
- * Mobile : la même arche en plus petit ; la description et la photo de l'étape choisie passent dessous.
+ * Mobile : la même arche, description et photo comprises, en plus petit.
  */
 import {rendreImage} from '../../lib/image'
 import type {EtapeArche, PageOffre} from '../../lib/types'
@@ -47,6 +47,9 @@ const travaux = {titre: deroule?.travaux?.titre || secours.travaux.titre || '', 
 // trait horizontal jusqu'à l'ouverture (720, 40). Les points sont placés en % de ce repère.
 const L = 920
 const H = 440
+// Mobile : même arche, trait vertical plus long (repère 920 × 640) pour loger la description à l'intérieur.
+const HM = 640
+const DY = HM - H
 const sommet = 230 - 190 * Math.SQRT1_2
 const points = [
   {x: 40, y: 390, place: 'droite'},
@@ -75,6 +78,10 @@ const toutes = [...etapes.map((e, i) => ({...e, numero: String(i + 1)})), {...tr
         <!-- Pointillés de l'ouverture jusqu'aux travaux -->
         <path class="parcours__pointilles" d="M720 40 H800" />
       </svg>
+      <svg class="parcours__trait parcours__trait--mobile" viewBox={`0 0 ${L} ${HM}`} aria-hidden="true" preserveAspectRatio="none">
+        <path d={`M40 ${420 + DY} V230 A190 190 0 0 1 230 40 H720`} vector-effect="non-scaling-stroke" />
+        <path class="parcours__pointilles" d="M720 40 H800" vector-effect="non-scaling-stroke" />
+      </svg>
 
       <div class="parcours__etapes" role="tablist" aria-label="Étapes du projet">
         {
@@ -87,7 +94,7 @@ const toutes = [...etapes.map((e, i) => ({...e, numero: String(i + 1)})), {...tr
               aria-selected={i === 0 ? 'true' : 'false'}
               tabindex={i === 0 ? 0 : -1}
               class:list={['parcours__point', `parcours__point--${points[i].place}`, {'parcours__point--sommet': i === 2, 'parcours__point--travaux': i === 5}]}
-              style={`left: ${(points[i].x / L) * 100}%; top: ${(points[i].y / H) * 100}%`}
+              style={`left: ${(points[i].x / L) * 100}%; --y: ${points[i].y / H}; --ym: ${(points[i].y > 230 ? points[i].y + DY : points[i].y) / HM}`}
             >
               {i === 5 ? (
                 <svg class="parcours__rond parcours__rond--pointille" viewBox="0 0 20 20" aria-hidden="true">
@@ -183,6 +190,9 @@ const toutes = [...etapes.map((e, i) => ({...e, numero: String(i + 1)})), {...tr
     height: 100%;
     overflow: visible;
   }
+  .parcours__trait--mobile {
+    display: none;
+  }
   .parcours__trait path {
     fill: none;
     stroke: var(--ocre);
@@ -191,6 +201,7 @@ const toutes = [...etapes.map((e, i) => ({...e, numero: String(i + 1)})), {...tr
   }
   .parcours__point {
     position: absolute;
+    top: calc(var(--y) * 100%);
     display: flex;
     align-items: center;
     gap: 1rem;
@@ -376,23 +387,24 @@ const toutes = [...etapes.map((e, i) => ({...e, numero: String(i + 1)})), {...tr
     }
   }
 
-  /* Mobile : la même arche, en plus petit. Les titres des étapes passent sur plusieurs lignes ;
-     la description et la photo de l'étape choisie s'affichent sous l'arche. */
+  /* Mobile : la même arche, avec la description et la photo à l'intérieur, simplement en plus petit.
+     Les titres du trait du haut passent sur deux lignes pour ne pas se toucher. */
   @media (max-width: 51.99rem) {
     .parcours {
-      display: grid;
-      grid-template-columns: 1fr 38%;
-      align-items: end;
-      column-gap: 1rem;
-      aspect-ratio: auto;
+      aspect-ratio: 920 / 640;
     }
-    .parcours__arche {
-      position: relative;
-      grid-column: 1 / -1;
-      aspect-ratio: 920 / 440;
-      margin-bottom: 2.5rem;
+    .parcours__trait {
+      display: none;
+    }
+    .parcours__trait--mobile {
+      display: block;
+    }
+    .parcours__trait--mobile .parcours__pointilles {
+      stroke-width: 1.25;
+      stroke-dasharray: 2 3.5;
     }
     .parcours__point {
+      top: calc(var(--ym) * 100%);
       gap: 0.5rem;
       transform: translate(-0.35rem, -50%);
     }
@@ -427,43 +439,43 @@ const toutes = [...etapes.map((e, i) => ({...e, numero: String(i + 1)})), {...tr
       letter-spacing: 0.08em;
       line-height: 1.35;
     }
-    /* Sur le trait du haut et en diagonale : titres sur deux lignes, pour qu'ils ne se touchent pas. */
-    .parcours__point--dessous .parcours__libelle,
-    .parcours__point--diagonale .parcours__libelle {
+    /* Titres des étapes sur deux lignes si besoin, pour qu'ils ne touchent ni leurs voisins ni la description. */
+    .parcours__libelle {
       max-width: 4.25rem;
       white-space: normal;
+      text-align: left;
     }
     .parcours__point--dessous .parcours__libelle {
       text-align: center;
     }
+    /* Description dans l'arche, en petit, entre les titres de gauche et la photo. */
     .parcours__panneaux {
-      position: static;
-      grid-column: 1;
-      grid-row: 2;
-      display: block;
-      text-align: left;
+      left: 33%;
+      top: calc(175 / 640 * 100%);
+      bottom: calc(20 / 640 * 100%);
     }
     .parcours__photo {
-      position: relative;
-      grid-column: 2;
-      grid-row: 2;
-      width: auto;
+      bottom: calc(20 / 640 * 100%);
+    }
+    .parcours__panneau {
+      max-width: none;
     }
     .parcours__num {
-      margin-bottom: 0.5rem;
+      font-size: 0.5rem;
+      letter-spacing: 0.14em;
+      margin-bottom: 0.3rem;
     }
     .parcours__panneau h3 {
-      font-size: var(--t-s);
-      letter-spacing: 0.14em;
-      margin-bottom: 0.5rem;
+      font-size: 0.625rem;
+      letter-spacing: 0.12em;
+      margin-bottom: 0.3rem;
     }
     .parcours__texte {
       white-space: normal;
-      margin-bottom: 0 !important;
     }
     .parcours__panneau p:last-child {
-      font-size: var(--t-s);
-      line-height: 1.55;
+      font-size: 0.5625rem;
+      line-height: 1.4;
     }
   }
 </style>
