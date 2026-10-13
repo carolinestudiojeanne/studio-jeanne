@@ -63,6 +63,13 @@ const tel = r.telephone?.replace(/\s/g, '')
   .pied a {
     text-decoration: none;
   }
+  /* Écrans tactiles : liens un peu plus hauts au toucher, sans changer la mise en page. */
+  @media (pointer: coarse) {
+    .pied__contact a:not(.pied__reseau),
+    .pied__legal a {
+      padding-block: 0.25rem;
+    }
+  }
   .pied a:hover {
     text-decoration: underline;
     text-decoration-color: var(--ocre);
@@ -96,8 +103,11 @@ const tel = r.telephone?.replace(/\s/g, '')
     letter-spacing: 0.18em;
   }
   /* Instagram et LinkedIn : pictos au trait fin. */
+  /* Zone de toucher de 34 px autour du picto (marge négative : rien ne bouge à l'écran). */
   .pied__reseau {
     display: inline-flex;
+    padding: 0.5rem;
+    margin: -0.5rem;
   }
   .pied__reseau svg {
     width: 1.15rem;

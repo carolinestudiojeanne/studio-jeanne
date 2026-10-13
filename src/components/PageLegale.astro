@@ -38,8 +38,9 @@ const date = page.miseAJour ? new Date(page.miseAJour).toLocaleDateString('fr-FR
   .retour {
     display: inline-block;
     color: var(--ocre);
-    padding: 0.5rem 0.75rem 0.5rem 0;
-    margin-bottom: 1.25rem;
+    /* Zone de toucher élargie (marge négative : la flèche ne bouge pas). */
+    padding: 0.5rem 1.25rem 0.5rem 0.75rem;
+    margin: 0 0 1.25rem -0.75rem;
     line-height: 0;
     transition: transform 0.25s;
   }

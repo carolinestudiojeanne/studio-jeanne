@@ -114,11 +114,11 @@ const groupes = !colonne
   .aa {
     margin: 0;
   }
-  /* Mobile : l'un sous l'autre, tous à la même hauteur. */
+  /* Mobile : l'un sous l'autre, tous à la même hauteur, centrés (un vertical, plus étroit, ne reste pas collé à gauche). */
   .aa-rangee {
     display: grid;
     gap: var(--ecart);
-    justify-items: start;
+    justify-items: center;
   }
   .aa-rangee .aa {
     width: min(100%, calc(var(--hauteur) * var(--r)));
