@@ -33,10 +33,12 @@ const {hero, projetsRecents, aiguillage} = page
     projets.length > 0 && (
       <section class="section section-projets-recents">
         <CarrouselProjets projets={projets}>
-          <div class="projets-recents">
-            <h2>{projetsRecents?.titre}</h2>
-            {projetsRecents?.texte && <p>{projetsRecents.texte}</p>}
-          </div>
+          {(projetsRecents?.titre || projetsRecents?.texte) && (
+            <div class="projets-recents">
+              {projetsRecents?.titre && <h2>{projetsRecents.titre}</h2>}
+              {projetsRecents?.texte && <p>{projetsRecents.texte}</p>}
+            </div>
+          )}
           {projetsRecents?.lienLibelle && (
             <p class="voir-projets" slot="lien">
               <a class="lien-fleche lien-chevron" href="/projets">

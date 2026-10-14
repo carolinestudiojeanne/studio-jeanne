@@ -296,7 +296,6 @@ export const pageAccueil: PageAccueil = {
     boutonLibelle: 'Parler de votre projet',
   },
   projetsRecents: {
-    titre: 'Projets récents',
     lienLibelle: 'Voir tous les projets',
   },
   deroule: {
