@@ -47,8 +47,9 @@ const travaux = {titre: deroule?.travaux?.titre || secours.travaux.titre || '', 
 // trait horizontal jusqu'à l'ouverture (720, 40). Les points sont placés en % de ce repère.
 const L = 920
 const H = 440
-// Mobile : même arche, trait vertical plus long (repère 920 × 640) pour loger la description à l'intérieur.
-const HM = 640
+// Mobile : même arche, trait vertical plus long (repère 920 × 1000) pour loger la description à l'intérieur,
+// en assez gros pour être lue sur téléphone.
+const HM = 1000
 const DY = HM - H
 const sommet = 230 - 190 * Math.SQRT1_2
 const points = [
@@ -391,7 +392,7 @@ const toutes = [...etapes.map((e, i) => ({...e, numero: String(i + 1)})), {...tr
      Les titres du trait du haut passent sur deux lignes pour ne pas se toucher. */
   @media (max-width: 51.99rem) {
     .parcours {
-      aspect-ratio: 920 / 640;
+      aspect-ratio: 920 / 1000;
     }
     .parcours__trait {
       display: none;
@@ -448,34 +449,44 @@ const toutes = [...etapes.map((e, i) => ({...e, numero: String(i + 1)})), {...tr
     .parcours__point--dessous .parcours__libelle {
       text-align: center;
     }
-    /* Description dans l'arche, en petit, entre les titres de gauche et la photo. */
+    /* Description dans l'arche, entre les titres de gauche et la photo : elle commence sous le titre
+       « Modélisation 3D » (jamais par-dessus les titres de l'arche) et se cale en bas, au niveau de la photo. */
     .parcours__panneaux {
       left: 33%;
-      top: calc(175 / 640 * 100%);
-      bottom: calc(20 / 640 * 100%);
+      top: 7rem;
+      right: calc(100% - 870 / 920 * 100% + 15% + 2.5%);
+      bottom: calc(20 / 1000 * 100%);
     }
+    /* Photo plus fine qu'à l'ordinateur, pour laisser la place au texte. */
     .parcours__photo {
-      bottom: calc(20 / 640 * 100%);
+      width: 15%;
+      bottom: calc(20 / 1000 * 100%);
     }
     .parcours__panneau {
       max-width: none;
     }
     .parcours__num {
-      font-size: 0.5rem;
+      font-size: 0.5625rem;
       letter-spacing: 0.14em;
-      margin-bottom: 0.3rem;
+      margin-bottom: 0.35rem;
     }
     .parcours__panneau h3 {
-      font-size: 0.625rem;
+      font-size: 0.8125rem;
       letter-spacing: 0.12em;
-      margin-bottom: 0.3rem;
+      margin-bottom: 0.4rem;
     }
     .parcours__texte {
       white-space: normal;
     }
     .parcours__panneau p:last-child {
-      font-size: 0.5625rem;
-      line-height: 1.4;
+      font-size: 0.75rem;
+      line-height: 1.45;
+    }
+  }
+  /* Petits téléphones : un peu plus petit pour que les plus longues descriptions tiennent. */
+  @media (max-width: 22rem) {
+    .parcours__panneau p:last-child {
+      font-size: 0.6875rem;
     }
   }
 </style>

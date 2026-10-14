@@ -11,6 +11,7 @@ import ListeAvis from '../sections/ListeAvis.astro'
 import Galerie from './Galerie.astro'
 import AvantApres from './AvantApres.astro'
 import Video from './Video.astro'
+import Visionneuse from './Visionneuse.astro'
 import {getReglages} from '../../lib/contenu'
 import {FORMULAIRES} from '../../lib/formulaires'
 import {texteBrut, texteEnHtml} from '../../lib/texte'
@@ -138,6 +139,9 @@ const caracteristiques = [projet.typeDeProjet && {libelle: 'Projet', valeur: pro
 
   <!-- 7. Autres projets -->
   <NavProjets precedent={precedent} suivant={suivant} />
+
+  <!-- Photos en grand au clic -->
+  <Visionneuse />
 
   <!-- 8. Plus de bloc « Un projet comme celui-ci ? » en bas : le bouton « Parlons de votre projet » est déjà sous les photos. -->
 </Base>

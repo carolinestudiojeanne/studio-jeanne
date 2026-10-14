@@ -44,7 +44,7 @@ const horizontaux = items.filter((p) => p.format !== 'portrait')
 const verticaux = items.filter((p) => p.format === 'portrait')
 const separer = items.length >= 3 && horizontaux.length > 0 && verticaux.length > 0
 const groupes = !colonne
-  ? [{classe: '', total: items.length, rangees}]
+  ? [{classe: items.length === 1 ? 'aa-liste--seul' : '', total: items.length, rangees}]
   : separer
     ? [
         {classe: 'aa-liste--colonne', total: Math.max(horizontaux.length, 2), rangees: horizontaux.map((p) => [p])},
@@ -137,6 +137,15 @@ const groupes = !colonne
       flex: var(--r) 1 0%;
       width: auto;
       min-width: 0;
+    }
+  }
+  /* Un seul avant / après sur la page : nettement plus grand (toute la largeur sur téléphone). */
+  .aa-liste--seul {
+    --hauteur: 24rem;
+  }
+  @media (min-width: 52rem) {
+    .aa-liste--seul {
+      --hauteur: min(34rem, 75svh);
     }
   }
   /* À droite d'une vidéo (ordinateur) : les avant / après empilés occupent exactement la hauteur de la vidéo. */

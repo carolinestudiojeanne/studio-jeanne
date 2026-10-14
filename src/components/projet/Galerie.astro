@@ -31,11 +31,11 @@ for (let i = 0; i < galerie.length; i++) {
       ligne.type === 'paire' ? (
         <div class="galerie__paire">
           {ligne.items.map((g) => (
-            <Image image={g.image} ratio={4 / 5} sizes="(min-width: 52rem) 45vw, 100vw" />
+            <Image image={g.image} ratio={4 / 5} sizes="(min-width: 52rem) 45vw, 100vw" agrandir />
           ))}
         </div>
       ) : (
-        <Image image={ligne.items[0].image} sizes="(min-width: 82rem) 82rem, 100vw" />
+        <Image image={ligne.items[0].image} sizes="(min-width: 82rem) 82rem, 100vw" agrandir />
       ),
     )
   }

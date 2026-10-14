@@ -1,0 +1,225 @@
+---
+/**
+ * Visionneuse des pages projet : un clic sur une photo (photo verticale, bande, galerie) l'ouvre en grand,
+ * entière, sur fond crème. Flèches ocre pour passer d'une photo à l'autre (dans l'ordre de la page, en boucle),
+ * flèche ocre en haut à droite pour fermer. Clavier : ← → pour défiler, Échap pour fermer.
+ * Téléphone : glisser vers la gauche ou la droite pour défiler.
+ */
+---
+
+<dialog class="visionneuse" aria-label="Photo en grand" data-visionneuse>
+  <button type="button" class="visionneuse__fermer" aria-label="Fermer la photo" data-fermer>
+    <svg viewBox="0 0 24 18" aria-hidden="true"><path d="M23 9H1M9 1 1 9l8 8" /></svg>
+  </button>
+  <button type="button" class="visionneuse__fleche" data-sens="-1" aria-label="Photo précédente">
+    <svg viewBox="0 0 10 18" aria-hidden="true"><path d="M9 1 1 9l8 8" /></svg>
+  </button>
+  <figure class="visionneuse__cadre">
+    <img class="visionneuse__img" alt="" sizes="100vw" />
+  </figure>
+  <button type="button" class="visionneuse__fleche" data-sens="1" aria-label="Photo suivante">
+    <svg viewBox="0 0 10 18" aria-hidden="true"><path d="m1 1 8 8-8 8" /></svg>
+  </button>
+  <p class="visionneuse__compteur" aria-live="polite"></p>
+</dialog>
+
+<script>
+  const dialogue = document.querySelector<HTMLDialogElement>('[data-visionneuse]')
+  if (dialogue) {
+    const img = dialogue.querySelector<HTMLImageElement>('.visionneuse__img')!
+    const compteur = dialogue.querySelector<HTMLElement>('.visionneuse__compteur')!
+    const photos = () => [...document.querySelectorAll<HTMLImageElement>('img[data-grande]')]
+    let liste: HTMLImageElement[] = []
+    let n = 0
+    let origine: HTMLElement | null = null
+
+    const afficher = (i: number) => {
+      n = (i + liste.length) % liste.length
+      const p = liste[n]
+      img.removeAttribute('srcset')
+      if (p.dataset.grandeSrcset) img.srcset = p.dataset.grandeSrcset
+      img.src = p.dataset.grande!
+      img.alt = p.alt
+      compteur.textContent = liste.length > 1 ? `${n + 1} / ${liste.length}` : ''
+      dialogue.classList.toggle('visionneuse--seule', liste.length < 2)
+    }
+    const ouvrir = (p: HTMLImageElement) => {
+      // Ordre de la page au moment du clic (la bande de photos tourne en boucle).
+      liste = photos()
+      origine = p
+      afficher(liste.indexOf(p))
+      dialogue.showModal()
+      document.documentElement.classList.add('visionneuse-ouverte')
+    }
+    const fermer = () => dialogue.close()
+    dialogue.addEventListener('close', () => {
+      document.documentElement.classList.remove('visionneuse-ouverte')
+      origine?.focus()
+    })
+
+    // Les photos deviennent cliquables (et accessibles au clavier).
+    photos().forEach((p) => {
+      p.tabIndex = 0
+      p.setAttribute('role', 'button')
+      p.setAttribute('aria-label', `Agrandir la photo${p.alt ? ` : ${p.alt}` : ''}`)
+      p.addEventListener('click', () => ouvrir(p))
+      p.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault()
+          ouvrir(p)
+        }
+      })
+    })
+
+    dialogue.querySelector('[data-fermer]')!.addEventListener('click', fermer)
+    dialogue.querySelectorAll<HTMLButtonElement>('.visionneuse__fleche').forEach((b) => b.addEventListener('click', () => afficher(n + Number(b.dataset.sens))))
+    // Un clic à côté de la photo (sur le fond crème) ferme la visionneuse.
+    dialogue.addEventListener('click', (e) => {
+      if (e.target === dialogue || (e.target as HTMLElement).classList.contains('visionneuse__cadre')) fermer()
+    })
+    dialogue.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') afficher(n - 1)
+      if (e.key === 'ArrowRight') afficher(n + 1)
+    })
+    // Téléphone : glisser pour passer à la photo suivante ou précédente.
+    let x0: number | null = null
+    dialogue.addEventListener('touchstart', (e) => (x0 = e.touches[0].clientX), {passive: true})
+    dialogue.addEventListener('touchend', (e) => {
+      if (x0 === null) return
+      const dx = e.changedTouches[0].clientX - x0
+      x0 = null
+      if (Math.abs(dx) > 50 && liste.length > 1) afficher(n + (dx < 0 ? 1 : -1))
+    })
+  }
+</script>
+
+<style>
+  :global(img[data-grande]) {
+    cursor: zoom-in;
+  }
+  :global(img[data-grande]:focus-visible) {
+    outline: 2px solid var(--ocre);
+    outline-offset: 3px;
+  }
+  :global(html.visionneuse-ouverte) {
+    overflow: hidden;
+  }
+
+  .visionneuse {
+    width: 100vw;
+    height: 100dvh;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: var(--creme);
+    color: var(--ocre);
+  }
+  .visionneuse[open] {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    animation: visionneuse-apparition 0.3s ease;
+  }
+  .visionneuse::backdrop {
+    background: transparent;
+  }
+  @keyframes visionneuse-apparition {
+    from {
+      opacity: 0;
+    }
+  }
+
+  .visionneuse__cadre {
+    --marge: clamp(3.5rem, 7vh, 4.5rem);
+    margin: 0;
+    height: 100dvh;
+    min-width: 0;
+    display: grid;
+    place-items: center;
+    padding: var(--marge) 0;
+  }
+  .visionneuse__img {
+    max-width: 100%;
+    max-height: calc(100dvh - 2 * var(--marge));
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: var(--arrondi);
+  }
+
+  /* Têtes de flèches fines, en ocre, comme la bande de photos du projet ; elles glissent un peu au survol. */
+  .visionneuse__fleche,
+  .visionneuse__fermer {
+    background: none;
+    border: 0;
+    color: var(--ocre);
+    line-height: 0;
+    cursor: pointer;
+    transition: transform 0.25s;
+  }
+  .visionneuse__fleche {
+    padding: 1.25rem clamp(0.75rem, 2.5vw, 2rem);
+  }
+  .visionneuse__fleche[data-sens='-1']:hover {
+    transform: translateX(-4px);
+  }
+  .visionneuse__fleche[data-sens='1']:hover {
+    transform: translateX(4px);
+  }
+  .visionneuse__fleche svg {
+    width: 0.85rem;
+    height: auto;
+  }
+  .visionneuse--seule .visionneuse__fleche {
+    visibility: hidden;
+  }
+  /* Flèche de fermeture, en haut à droite. */
+  .visionneuse__fermer {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    z-index: 1;
+    padding: 0.75rem;
+  }
+  .visionneuse__fermer:hover {
+    transform: translateX(-4px);
+  }
+  .visionneuse__fermer svg {
+    width: 1.5rem;
+    height: auto;
+  }
+  .visionneuse svg {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    overflow: visible;
+  }
+  .visionneuse button:focus {
+    outline: none;
+  }
+  .visionneuse button:focus-visible {
+    outline: 1px solid var(--ocre);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  .visionneuse__compteur {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 1rem;
+    margin: 0;
+    text-align: center;
+    font-size: var(--t-xs);
+    letter-spacing: 0.18em;
+    color: var(--ardoise);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .visionneuse[open] {
+      animation: none;
+    }
+  }
+</style>

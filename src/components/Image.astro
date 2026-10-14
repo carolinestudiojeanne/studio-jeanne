@@ -12,10 +12,14 @@ interface Props {
   prioritaire?: boolean
   arche?: boolean
   legende?: boolean
+  /** Un clic ouvre la photo en grand, entière (visionneuse des pages projet). */
+  agrandir?: boolean
   class?: string
 }
-const {image, ratio, sizes = '100vw', prioritaire = false, arche = false, legende = true, class: classe} = Astro.props
+const {image, ratio, sizes = '100vw', prioritaire = false, arche = false, legende = true, agrandir = false, class: classe} = Astro.props
 const img = rendreImage(image, {ratio})
+// Version en grand : la photo entière (recadrage Sanity compris), sans le format imposé par la page.
+const grande = agrandir ? rendreImage(image) : null
 const avecLegende = legende && (img?.legende || img?.rendu3D)
 ---
 
@@ -33,6 +37,8 @@ const avecLegende = legende && (img?.legende || img?.rendu3D)
           loading={prioritaire ? 'eager' : 'lazy'}
           fetchpriority={prioritaire ? 'high' : undefined}
           decoding={prioritaire ? 'sync' : 'async'}
+          data-grande={grande?.src}
+          data-grande-srcset={grande?.srcset}
         />
       </div>
       {avecLegende && (

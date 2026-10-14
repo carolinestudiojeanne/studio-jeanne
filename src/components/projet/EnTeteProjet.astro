@@ -40,7 +40,7 @@ const {projet, portrait, bande, caracteristiques, avantApres = false, video = fa
   {
     portrait && (
       <div class="ep__portrait">
-        <Image image={portrait} ratio={4 / 5} legende={false} sizes="(min-width: 52rem) 26vw, 70vw" />
+        <Image image={portrait} ratio={4 / 5} legende={false} sizes="(min-width: 52rem) 26vw, 70vw" agrandir />
       </div>
     )
   }
@@ -78,7 +78,7 @@ const {projet, portrait, bande, caracteristiques, avantApres = false, video = fa
           <ul class="ep__bande">
             {bande.map((image) => (
               <li>
-                <Image image={image} ratio={3 / 4} sizes="(min-width: 52rem) 24vw, 50vw" />
+                <Image image={image} ratio={3 / 4} sizes="(min-width: 52rem) 24vw, 50vw" agrandir />
               </li>
             ))}
           </ul>

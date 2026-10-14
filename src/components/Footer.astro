@@ -18,27 +18,25 @@ const tel = r.telephone?.replace(/\s/g, '')
       {tel && <li><a href={`tel:${tel}`}>{r.telephone}</a></li>}
       {r.email && <li><a href={`mailto:${r.email}`}>{r.email}</a></li>}
       {
-        r.instagram && (
-          <li>
-            <a class="pied__reseau" href={r.instagram} target="_blank" rel="noopener" aria-label="Instagram (nouvel onglet)">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <rect x="3.5" y="3.5" width="17" height="17" rx="5" />
-                <circle cx="12" cy="12" r="4" />
-                <circle cx="17.2" cy="6.8" r="0.6" class="plein" />
-              </svg>
-            </a>
-          </li>
-        )
-      }
-      {
-        r.linkedin && (
-          <li>
-            <a class="pied__reseau" href={r.linkedin} target="_blank" rel="noopener" aria-label="LinkedIn (nouvel onglet)">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <rect x="3.5" y="3.5" width="17" height="17" rx="3" />
-                <path d="M8.25 10.5v6M8.25 7.6v.1M11.75 16.5v-6M11.75 13.25c0-1.6 1-2.75 2.4-2.75s2.1 1 2.1 2.6v3.4" />
-              </svg>
-            </a>
+        (r.instagram || r.linkedin) && (
+          <li class="pied__reseaux">
+            {r.instagram && (
+              <a class="pied__reseau" href={r.instagram} target="_blank" rel="noopener" aria-label="Instagram (nouvel onglet)">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <rect x="3.5" y="3.5" width="17" height="17" rx="5" />
+                  <circle cx="12" cy="12" r="4" />
+                  <circle cx="17.2" cy="6.8" r="0.6" class="plein" />
+                </svg>
+              </a>
+            )}
+            {r.linkedin && (
+              <a class="pied__reseau" href={r.linkedin} target="_blank" rel="noopener" aria-label="LinkedIn (nouvel onglet)">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <rect x="3.5" y="3.5" width="17" height="17" rx="3" />
+                  <path d="M8.25 10.5v6M8.25 7.6v.1M11.75 16.5v-6M11.75 13.25c0-1.6 1-2.75 2.4-2.75s2.1 1 2.1 2.6v3.4" />
+                </svg>
+              </a>
+            )}
           </li>
         )
       }
@@ -118,6 +116,19 @@ const tel = r.telephone?.replace(/\s/g, '')
     stroke-linecap: round;
     stroke-linejoin: round;
     transition: stroke 0.25s;
+  }
+  /* Instagram et LinkedIn toujours côte à côte, même écart que les autres contacts. */
+  .pied__reseaux {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  /* Téléphone : les deux pictos ensemble sur leur propre ligne, sous l'adresse e-mail. */
+  @media (max-width: 51.99rem) {
+    .pied__reseaux {
+      flex-basis: 100%;
+      padding-top: 0.4rem;
+    }
   }
   .pied__reseau .plein {
     fill: currentColor;
