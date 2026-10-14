@@ -325,7 +325,7 @@ export const pageContact = defineType({
       group: 'contenu',
       description: 'Les deux premières arches reprennent les textes de l’accueil (« 4. Deux points de départ »).',
       fields: [
-        defineField({name: 'titre', title: 'Titre', type: 'string', description: 'Par défaut : « Vous êtes un professionnel. »'}),
+        defineField({name: 'titre', title: 'Titre', type: 'string', description: 'Par défaut : « Vous êtes un professionnel »'}),
         defineField({name: 'texte', title: 'Phrase', type: 'text', rows: 2}),
         defineField({name: 'boutonLibelle', title: 'Texte du bouton', type: 'string', description: 'Par défaut : « Parlons de vos locaux ».'}),
       ],

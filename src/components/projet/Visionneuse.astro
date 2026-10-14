@@ -132,19 +132,21 @@
   }
 
   .visionneuse__cadre {
-    --marge: clamp(3.5rem, 7vh, 4.5rem);
     margin: 0;
-    height: 100dvh;
     min-width: 0;
-    display: grid;
-    place-items: center;
-    padding: var(--marge) 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
+  /* Toujours la photo entière, adaptée à la fenêtre : jamais plus grande que 90 % de la largeur
+     (moins les flèches) ni 85 % de la hauteur, sans recadrage. */
   .visionneuse__img {
-    max-width: 100%;
-    max-height: calc(100dvh - 2 * var(--marge));
+    display: block;
     width: auto;
     height: auto;
+    max-width: min(100%, 90vw);
+    max-height: 85vh;
+    max-height: 85dvh;
     object-fit: contain;
     border-radius: var(--arrondi);
   }

@@ -1,6 +1,6 @@
 ---
 /**
- * Page Contact (et accueil, sans l'arche pro et avec les liens « Découvrir… ») : les portes d'entrée, chacune dans une arche basse, empilées l'une sous l'autre.
+ * Page Contact (et accueil, avec les liens « Découvrir… ») : les portes d'entrée, chacune dans une arche basse, empilées l'une sous l'autre.
  * Même tracé que l'arche du logo et du déroulé (L'accompagnement, Trouver votre bien) : trait vertical à gauche,
  * angle arrondi, trait horizontal jusqu'au bord droit ; pas d'étapes, juste un titre, une phrase et le bouton
  * vers le bon formulaire Tally. Les trois au même niveau, pour que le choix soit clair.
@@ -35,10 +35,11 @@ const arches: Arche[] = [
     page: {href: '/trouver-votre-bien', libelle: 'Découvrir la recherche de bien'},
   },
   ...(sansPro ? [] : [{
-    titre: pro?.titre || 'Vous êtes un professionnel.',
+    titre: pro?.titre || 'Vous êtes un professionnel',
     texte: pro?.texte || 'Restaurant, bar, boutique ou bureau : un lieu à votre image.',
     bouton: pro?.boutonLibelle || 'Parlons de vos locaux',
     href: FORMULAIRES.professionnel,
+    page: {href: '/projets?type=professionnels', libelle: 'Voir les projets professionnels'},
   }]),
 ].filter((a) => a.titre)
 ---
@@ -175,7 +176,8 @@ const arches: Arche[] = [
     .arche-contact__actions {
       justify-self: end;
     }
-    .arche-contact__bouton {
+    .arche-contact__bouton,
+    .arche-contact__page {
       white-space: nowrap;
     }
   }

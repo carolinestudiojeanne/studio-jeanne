@@ -291,7 +291,7 @@ export const pageAccueil: PageAccueil = {
   hero: {
     image: img('chene', 'Pièce de vie lumineuse en chêne clair, projet Studio Jeanne à Bordeaux'),
     h1: 'Studio Jeanne, décoratrice d’intérieur à Bordeaux',
-    accroche: 'Votre intérieur devrait vous ressembler, vraiment.',
+    accroche: 'Votre intérieur devrait vous ressembler, vraiment',
     sousTitre: 'J’écoute, je questionne, je traduis.',
     boutonLibelle: 'Parler de votre projet',
   },
@@ -311,12 +311,12 @@ export const pageAccueil: PageAccueil = {
   aiguillage: {
     titre: 'Deux points de départ',
     colonne1: {
-      titre: 'Vous avez déjà votre maison.',
+      titre: 'Vous avez déjà votre maison',
       texte: 'Vous venez de l’acheter, ou vous y vivez depuis des années et le moment est enfin venu de la transformer.',
       boutonLibelle: 'Accompagnement',
     },
     colonne2: {
-      titre: 'Vous ne l’avez pas encore trouvée.',
+      titre: 'Vous ne l’avez pas encore trouvée',
       texte: 'Je cherche votre bien avec vous, en sachant déjà ce que vous voulez en faire.',
       boutonLibelle: 'Trouver votre bien',
     },

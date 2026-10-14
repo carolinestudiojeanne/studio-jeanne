@@ -5,10 +5,10 @@ import ArchesContact from '../components/sections/ArchesContact.astro'
 import CarrouselProjets from '../components/sections/CarrouselProjets.astro'
 import MurAvis from '../components/sections/MurAvis.astro'
 import Bande from '../components/sections/Bande.astro'
-import {getAvisAccueil, getPageAccueil, getProjets, getReglages} from '../lib/contenu'
+import {getAvisAccueil, getPageAccueil, getPageContact, getProjets, getReglages} from '../lib/contenu'
 import {FORMULAIRES} from '../lib/formulaires'
 
-const [page, tousProjets, avis, reglages] = await Promise.all([getPageAccueil(), getProjets(), getAvisAccueil(), getReglages()])
+const [page, tousProjets, avis, reglages, contact] = await Promise.all([getPageAccueil(), getProjets(), getAvisAccueil(), getReglages(), getPageContact()])
 // L'accueil ne montre que les projets de particuliers (diaporama et projets récents).
 const projets = tousProjets.filter((p) => p.categorie === 'residentiel')
 const titre = page.seo?.metaTitle || `Décoratrice d’intérieur à Bordeaux${reglages.suffixeTitre}`
@@ -49,14 +49,14 @@ const {hero, projetsRecents, aiguillage} = page
     )
   }
 
-  <!-- 4. Deux points de départ, en arches basses comme sur la page Contact (sans l'arche pro), avec les liens vers les pages.
+  <!-- 4. Trois points de départ, en arches basses comme sur la page Contact (l'arche pro reprend ses textes), avec les liens vers les pages.
        Ancienne version (deux colonnes avec photos) : <ArchesContact aiguillage={aiguillage} sansPro liens />. -->
   {
     aiguillage && (
       <section class="section section-portes">
         <div class="conteneur">
           <h2 class="visuellement-cache">{aiguillage.titre || 'Deux points de départ'}</h2>
-          <ArchesContact aiguillage={aiguillage} sansPro liens />
+          <ArchesContact aiguillage={aiguillage} pro={contact.pro} liens />
         </div>
       </section>
     )
@@ -143,9 +143,10 @@ const {hero, projetsRecents, aiguillage} = page
     background: var(--blanc);
     padding-top: calc(var(--section) * 0.7);
   }
-  /* Les deux arches plus espacées, sans agrandir la section : l'espace pris au-dessus de la première arche passe entre les deux. */
+  /* Les trois arches un peu plus espacées que sur Contact, sans agrandir la section :
+     l'espace pris au-dessus de la première arche passe entre elles. */
   .section-portes :global(.arches) {
     margin-top: 0;
-    gap: calc(clamp(3.5rem, 7vw, 5rem) + clamp(1.5rem, 3vw, 2.5rem));
+    gap: calc(clamp(3.5rem, 7vw, 5rem) + clamp(0.75rem, 1.5vw, 1.25rem));
   }
 </style>
