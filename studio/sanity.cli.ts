@@ -7,5 +7,5 @@ export default defineCliConfig({
   },
   // Adresse de l'interface d'édition une fois publiée : https://studio-jeanne.sanity.studio
   studioHost: 'studio-jeanne',
-  deployment: {autoUpdates: true},
+  deployment: {appId: 'a8s8xaqviyff3h712vr3l14f', autoUpdates: true},
 })
