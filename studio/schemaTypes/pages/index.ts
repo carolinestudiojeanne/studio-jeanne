@@ -101,9 +101,15 @@ export const pageAccueil = defineType({
       title: '1. Grand visuel',
       type: 'object',
       group: 'contenu',
+      description: 'Le grand visuel fait défiler automatiquement les photos principales des projets (particuliers).',
       options: {collapsible: true, collapsed: false},
       fields: [
-        defineField({name: 'image', title: 'Photo', type: 'imageAlt', validation: (r) => r.required()}),
+        defineField({
+          name: 'image',
+          title: 'Photo de secours (facultatif)',
+          type: 'imageAlt',
+          description: 'Utilisée seulement s’il y a moins de deux projets de particuliers. Sinon, ce sont les photos des projets qui défilent.',
+        }),
         defineField({
           name: 'h1',
           title: 'Petite ligne au-dessus de l’accroche',
@@ -142,9 +148,10 @@ export const pageAccueil = defineType({
     }),
     defineField({
       name: 'aiguillage',
-      title: '4. Deux points de départ',
+      title: '4. Les arches (points de départ)',
       type: 'object',
       group: 'contenu',
+      description: 'Les deux premières arches. La 3e, « Vous êtes un professionnel », se modifie dans la page Contact.',
       options: {collapsible: true, collapsed: false},
       fields: [
         defineField({name: 'titre', title: 'Titre', type: 'string'}),
