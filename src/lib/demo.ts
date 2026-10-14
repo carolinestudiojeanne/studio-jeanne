@@ -331,7 +331,7 @@ export const pageAccueil: PageAccueil = {
   appel: {
     titre: 'La première étape',
     texte:
-      'Un formulaire d’une dizaine de minutes, puis un premier appel téléphonique de trente minutes. Vous recevez ensuite une proposition écrite, et vous prenez le temps qu’il vous faut.',
+      'Un formulaire de 3 à 4 minutes, puis un premier appel téléphonique de trente minutes. Vous recevez ensuite une proposition écrite, et vous prenez le temps qu’il vous faut.',
     boutonLibelle: 'Remplir le formulaire',
   },
   seo: {
@@ -343,7 +343,7 @@ export const pageAccueil: PageAccueil = {
 
 const appelStandard = {
   titre: 'Parlons de votre projet',
-  texte: 'Un formulaire d’une dizaine de minutes, puis un premier appel téléphonique de trente minutes.',
+  texte: 'Un formulaire de 3 à 4 minutes, puis un premier appel téléphonique de trente minutes.',
   boutonLibelle: 'Remplir le formulaire',
 }
 
@@ -493,7 +493,7 @@ export const pageContact: PageContact = {
   intro: {
     titre: 'Parlons de votre projet',
     texte: paragraphes(
-      'Avant de nous rencontrer, j’ai besoin de comprendre où vous en êtes. Le formulaire prend une dizaine de minutes : votre lieu, quelques photos, ce que vous avez en tête. C’est ce qui me permet d’arriver à notre premier échange en ayant déjà regardé vos pièces, repéré les contraintes et réfléchi aux possibilités.',
+      'Avant de nous rencontrer, j’ai besoin de comprendre où vous en êtes. Le formulaire prend 3 à 4 minutes : votre lieu, quelques photos, ce que vous avez en tête. C’est ce qui me permet d’arriver à notre premier échange en ayant déjà regardé vos pièces, repéré les contraintes et réfléchi aux possibilités.',
       'Une fois le formulaire envoyé, vous choisissez un créneau dans mon agenda pour un premier appel de trente minutes. Vous me racontez comment vous vivez et ce dont vous rêvez, je vous dis ce qui me semble possible et dans quel ordre de budget nous nous situons. Vous recevez ensuite une proposition écrite, et vous prenez le temps qu’il vous faut pour décider.',
     ),
   },
@@ -507,7 +507,7 @@ export const pageContact: PageContact = {
   },
   seo: {
     metaTitle: 'Contact · Décoratrice d’intérieur à Bordeaux et en Gironde',
-    metaDescription: 'Parlons de votre projet : un formulaire d’une dizaine de minutes, puis un premier appel téléphonique de trente minutes. Studio Jeanne, Bordeaux et Gironde.',
+    metaDescription: 'Parlons de votre projet : un formulaire de 3 à 4 minutes, puis un premier appel téléphonique de trente minutes. Studio Jeanne, Bordeaux et Gironde.',
   },
 }
 
