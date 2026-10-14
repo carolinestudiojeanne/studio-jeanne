@@ -454,19 +454,28 @@ const toutes = [...etapes.map((e, i) => ({...e, numero: String(i + 1)})), {...tr
       top: calc(175 / 640 * 100%);
       bottom: calc(20 / 640 * 100%);
     }
+    /* Photo un peu plus grande (plus haute et un peu plus large), même arche. */
     .parcours__photo {
       bottom: calc(20 / 640 * 100%);
+      width: 22%;
+      aspect-ratio: 2 / 3;
+    }
+    .parcours__panneaux {
+      right: calc(100% - 870 / 920 * 100% + 22% + 2.5%);
     }
     .parcours__panneau {
       max-width: none;
     }
+    /* « Étape 1 » et le titre de l'étape, plus grands eux aussi, pour aller avec les explications. */
     .parcours__num {
-      font-size: 0.5rem;
+      font-size: 0.625rem;
       letter-spacing: 0.14em;
-      margin-bottom: 0.3rem;
+      margin-bottom: 0.25rem;
+      /* S'il passe sur deux lignes, il reste à l'écart du titre « Modélisation 3D » de l'arche. */
+      padding-left: 15%;
     }
     .parcours__panneau h3 {
-      font-size: 0.625rem;
+      font-size: clamp(0.75rem, 3.4vw, 0.875rem);
       letter-spacing: 0.12em;
       margin-bottom: 0.3rem;
     }
