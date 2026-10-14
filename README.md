@@ -1,6 +1,6 @@
 # Studio Jeanne : site et interface d’édition
 
-Site de Caroline Canova, architecte d’intérieur à Bordeaux. Référence : le cahier des charges du 3 octobre 2026.
+Site de Caroline Canova, décoratrice d’intérieur à Bordeaux. Référence : le cahier des charges du 3 octobre 2026.
 
 | Dossier | Ce que c’est | Hébergement |
 |---|---|---|
