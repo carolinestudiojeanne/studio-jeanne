@@ -37,7 +37,8 @@ export default defineConfig({
   integrations: [
     projetsAJourEnLocal(),
     sitemap({
-      filter: (page) => !page.includes('/apercu'),
+      // La carte de visite (/carte) reste hors du plan du site.
+      filter: (page) => !page.includes('/apercu') && !/\/carte\/?$/.test(page),
     }),
   ],
   image: {
