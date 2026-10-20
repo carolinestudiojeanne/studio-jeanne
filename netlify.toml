@@ -11,6 +11,18 @@
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
+# Carte de visite de Caroline : accessible par lien, jamais indexée.
+[[headers]]
+  for = "/carte*"
+  [headers.values]
+    X-Robots-Tag = "noindex"
+
+# Fiche contact de la carte de visite (bouton « Enregistrer le contact »).
+[[headers]]
+  for = "/caroline-canova.vcf"
+  [headers.values]
+    Content-Type = "text/vcard; charset=utf-8"
+
 # L'ancienne page Professionnels (supprimée en octobre 2026) mène aux projets, filtre « Professionnels » activé.
 [[redirects]]
   from = "/professionnels"
