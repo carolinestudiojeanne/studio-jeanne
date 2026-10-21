@@ -9,6 +9,7 @@
     "check": "astro check",
     "importer": "tsx --env-file-if-exists=.env scripts/importer.ts",
     "importer-textes": "tsx scripts/importer-textes.ts",
+    "importer-carte": "tsx --env-file-if-exists=.env scripts/importer-carte.ts",
     "studio": "npm --prefix studio run dev"
   },
   "dependencies": {

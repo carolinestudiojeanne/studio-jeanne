@@ -33,6 +33,7 @@ export default defineConfig({
       creationContext.type === 'global' ? items.filter((i) => !NON_CREABLES.has(i.templateId)) : items,
     // Bouton « Voir la page » (menu ⋯ en haut à droite d'un projet).
     productionUrl: async (prev, {document}) => {
+      if (document._type === 'carteVisite') return `${siteUrl}/carte`
       if (document._type !== 'projet') return prev
       const id = document._id.replace(/^drafts\./, '')
       return `${siteUrl}/apercu/${id}?secret=${encodeURIComponent(previewSecret)}`

@@ -7,6 +7,7 @@ import {projet} from './documents/projet'
 import {avis} from './documents/avis'
 import {reglages} from './documents/reglages'
 import {pageLegale} from './documents/pageLegale'
+import {carteVisite} from './documents/carteVisite'
 import {etapeArche, pagesFixes} from './pages'
 
 export const schemaTypes = [
@@ -29,11 +30,13 @@ export const schemaTypes = [
   avis,
   reglages,
   pageLegale,
+  carteVisite,
   ...pagesFixes,
 ]
 
 /** Documents uniques : on ne peut ni en créer d'autres, ni les supprimer. */
 export const SINGLETONS = [
   'reglages',
+  'carteVisite',
   ...pagesFixes.map((p) => p.name),
 ]
