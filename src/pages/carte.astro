@@ -1,0 +1,242 @@
+---
+/**
+ * Carte de visite de Caroline : www.studio-jeanne.com/carte (non indexée, hors plan du site et menu).
+ * Contenu modifiable dans Sanity (« Carte de visite »), contenu d'origine si un champ est vide.
+ */
+import {getCarte, image, imagePartage, telInternational} from '../lib/carte'
+
+const c = await getCarte()
+const nom = `${c.prenom} ${c.nom}`
+const partage = imagePartage(c.imagePartage)
+const portrait = image(c.portrait, 140, 4 / 5)
+const [duo, suite] = c.boutons.length > 1 ? [c.boutons.slice(0, 2), c.boutons.slice(2)] : [[], c.boutons]
+const idEmail = (e: string, i: number) => (i === 0 ? 'mail' : e.endsWith('@studio-jeanne.com') ? 'mail-sj' : `mail-${i + 1}`)
+---
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="description" content={c.description}>
+<meta property="og:type" content="website">
+<meta property="og:title" content={nom}>
+<meta property="og:description" content={c.description}>
+<meta property="og:image" content={partage.url}>
+<meta property="og:image:secure_url" content={partage.url}>
+<meta property="og:image:type" content={partage.type}>
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content={c.imagePartage.alt}>
+<meta name="twitter:card" content="summary_large_image">
+<title>{c.titreOnglet}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Mulish:wght@400;600&display=swap">
+<style is:inline>
+/* Une colonne étroite, lue sur téléphone par un agent : la chasse d'abord,
+   le regard d'architecte d'intérieur ensuite. L'arche du logo revient en coin
+   arrondi haut-gauche sur le portrait, les photos et les boutons. */
+:root {
+  --creme: #FBF7EF;
+  --creme-soutenu: #F0E9DC;
+  --bleu: #4D5067;
+  --ocre: #B48948;
+  --texte: #3A3A38;
+  --texte-doux: #6E6C66;
+  --ligne: #E3D9C6;
+  --sur-ocre: #FFFFFF;
+  --display: "Jost", "Futura", "Century Gothic", Arial, sans-serif;
+  --corps: "Mulish", "Helvetica Neue", Arial, sans-serif;
+  --arche: 44px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --creme: #2E3042; --creme-soutenu: #383B50; --bleu: #F3EDE2; --ocre: #C9A066;
+    --texte: #ECE6DA; --texte-doux: #B9B3A8; --ligne: #4A4D63; --sur-ocre: #2E3042;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --creme: #2E3042; --creme-soutenu: #383B50; --bleu: #F3EDE2; --ocre: #C9A066;
+  --texte: #ECE6DA; --texte-doux: #B9B3A8; --ligne: #4A4D63; --sur-ocre: #2E3042;
+  color-scheme: dark;
+}
+
+body {
+  background: var(--creme);
+  color: var(--texte);
+  font-family: var(--corps);
+  font-size: 15px;
+  line-height: 1.6;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.carte { max-width: 420px; margin: 0 auto; padding-block: 36px 48px; display: flex; flex-direction: column; gap: 30px; }
+
+.identite { display: flex; flex-direction: column; align-items: center; gap: 18px; text-align: center; }
+.portrait {
+  width: 140px; aspect-ratio: 4 / 5; max-width: 100%;
+  border-radius: var(--arche) 4px 4px 4px;
+  background: var(--creme-soutenu); border: 1px solid var(--ligne);
+  display: grid; place-items: center; overflow: hidden;
+}
+.portrait span { font-family: var(--display); font-weight: 300; font-size: 32px; letter-spacing: 0.18em; padding-left: 0.18em; color: var(--ocre); }
+.portrait img { width: 100%; height: 100%; object-fit: cover; }
+h1 { margin: 0; font-family: var(--display); font-weight: 400; font-size: 29px; letter-spacing: 0.04em; color: var(--bleu); text-wrap: balance; }
+.roles { margin: 8px 0 0; display: flex; flex-direction: column; gap: 2px; }
+.roles p { margin: 0; font-size: 14.5px; }
+.roles .principal { font-weight: 600; color: var(--bleu); }
+.roles .maison { color: var(--ocre); font-weight: 600; white-space: nowrap; }
+.zone { margin: 12px 0 0; font-family: var(--display); font-size: 12px; letter-spacing: 0.32em; text-transform: uppercase; color: var(--texte-doux); padding-left: 0.32em; }
+
+.ajouter {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  padding: 15px 20px; border-radius: 22px 4px 4px 4px;
+  background: var(--ocre); color: var(--sur-ocre);
+  font-family: var(--display); font-size: 17px; font-weight: 500; letter-spacing: 0.03em; text-decoration: none;
+}
+.ajouter svg { width: 20px; height: 20px; flex: none; }
+.intro { margin: 0; font-size: 15px; color: var(--texte); text-wrap: pretty; }
+
+.titre-bloc { margin: 0 0 4px; font-family: var(--display); font-size: 12px; font-weight: 500; letter-spacing: 0.32em; text-transform: uppercase; color: var(--bleu); }
+
+.contact { display: flex; flex-direction: column; }
+.ligne { display: flex; align-items: center; gap: 14px; padding: 13px 2px; border-bottom: 1px solid var(--ligne); min-width: 0; }
+.ligne:first-of-type { border-top: 1px solid var(--ligne); }
+.ligne svg { width: 19px; height: 19px; flex: none; color: var(--ocre); }
+.ligne a { color: var(--texte); text-decoration: none; font-size: 15.5px; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; min-width: 0; user-select: all; }
+.copier {
+  margin-left: auto; flex: none;
+  font: 500 13px/1 var(--display); letter-spacing: 0.04em;
+  padding: 8px 12px; border-radius: 12px 3px 3px 3px;
+  border: 1px solid var(--ligne); background: transparent; color: var(--bleu); cursor: pointer;
+}
+
+.travail { display: flex; flex-direction: column; gap: 14px; }
+.travail .sous { margin: 0; font-size: 14.5px; color: var(--texte-doux); }
+.galerie { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.galerie figure { margin: 0; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.galerie .photo {
+  aspect-ratio: 4 / 5; max-width: 100%;
+  background: var(--creme-soutenu);
+  border-radius: 28px 3px 3px 3px;
+  display: grid; place-items: center; font-size: 12px; color: var(--texte-doux); overflow: hidden;
+}
+.galerie .photo img { width: 100%; height: 100%; object-fit: cover; }
+.galerie .large { grid-column: 1 / -1; }
+.galerie .large .photo { aspect-ratio: 16 / 10; }
+.galerie figcaption { font-family: var(--display); font-size: 13px; letter-spacing: 0.02em; }
+
+.bouton {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  padding: 14px 18px; border-radius: 22px 4px 4px 4px;
+  font-family: var(--display); font-size: 16px; letter-spacing: 0.03em; text-decoration: none;
+}
+.bouton.plein { background: var(--ocre); color: var(--sur-ocre); font-weight: 500; }
+.bouton.trait { border: 1px solid var(--ocre); color: var(--ocre); }
+.duo { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+.signes { display: flex; flex-direction: column; align-items: center; gap: 14px; padding-top: 22px; border-top: 1px solid var(--ligne); }
+.signes img { width: 150px; height: auto; display: block; }
+.signes .sombre { display: none; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .signes .clair { display: none; }
+  :root:not([data-theme="light"]) .signes .sombre { display: block; }
+}
+:root[data-theme="dark"] .signes .clair { display: none; }
+:root[data-theme="dark"] .signes .sombre { display: block; }
+.signes p { margin: 0; font-size: 12.5px; color: var(--texte-doux); text-align: center; }
+
+a:focus-visible, button:focus-visible { outline: 2px solid var(--ocre); outline-offset: 3px; }
+</style>
+</head>
+<body style="margin:0">
+
+
+<main class="carte">
+  <section class="identite">
+    <div class="portrait"><img src={portrait.src} srcset={portrait.srcset} alt={c.portrait.alt || nom}></div>
+    <div>
+      <h1>{nom}</h1>
+      <div class="roles">
+        {c.metiers.map((m, i) => (
+          <p class={i === 0 ? 'principal' : undefined}>{m.metier}{m.structure && <Fragment>, <span class="maison">{m.structure}</span></Fragment>}</p>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <a class="ajouter" href="/caroline-canova.vcf">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="9" cy="8" r="4"/><path d="M2 21c0-3.9 3.1-7 7-7s7 3.1 7 7"/><path d="M19 8v6M16 11h6"/></svg>
+    {c.boutonAjouter}
+  </a>
+
+  <p class="intro">{c.intro}</p>
+
+  <section class="contact" aria-labelledby="t-contact">
+    <h2 class="titre-bloc" id="t-contact">{c.titreContact}</h2>
+    <div class="ligne">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M10.5 18.5h3"/></svg>
+      <a href={`tel:${telInternational(c.telephone)}`} id="tel">{c.telephone}</a>
+      <button class="copier" type="button" data-copie={c.telephone}>Copier</button>
+    </div>
+    {c.emails.map((e, i) => {
+      const [local, domaine] = e.trim().split('@')
+      return (
+        <div class="ligne">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg>
+          <a href={`mailto:${e.trim()}`} id={idEmail(e.trim(), i)}>{local}<wbr />@{domaine}</a>
+          <button class="copier" type="button" data-copie={e.trim()}>Copier</button>
+        </div>
+      )
+    })}
+  </section>
+
+  <section class="travail" aria-labelledby="t-travail">
+    <h2 class="titre-bloc" id="t-travail">{c.titreTravail}</h2>
+    <p class="sous">{c.sousTitreTravail}</p>
+    <div class="galerie">
+      {c.photos.map((p, i) => {
+        const img = i === 0 ? image(p.image, 420, 16 / 10) : image(p.image, 210, 4 / 5)
+        return (
+          <figure class={i === 0 ? 'large' : undefined}><div class="photo"><img src={img.src} srcset={img.srcset} alt={p.image.alt || p.lieu || ''} /></div>{p.lieu && <figcaption>{p.lieu}</figcaption>}</figure>
+        )
+      })}
+    </div>
+    {duo.length > 0 && (
+      <div class="duo">
+        {duo.map((b, i) => <a class={i === 0 ? 'bouton plein' : 'bouton trait'} href={b.url} target="_blank" rel="noopener">{b.libelle}</a>)}
+      </div>
+    )}
+    {suite.map((b) => <a class={duo.length ? 'bouton trait' : 'bouton plein'} href={b.url} target="_blank" rel="noopener">{b.libelle}</a>)}
+  </section>
+
+  <footer class="signes">
+    <img class="clair" src={image(c.logoClair, 150).src} srcset={image(c.logoClair, 150).srcset} alt={c.logoClair.alt || ''}>
+    <img class="sombre" src={image(c.logoSombre, 150).src} srcset={image(c.logoSombre, 150).srcset} alt={c.logoSombre.alt || ''}>
+    <p>{c.mentionBas}</p>
+  </footer>
+</main>
+
+<script is:inline>
+  document.querySelectorAll(".copier").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var texte = b.getAttribute("data-copie");
+      var ok = function () { b.textContent = "Copié"; setTimeout(function () { b.textContent = "Copier"; }, 1800); };
+      var repli = function () {
+        var lien = b.previousElementSibling;
+        var r = document.createRange(); r.selectNodeContents(lien);
+        var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+        b.textContent = "Sélectionné";
+        setTimeout(function () { b.textContent = "Copier"; }, 1800);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(texte).then(ok, repli);
+      } else { repli(); }
+    });
+  });
+</script>
+
+</body>
+</html>

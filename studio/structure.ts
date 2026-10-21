@@ -4,6 +4,7 @@ import {CogIcon} from '@sanity/icons/Cog'
 import {CommentIcon} from '@sanity/icons/Comment'
 import {DocumentTextIcon} from '@sanity/icons/DocumentText'
 import {HomeIcon} from '@sanity/icons/Home'
+import {UserIcon} from '@sanity/icons/User'
 import {DocumentsIcon} from '@sanity/icons/Documents'
 import {pagesFixes} from './schemaTypes/pages'
 
@@ -57,6 +58,10 @@ export const structure: StructureResolver = (S, context) =>
               ),
             ),
         ),
+      S.listItem()
+        .title('Carte de visite')
+        .icon(UserIcon)
+        .child(S.document().schemaType('carteVisite').documentId('carteVisite').title('Carte de visite')),
       S.divider(),
       S.listItem()
         .title('Réglages du site')
