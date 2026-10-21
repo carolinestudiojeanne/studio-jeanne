@@ -37,6 +37,13 @@ Copier `.env.example` en `.env` (et `studio/.env.example` en `studio/.env`) et r
 5. **Publication automatique** : dans Netlify, *Build hooks* > créer un hook ; dans Sanity, *API > Webhooks* > coller l’adresse du hook (déclencheur : création, mise à jour, suppression). Chaque publication de Caroline reconstruit le site en une à deux minutes.
 6. **Bouton « Voir la page »** : dans `studio/.env`, `SANITY_STUDIO_SITE_URL` = l’adresse Netlify et `SANITY_STUDIO_PREVIEW_SECRET` = la même valeur que `SANITY_PREVIEW_SECRET`, puis redéployer le Studio.
 7. **Avis Google automatiques** (`netlify/functions/avis-google.mts`, une fois par jour) : ajoute dans Sanity les nouveaux avis Google 5 étoiles avec texte, sans doublon. Inactif tant que les variables ci-dessous manquent.
+   **Par Zapier (solution retenue, Google ayant refusé l'accès à l'API en octobre 2026)** :
+   - Zap de Caroline : déclencheur *Google Business Profile › New Review* → action *Google Sheets › Create Spreadsheet Row*, dans une feuille dont la première ligne porte exactement les colonnes `ID`, `Date`, `Prénom`, `Note`, `Texte` (identifiant de l'avis, date, nom de l'auteur, note, texte). La note peut être `5`, `FIVE` ou `5 étoiles` ; seuls les avis 5 étoiles avec texte sont repris, avec le premier mot du nom comme prénom.
+   - Dans Google Sheets : *Fichier › Partager › Publier sur le Web*, onglet de la feuille, format *CSV*. Copier l'adresse.
+   - Variables Netlify : `AVIS_SHEET_CSV_URL` (cette adresse), `SANITY_API_WRITE_TOKEN` (jeton **Editor**) et `NETLIFY_BUILD_HOOK` (l'adresse du hook de l'étape 5). `PUBLIC_SANITY_PROJECT_ID` est déjà là.
+   - Les avis déjà publiés avant le Zap s'ajoutent une fois à la main dans Sanity (ou en lignes dans la feuille).
+
+   **Par l'API Google Business Profile** (si Google accorde un jour l'accès, les deux sources peuvent coexister) :
    - Caroline ajoute la personne qui s’en occupe comme **gestionnaire** de sa fiche (business.google.com > Paramètres > Personnes et accès).
    - Dans Google Cloud (même compte) : créer un projet, demander l’accès à l’API Google Business Profile (formulaire « GBP API access », réponse en quelques jours à quelques semaines), puis activer *My Business Account Management API* et *Google My Business API*.
    - Créer un identifiant OAuth (type « Application Web », adresse de redirection `https://developers.google.com/oauthplayground`), puis obtenir un *refresh token* dans OAuth Playground avec le droit `https://www.googleapis.com/auth/business.manage` (cocher « Use your own OAuth credentials »).
