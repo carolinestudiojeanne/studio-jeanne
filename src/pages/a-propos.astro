@@ -7,6 +7,8 @@ import {texteEnHtml} from '../lib/texte'
 import {SITE} from '../lib/seo'
 
 const [page, reglages] = await Promise.all([getPageAPropos(), getReglages()])
+// Avec un surtitre, c'est lui le titre principal (H1) ; le titre s'affiche en grand dessous.
+const TitreTag = page.surtitre ? 'p' : 'h1'
 const titre = page.seo?.metaTitle || `À propos${reglages.suffixeTitre}`
 const personne = {
   '@context': 'https://schema.org',
@@ -30,7 +32,8 @@ const personne = {
         <Image class="apropos__photo apropos__photo--2" image={page.portrait2} ratio={4 / 5} legende={false} sizes="(min-width: 52rem) 24vw, 60vw" />
       </div>
       <div class="apropos__texte">
-        <h1>{page.titre}</h1>
+        {page.surtitre && <h1 class="surtitre apropos__surtitre">{page.surtitre}</h1>}
+        <TitreTag class="apropos__titre">{page.titre}</TitreTag>
         <div class="texte" set:html={texteEnHtml(page.texte)} />
         {
           page.lienAvisLibelle && (
@@ -98,9 +101,21 @@ const personne = {
   .apropos__texte {
     max-width: var(--etroit);
   }
-  /* Même taille de titre que l'en-tête des autres pages. */
+  /* Surtitre : lettrage du menu, en petit, juste au-dessus du titre. */
+  .apropos__surtitre {
+    line-height: 1.6;
+    margin-bottom: 0.75rem;
+  }
+  /* Même lettrage que les titres de page, un peu plus grand. */
   /* Les retours à la ligne saisis dans le Studio sont respectés. */
-  .apropos__texte h1 {
+  .apropos__titre {
+    font-family: var(--police);
+    color: var(--titres);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    line-height: 1.4;
+    margin: 0 0 0.75em;
+    text-wrap: balance;
     font-size: clamp(1.3rem, 1rem + 0.8vw, 1.7rem);
     white-space: pre-line;
   }
