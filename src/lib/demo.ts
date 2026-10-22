@@ -471,7 +471,6 @@ export const pageTrouverVotreBien: PageOffre = {
 }
 
 export const pageAPropos: PageAPropos = {
-  surtitre: 'Caroline Canova, décoratrice et architecte d’intérieur à Bordeaux',
   titre: 'Studio Jeanne, c’est une histoire bordelaise.',
   texte: paragraphes(
     'Celle d’une échoppe rue Jeanne dont personne ne voulait et dont j’ai été la seule à voir le potentiel. En la transformant de fond en comble, en faisant naître un intérieur chaleureux et singulier, j’ai compris que c’était ça, mon métier.',

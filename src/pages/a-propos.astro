@@ -7,8 +7,14 @@ import {texteEnHtml} from '../lib/texte'
 import {SITE} from '../lib/seo'
 
 const [page, reglages] = await Promise.all([getPageAPropos(), getReglages()])
-// Avec un surtitre, c'est lui le titre principal (H1) ; le titre s'affiche en grand dessous.
-const TitreTag = page.surtitre ? 'p' : 'h1'
+// Titres fixés dans le code (demande de Caroline, octobre 2026) : le surtitre est le titre principal (H1),
+// la phrase en grand dessous n'est pas un titre. Le champ « Titre » du Studio n'est plus affiché.
+const SURTITRE = 'Caroline Canova, décoratrice et architecte d’intérieur à Bordeaux'
+const SOUS_TITRE = 'Studio Jeanne, c’est une histoire bordelaise.'
+// Image entièrement blanche posée en attendant le shooting : on ne l'affiche pas.
+// Dès qu'une vraie photo la remplace dans le Studio, le second portrait réapparaît.
+const PORTRAITS_VIDES = ['image-4551f710005d2703a7d33cfe4375f6e7989b3188-601x977-jpg']
+const portrait2 = page.portrait2?.asset && PORTRAITS_VIDES.includes(page.portrait2.asset._ref) ? undefined : page.portrait2
 const titre = page.seo?.metaTitle || `À propos${reglages.suffixeTitre}`
 const personne = {
   '@context': 'https://schema.org',
@@ -27,13 +33,13 @@ const personne = {
 <Base titre={titre} description={page.seo?.metaDescription} imagePartage={page.seo?.imagePartage || page.portrait} schemas={[personne]}>
   <section class="section">
     <div class="conteneur apropos">
-      <div class:list={['apropos__photos', {'apropos__photos--deux': page.portrait && page.portrait2}]}>
+      <div class:list={['apropos__photos', {'apropos__photos--deux': page.portrait && portrait2}]}>
         <Image class="apropos__photo apropos__photo--1" image={page.portrait} ratio={4 / 5} legende={false} prioritaire sizes="(min-width: 52rem) 28vw, 70vw" />
-        <Image class="apropos__photo apropos__photo--2" image={page.portrait2} ratio={4 / 5} legende={false} sizes="(min-width: 52rem) 24vw, 60vw" />
+        <Image class="apropos__photo apropos__photo--2" image={portrait2} ratio={4 / 5} legende={false} sizes="(min-width: 52rem) 24vw, 60vw" />
       </div>
       <div class="apropos__texte">
-        {page.surtitre && <h1 class="surtitre apropos__surtitre">{page.surtitre}</h1>}
-        <TitreTag class="apropos__titre">{page.titre}</TitreTag>
+        <h1 class="surtitre apropos__surtitre">{SURTITRE}</h1>
+        <p class="apropos__titre">{SOUS_TITRE}</p>
         <div class="texte" set:html={texteEnHtml(page.texte)} />
         {
           page.lienAvisLibelle && (
