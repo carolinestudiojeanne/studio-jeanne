@@ -285,21 +285,7 @@ export const pageAPropos = defineType({
   icon: DocumentIcon,
   groups,
   fields: [
-    defineField({
-      name: 'surtitre',
-      title: 'Surtitre',
-      type: 'string',
-      group: 'contenu',
-      description:
-        'Petite ligne au-dessus du titre. C’est le titre principal de la page pour Google. Ex. : Caroline Canova, décoratrice et architecte d’intérieur à Bordeaux',
-    }),
-    defineField({
-      name: 'titre',
-      title: 'Titre',
-      type: 'string',
-      group: 'contenu',
-      description: 'Affiché en grand sous le surtitre.',
-    }),
+    defineField({name: 'titre', title: 'Titre', type: 'string', group: 'contenu'}),
     defineField({name: 'texte', title: 'Texte', type: 'texteRiche', group: 'contenu'}),
     defineField({name: 'portrait', title: 'Portrait 1 (en haut à gauche)', type: 'imageAlt', group: 'contenu'}),
     defineField({
@@ -307,8 +293,7 @@ export const pageAPropos = defineType({
       title: 'Portrait 2 (plus bas, à droite)',
       type: 'imageAlt',
       group: 'contenu',
-      description:
-        'Les deux portraits s’affichent décalés en diagonale, à gauche du texte. Photos verticales de préférence. Sans portrait 2, le portrait 1 s’affiche seul.',
+      description: 'Les deux portraits s’affichent décalés en diagonale, à gauche du texte. Photos verticales de préférence.',
     }),
     defineField({name: 'imageEchoppe', title: 'Image de l’échoppe', type: 'imageAlt', group: 'contenu'}),
     defineField({name: 'lienAvisLibelle', title: 'Texte du lien vers les avis', type: 'string', group: 'contenu'}),
