@@ -150,6 +150,8 @@ export interface PageOffre {
 }
 
 export interface PageAPropos {
+  /** Titre principal (H1), en petit au-dessus du titre. */
+  surtitre?: string
   titre?: string
   texte?: PortableText
   portrait?: ImageData
